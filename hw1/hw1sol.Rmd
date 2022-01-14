@@ -32,6 +32,14 @@ sessionInfo()
 
 This exercise (and later in this course) uses the [MIMIC-IV data](https://mimic-iv.mit.edu), a freely accessible critical care database developed by the MIT Lab for Computational Physiology. Follow the instructions at <https://mimic.mit.edu/docs/gettingstarted/> to (1) complete the CITI `Data or Specimens Only Research` course and (2) obtain the PhysioNet credential for using the MIMIC-IV data. Display the verification links to your completion report and completion certificate here. (Hint: The CITI training takes a couple hours and the PhysioNet credentialing takes a couple days; do not leave it to the last minute.)
 
+### Completion Report
+
+<https://citiprogram.org/verify/?kde435228-50b9-4be9-b8df-b7afd56f2a99-46524805>
+
+### Completion Certificate
+
+<https://citiprogram.org/verify/?w0840cb69-a8c6-4caa-93d3-4975697f131d-46524805>
+
 ## Q3. Linux Shell Commands
 
 1. The `/mnt/mimiciv/1.0` folder on teaching server contains data sets from MIMIC-IV. Refer to the documentation <https://mimic.mit.edu/docs/iv/> for details of data files.  
@@ -69,18 +77,18 @@ the target files themselves.
 
 - `cat` prints the contents of gzip compressed file.
 
-- `zless` is used to view the contents of a gzip compressed file screen by screen.
-The spacebar can be used to move to the next page, but the mouse can also be
-used to scroll through the file. Press `q` to exit.
+- `zless` is used to view the contents of a gzip compressed file screen by 
+screen.The spacebar can be used to move to the next page, but the mouse can also 
+be used to scroll through the file. Press `q` to exit.
 
-- `zmore` is similar to `zless` but is more limited in functionality. For example,
-mouse scrolling is disabled.
+- `zmore` is similar to `zless` but is more limited in functionality. 
+For example, mouse scrolling is disabled.
 
 - `zgrep` prints all lines from a gzip compressed file that match a specified 
 expression.
 
 4. What's the output of following bash script?
-    ```{bash, eval=F}
+    ```{bash, eval=T}
     for datafile in /mnt/mimiciv/1.0/core/*.gz
       do
         ls -l $datafile
@@ -88,10 +96,55 @@ expression.
     ```
 Display the number of lines in each data file using a similar loop.
 
+### Solution 
+```{bash, eval=T}
+    for datafile in /mnt/mimiciv/1.0/core/*.gz
+      do
+        zcat  $datafile | wc -l
+      done
+```
 5. Display the first few lines of `admissions.csv.gz`. How many rows are in this data file? How many unique patients (identified by `subject_id`) are in this data file? (Hint: combine Linux commands `zcat`, `head`/`tail`, `awk`, `sort`, `uniq`, `wc`, and so on.)
+
+### Solution
+
+- The first few lines are:
+```{bash}
+zcat /mnt/mimiciv/1.0/core/admissions.csv.gz | head
+```
+- The number of rows in the data file is:
+```{bash}
+zcat /mnt/mimiciv/1.0/core/admissions.csv.gz | tail -n+2 | wc -l 
+```
+- The number of unique patients in this data file is:
+```{bash}
+zcat /mnt/mimiciv/1.0/core/admissions.csv.gz | tail -n+2 | awk -F, '{print $1}'\
+| sort | uniq | wc -l
+``` 
 
 6. What are the possible values taken by each of the variable `admission_type`, `admission_location`, `insurance`, and `ethnicity`? Also report the count for each unique value of these variables. (Hint: combine Linux commands `zcat`, `head`/`tail`, `awk`, `uniq -c`, `wc`, and so on.)
 
+### Solution
+
+- Admission type:
+```{bash}
+zcat /mnt/mimiciv/1.0/core/admissions.csv.gz | tail -n+2 | awk -F, '{print $6}'\
+| sort | uniq -c
+```
+- Admission location:
+```{bash}
+zcat /mnt/mimiciv/1.0/core/admissions.csv.gz | tail -n+2 | awk -F, '{print $7}'\
+| sort | uniq -c
+```
+- Insurance:
+```{bash}
+zcat /mnt/mimiciv/1.0/core/admissions.csv.gz | tail -n+2 | awk -F, '{print $9}'\
+| sort | uniq -c
+```
+- Ethnicity:
+```{bash}
+zcat /mnt/mimiciv/1.0/core/admissions.csv.gz | tail -n+2 | awk -F, \
+'{print $12}' | sort | uniq -c
+```
 ## Q4. Who's popular in Price and Prejudice
 
 1. You and your friend just have finished reading *Pride and Prejudice* by Jane Austen. Among the four main characters in the book, Elizabeth, Jane, Lydia, and Darcy, your friend thinks that Darcy was the most mentioned. You, however, are certain it was Elizabeth. Obtain the full text of the novel from <http://www.gutenberg.org/cache/epub/42671/pg42671.txt> and save to your local folder. 
