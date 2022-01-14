@@ -44,7 +44,40 @@ Please, do **not** put these data files into Git; they are big. Do **not** copy 
 
 2. Display the contents in the folders `core`, `hosp`, `icu`. Why are these data files distributed as `.csv.gz` files instead of `.csv` (comma separated values) files? Read the page <https://mimic.mit.edu/docs/iv/> to understand what's in each folder.
 
+### Solution 
+Contents of the 'core' folder are:
+```{bash}
+ls -l /mnt/mimiciv/1.0/core
+```
+Contents of the 'hosp' folder are:
+```{bash}
+ls -l /mnt/mimiciv/1.0/hosp
+```
+Contents of the 'icu' folder are:
+```{bash}
+ls -l /mnt/mimiciv/1.0/icu
+```
+The files are distributed as '.csv.gz' instead of '.csv' because the files are 
+compressed by the gzip utility to reduce file size, allowing for faster file 
+transfer.
+
 3. Briefly describe what bash commands `zcat`, `zless`, `zmore`, and `zgrep` do.
+
+### Solution 
+Note that the main advantage of these commands is that they do not uncompress 
+the target files themselves.
+
+- `cat` prints the contents of gzip compressed file.
+
+- `zless` is used to view the contents of a gzip compressed file screen by screen.
+The spacebar can be used to move to the next page, but the mouse can also be
+used to scroll through the file. Press `q` to exit.
+
+- `zmore` is similar to `zless` but is more limited in functionality. For example,
+mouse scrolling is disabled.
+
+- `zgrep` prints all lines from a gzip compressed file that match a specified 
+expression.
 
 4. What's the output of following bash script?
     ```{bash, eval=F}
