@@ -53,19 +53,19 @@ Please, do **not** put these data files into Git; they are big. Do **not** copy 
 2. Display the contents in the folders `core`, `hosp`, `icu`. Why are these data files distributed as `.csv.gz` files instead of `.csv` (comma separated values) files? Read the page <https://mimic.mit.edu/docs/iv/> to understand what's in each folder.
 
 ### Solution 
-Contents of the 'core' folder are:
+-Contents of the `core` folder are:
 ```{bash}
 ls -l /mnt/mimiciv/1.0/core
 ```
-Contents of the 'hosp' folder are:
+-Contents of the `hosp` folder are:
 ```{bash}
 ls -l /mnt/mimiciv/1.0/hosp
 ```
-Contents of the 'icu' folder are:
+-Contents of the `icu` folder are:
 ```{bash}
 ls -l /mnt/mimiciv/1.0/icu
 ```
-The files are distributed as '.csv.gz' instead of '.csv' because the files are 
+-The files are distributed as '.csv.gz' instead of '.csv' because the files are 
 compressed by the gzip utility to reduce file size, allowing for faster file 
 transfer.
 
@@ -148,16 +148,23 @@ zcat /mnt/mimiciv/1.0/core/admissions.csv.gz | tail -n+2 | awk -F, \
 ## Q4. Who's popular in Price and Prejudice
 
 1. You and your friend just have finished reading *Pride and Prejudice* by Jane Austen. Among the four main characters in the book, Elizabeth, Jane, Lydia, and Darcy, your friend thinks that Darcy was the most mentioned. You, however, are certain it was Elizabeth. Obtain the full text of the novel from <http://www.gutenberg.org/cache/epub/42671/pg42671.txt> and save to your local folder. 
-    ```{bash, eval=FALSE}
+    ```{bash, eval=T}
     wget -nc http://www.gutenberg.org/cache/epub/42671/pg42671.txt
     ```
 Explain what `wget -nc` does. Do **not** put this text file `pg42671.txt` in Git. Complete the following loop to tabulate the number of times each of the four characters is mentioned using Linux commands.
+
+### Solution 
+
+`wget` is a command-line utility used to download files from the web. It is 
+non-interactive, so it can work in the background. It supports HTTPS, HTTP, and
+FTP, the most widely used Internet protocals. The `-nc` option prevents a file
+from being downloaded again if it hasalready been downloaded.
     ```{bash, eval=FALSE}
-    wget -nc http://www.gutenberg.org/cache/epub/42671/pg42671.txt
+    #wget -nc http://www.gutenberg.org/cache/epub/42671/pg42671.txt
     for char in Elizabeth Jane Lydia Darcy
     do
       echo $char:
-      # some commands here
+       cat pg42671.txt | grep -o -i $char | wc -l
     done
     ```
 
@@ -169,6 +176,8 @@ Explain what `wget -nc` does. Do **not** put this text file `pg42671.txt` in Git
     ```{bash eval=FALSE}
     echo 'hello, world' >> test2.txt
     ```
+### Solution 
+
 
 3. Using your favorite text editor (e.g., `vi`), type the following and save the file as `middle.sh`:
     ```{bash eval=FALSE}

@@ -213,11 +213,11 @@ pre code {
 <p>This exercise (and later in this course) uses the <a href="https://mimic-iv.mit.edu">MIMIC-IV data</a>, a freely accessible critical care database developed by the MIT Lab for Computational Physiology. Follow the instructions at <a href="https://mimic.mit.edu/docs/gettingstarted/" class="uri">https://mimic.mit.edu/docs/gettingstarted/</a> to (1) complete the CITI <code>Data or Specimens Only Research</code> course and (2) obtain the PhysioNet credential for using the MIMIC-IV data. Display the verification links to your completion report and completion certificate here. (Hint: The CITI training takes a couple hours and the PhysioNet credentialing takes a couple days; do not leave it to the last minute.)</p>
 <div id="completion-report" class="section level3">
 <h3>Completion Report</h3>
-<p>&lt;citiprogram.org/verify/?kde435228-50b9-4be9-b8df-b7afd56f2a99-46524805&gt;</p>
+<p><a href="https://citiprogram.org/verify/?kde435228-50b9-4be9-b8df-b7afd56f2a99-46524805" class="uri">https://citiprogram.org/verify/?kde435228-50b9-4be9-b8df-b7afd56f2a99-46524805</a></p>
 </div>
 <div id="completion-certificate" class="section level3">
 <h3>Completion Certificate</h3>
-<p>&lt;citiprogram.org/verify/?w0840cb69-a8c6-4caa-93d3-4975697f131d-46524805&gt;</p>
+<p><a href="https://citiprogram.org/verify/?w0840cb69-a8c6-4caa-93d3-4975697f131d-46524805" class="uri">https://citiprogram.org/verify/?w0840cb69-a8c6-4caa-93d3-4975697f131d-46524805</a></p>
 </div>
 </div>
 <div id="q3.-linux-shell-commands" class="section level2">
@@ -238,14 +238,14 @@ pre code {
 </ol>
 <div id="solution" class="section level3">
 <h3>Solution</h3>
-<p>Contents of the ‘core’ folder are:</p>
+<p>-Contents of the <code>core</code> folder are:</p>
 <pre class="bash"><code>ls -l /mnt/mimiciv/1.0/core</code></pre>
 <pre><code>## total 71472
 ## -rw-r--r--. 1 root root 17208966 Jan  4 21:48 admissions.csv.gz
 ## -rw-r--r--. 1 root root      606 Jan  4 21:48 index.html
 ## -rw-r--r--. 1 root root  2955582 Jan  4 21:48 patients.csv.gz
 ## -rw-r--r--. 1 root root 53014503 Jan  4 21:48 transfers.csv.gz</code></pre>
-<p>Contents of the ‘hosp’ folder are:</p>
+<p>-Contents of the <code>hosp</code> folder are:</p>
 <pre class="bash"><code>ls -l /mnt/mimiciv/1.0/hosp</code></pre>
 <pre><code>## total 4454012
 ## -rw-r--r--. 1 root root     430049 Jan  4 21:51 d_hcpcs.csv.gz
@@ -266,7 +266,7 @@ pre code {
 ## -rw-r--r--. 1 root root  367041717 Jan  4 21:49 prescriptions.csv.gz
 ## -rw-r--r--. 1 root root    7750325 Jan  4 21:48 procedures_icd.csv.gz
 ## -rw-r--r--. 1 root root    9565293 Jan  4 21:48 services.csv.gz</code></pre>
-<p>Contents of the ‘icu’ folder are:</p>
+<p>-Contents of the <code>icu</code> folder are:</p>
 <pre class="bash"><code>ls -l /mnt/mimiciv/1.0/icu</code></pre>
 <pre><code>## total 2741332
 ## -rw-r--r--. 1 root root 2350783547 Jan  4 21:54 chartevents.csv.gz
@@ -277,7 +277,7 @@ pre code {
 ## -rw-r--r--. 1 root root  352443512 Jan  4 21:52 inputevents.csv.gz
 ## -rw-r--r--. 1 root root   37095672 Jan  4 21:52 outputevents.csv.gz
 ## -rw-r--r--. 1 root root   20567368 Jan  4 21:52 procedureevents.csv.gz</code></pre>
-<p>The files are distributed as ‘.csv.gz’ instead of ‘.csv’ because the files are compressed by the gzip utility to reduce file size, allowing for faster file transfer.</p>
+<p>-The files are distributed as ‘.csv.gz’ instead of ‘.csv’ because the files are compressed by the gzip utility to reduce file size, allowing for faster file transfer.</p>
 <ol start="3" style="list-style-type: decimal">
 <li>Briefly describe what bash commands <code>zcat</code>, <code>zless</code>, <code>zmore</code>, and <code>zgrep</code> do.</li>
 </ol>
@@ -408,17 +408,53 @@ pre code {
 <ol style="list-style-type: decimal">
 <li><p>You and your friend just have finished reading <em>Pride and Prejudice</em> by Jane Austen. Among the four main characters in the book, Elizabeth, Jane, Lydia, and Darcy, your friend thinks that Darcy was the most mentioned. You, however, are certain it was Elizabeth. Obtain the full text of the novel from <a href="http://www.gutenberg.org/cache/epub/42671/pg42671.txt" class="uri">http://www.gutenberg.org/cache/epub/42671/pg42671.txt</a> and save to your local folder.</p>
 <pre class="bash"><code>wget -nc http://www.gutenberg.org/cache/epub/42671/pg42671.txt</code></pre>
-<p>Explain what <code>wget -nc</code> does. Do <strong>not</strong> put this text file <code>pg42671.txt</code> in Git. Complete the following loop to tabulate the number of times each of the four characters is mentioned using Linux commands.</p>
-<pre class="bash"><code>wget -nc http://www.gutenberg.org/cache/epub/42671/pg42671.txt
+<pre><code>## --2022-01-15 03:09:58--  http://www.gutenberg.org/cache/epub/42671/pg42671.txt
+## Resolving www.gutenberg.org (www.gutenberg.org)... 152.19.134.47, 2610:28:3090:3000:0:bad:cafe:47
+## Connecting to www.gutenberg.org (www.gutenberg.org)|152.19.134.47|:80... connected.
+## HTTP request sent, awaiting response... 302 Found
+## Location: https://www.gutenberg.org/cache/epub/42671/pg42671.txt [following]
+## --2022-01-15 03:09:58--  https://www.gutenberg.org/cache/epub/42671/pg42671.txt
+## Connecting to www.gutenberg.org (www.gutenberg.org)|152.19.134.47|:443... connected.
+## HTTP request sent, awaiting response... 200 OK
+## Length: 725060 (708K) [text/plain]
+## Saving to: ‘pg42671.txt’
+## 
+##      0K .......... .......... .......... .......... ..........  7%  700K 1s
+##     50K .......... .......... .......... .......... .......... 14%  700K 1s
+##    100K .......... .......... .......... .......... .......... 21%  103M 1s
+##    150K .......... .......... .......... .......... .......... 28%  118M 0s
+##    200K .......... .......... .......... .......... .......... 35%  700K 0s
+##    250K .......... .......... .......... .......... .......... 42%  120M 0s
+##    300K .......... .......... .......... .......... .......... 49%  143M 0s
+##    350K .......... .......... .......... .......... .......... 56%  150M 0s
+##    400K .......... .......... .......... .......... .......... 63%  711K 0s
+##    450K .......... .......... .......... .......... .......... 70%  107M 0s
+##    500K .......... .......... .......... .......... .......... 77%  143M 0s
+##    550K .......... .......... .......... .......... .......... 84% 99.2M 0s
+##    600K .......... .......... .......... .......... .......... 91%  116M 0s
+##    650K .......... .......... .......... .......... .......... 98%  151M 0s
+##    700K ........                                              100%  143M=0.3s
+## 
+## 2022-01-15 03:09:59 (2.40 MB/s) - ‘pg42671.txt’ saved [725060/725060]</code></pre>
+<p>Explain what <code>wget -nc</code> does. Do <strong>not</strong> put this text file <code>pg42671.txt</code> in Git. Complete the following loop to tabulate the number of times each of the four characters is mentioned using Linux commands.</p></li>
+</ol>
+<div id="solution-5" class="section level3">
+<h3>Solution</h3>
+<p><code>wget</code> is a command-line utility used to download files from the web. It is non-interactive, so it can work in the background. It supports HTTPS, HTTP, and FTP, the most widely used Internet protocals. The <code>-nc</code> option prevents a file from being downloaded again if it hasalready been downloaded.</p>
+<pre><code>```bash
+#wget -nc http://www.gutenberg.org/cache/epub/42671/pg42671.txt
 for char in Elizabeth Jane Lydia Darcy
 do
   echo $char:
-  # some commands here
-done</code></pre></li>
+   cat pg42671.txt | grep -o -i $char | wc -l
+done
+```</code></pre>
+<ol start="2" style="list-style-type: decimal">
 <li><p>What’s the difference between the following two commands?</p>
 <pre class="bash"><code>echo &#39;hello, world&#39; &gt; test1.txt</code></pre>
 <p>and</p>
-<pre class="bash"><code>echo &#39;hello, world&#39; &gt;&gt; test2.txt</code></pre></li>
+<pre class="bash"><code>echo &#39;hello, world&#39; &gt;&gt; test2.txt</code></pre>
+<h3 id="solution-6">Solution</h3></li>
 <li><p>Using your favorite text editor (e.g., <code>vi</code>), type the following and save the file as <code>middle.sh</code>:</p>
 <pre class="bash"><code>#!/bin/sh
 # Select lines from the middle of a file.
@@ -428,6 +464,7 @@ head -n &quot;$2&quot; &quot;$1&quot; | tail -n &quot;$3&quot;</code></pre>
 <pre class="bash"><code>./middle.sh pg42671.txt 20 5</code></pre>
 <p>Explain the output. Explain the meaning of <code>&quot;$1&quot;</code>, <code>&quot;$2&quot;</code>, and <code>&quot;$3&quot;</code> in this shell script. Why do we need the first line of the shell script?</p></li>
 </ol>
+</div>
 <div id="q5.-more-fun-with-linux" class="section level3">
 <h3>Q5. More fun with Linux</h3>
 <p>Try following commands in Bash and interpret the results: <code>cal</code>, <code>cal 2021</code>, <code>cal 9 1752</code> (anything unusual?), <code>date</code>, <code>hostname</code>, <code>arch</code>, <code>uname -a</code>, <code>uptime</code>, <code>who am i</code>, <code>who</code>, <code>w</code>, <code>id</code>, <code>last | head</code>, <code>echo {con,pre}{sent,fer}{s,ed}</code>, <code>time sleep 5</code>, <code>history | tail</code>.</p>
