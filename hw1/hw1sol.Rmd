@@ -18,7 +18,7 @@ sessionInfo()
 
 **No handwritten homework reports are accepted for this course.** We work with Git and GitHub. Efficient and abundant use of Git, e.g., frequent and well-documented commits, is an important criterion for grading your homework.
 
-1. Apply for the [Student Developer Pack](https://education.github.com/pack) at GitHub using your UCLA email. You'll get GitHub Pro account for free (unlimited public and private repositories).
+1. Apply for the [Student Developer Pack](https://education.github.com/pack) at GitHub using your UCLA email. You`ll get GitHub Pro account for free (unlimited public and private repositories).
 
 2. Create a **private** repository `biostat-203b-2022-winter` and add `Hua-Zhou` and `maschepps` as your collaborators with write permission.
 
@@ -50,7 +50,7 @@ Please, do **not** put these data files into Git; they are big. Do **not** copy 
 
     Use Bash commands to answer following questions.
 
-2. Display the contents in the folders `core`, `hosp`, `icu`. Why are these data files distributed as `.csv.gz` files instead of `.csv` (comma separated values) files? Read the page <https://mimic.mit.edu/docs/iv/> to understand what's in each folder.
+2. Display the contents in the folders `core`, `hosp`, `icu`. Why are these data files distributed as `.csv.gz` files instead of `.csv` (comma separated values) files? Read the page <https://mimic.mit.edu/docs/iv/> to understand what`s in each folder.
 
 ### Solution 
 - Contents of the `core` folder are:
@@ -65,7 +65,7 @@ ls -l /mnt/mimiciv/1.0/hosp
 ```{bash}
 ls -l /mnt/mimiciv/1.0/icu
 ```
-- The files are distributed as '.csv.gz' instead of '.csv' because the files are 
+- The files are distributed as `.csv.gz` instead of `.csv` because the files are 
 compressed by the gzip utility to reduce file size, allowing for faster file 
 transfer.
 
@@ -87,7 +87,7 @@ For example, mouse scrolling is disabled.
 - `zgrep` prints all lines from a gzip compressed file that match a specified 
 expression.
 
-4. What's the output of following bash script?
+4. What`s the output of following bash script?
     ```{bash, eval=T}
     for datafile in /mnt/mimiciv/1.0/core/*.gz
       do
@@ -117,7 +117,7 @@ zcat /mnt/mimiciv/1.0/core/admissions.csv.gz | tail -n+2 | wc -l
 ```
 - The number of unique patients in this data file is:
 ```{bash}
-zcat /mnt/mimiciv/1.0/core/admissions.csv.gz | tail -n+2 | awk -F, '{print $1}'\
+zcat /mnt/mimiciv/1.0/core/admissions.csv.gz | tail -n+2 | awk -F, `{print $1}`\
 | sort | uniq | wc -l
 ``` 
 
@@ -127,25 +127,25 @@ zcat /mnt/mimiciv/1.0/core/admissions.csv.gz | tail -n+2 | awk -F, '{print $1}'\
 
 - Admission type:
 ```{bash}
-zcat /mnt/mimiciv/1.0/core/admissions.csv.gz | tail -n+2 | awk -F, '{print $6}'\
+zcat /mnt/mimiciv/1.0/core/admissions.csv.gz | tail -n+2 | awk -F, `{print $6}`\
 | sort | uniq -c
 ```
 - Admission location:
 ```{bash}
-zcat /mnt/mimiciv/1.0/core/admissions.csv.gz | tail -n+2 | awk -F, '{print $7}'\
+zcat /mnt/mimiciv/1.0/core/admissions.csv.gz | tail -n+2 | awk -F, `{print $7}`\
 | sort | uniq -c
 ```
 - Insurance:
 ```{bash}
-zcat /mnt/mimiciv/1.0/core/admissions.csv.gz | tail -n+2 | awk -F, '{print $9}'\
+zcat /mnt/mimiciv/1.0/core/admissions.csv.gz | tail -n+2 | awk -F, `{print $9}`\
 | sort | uniq -c
 ```
 - Ethnicity:
 ```{bash}
 zcat /mnt/mimiciv/1.0/core/admissions.csv.gz | tail -n+2 | awk -F, \
-'{print $12}' | sort | uniq -c
+`{print $12}` | sort | uniq -c
 ```
-## Q4. Who's popular in Price and Prejudice
+## Q4. Who`s popular in Price and Prejudice
 
 1. You and your friend just have finished reading *Pride and Prejudice* by Jane Austen. Among the four main characters in the book, Elizabeth, Jane, Lydia, and Darcy, your friend thinks that Darcy was the most mentioned. You, however, are certain it was Elizabeth. Obtain the full text of the novel from <http://www.gutenberg.org/cache/epub/42671/pg42671.txt> and save to your local folder. 
     ```{bash, eval=T}
@@ -169,19 +169,19 @@ from being downloaded again if it has already been downloaded.
     done
 ```
 
-2. What's the difference between the following two commands?
+2. What`s the difference between the following two commands?
     ```{bash eval=FALSE}
-    echo 'hello, world' > test1.txt
+    echo `hello, world` > test1.txt
     ```
     and
     ```{bash eval=FALSE}
-    echo 'hello, world' >> test2.txt
+    echo `hello, world` >> test2.txt
     ```
 
 ### Solution 
 
 Both the `>` and `>>` operators will create the specified file if it does not 
-exist already in the current directory and add 'hello, world' to it. 
+exist already in the current directory and add `hello, world` to it. 
 However, if the files have already been created, the `>` operator will overwrite 
 the existing file while `>>` will append to the existing file.
 
@@ -213,3 +213,98 @@ specifies that the script should always be run with the Bourne Shell (sh).
 ### Q5. More fun with Linux
 
 Try following commands in Bash and interpret the results: `cal`, `cal 2021`, `cal 9 1752` (anything unusual?), `date`, `hostname`, `arch`, `uname -a`, `uptime`, `who am i`, `who`, `w`, `id`, `last | head`, `echo {con,pre}{sent,fer}{s,ed}`, `time sleep 5`, `history | tail`.
+<<<<<<< HEAD
+=======
+``` {bash}
+   cal
+   cal 2021
+   cal 9 1752
+   date
+   hostname
+   arch
+   uname -a
+   uptime
+   whoami
+   who
+   w
+   id
+   last | head
+   echo {con,pre}{sent,fer}{s,ed}
+   time sleep 5
+```
+
+``` {bash}
+history | tail
+```
+
+### Solution
+- `cal` displays a calendar of the current month with the current day 
+highlighted.
+
+- `cal 2021` prints out a calendar of the year 2021.
+
+- `cal 9 1752` prints out a calendar of September 1752. September 3-13 are not 
+shown on the calendar.
+
+- `date` prints out the abbreviated day of the week, abbreviated month, day of 
+the month, time seperated by colons in the form hr:min:sec, the abbreviated
+time zone name, and the current year.
+
+- `hostname` prints the current hostname. Currently, the hostname is
+`biostat-203b-teaching-server`.
+
+- `arch` prints the current system architecture for the server. The teaching 
+server runs a 64-bit implementation of the x86 architecture set, making the
+architecture x86_64.
+
+- `uname -a` outputs the os kernel name, the hostname, the kernel release,
+the last time the kernel was compiled in the format of the `date` command, 
+the machine architecture, the processor architecutre, the computer architecture,
+and the current operating system.
+
+- `uptime` outputs the current time in the form hr:min:sec, how long the 
+system (in this case, the teaching server) has been up in the format days,
+hr:min, the number of users currently logged on, and the load averages 
+over the past 1, 5, and 15 minutes,  which describe the average number of 
+processes that are currently being executed or waiting to be executed.
+
+- `whoami` outputs the username of the current user, which is `jonathanking192` 
+for me.
+
+- `who` outputs a list of all users currently logged on the system. The output 
+includes: username, terminal, login time, and the hostname or IP address.
+
+- `w` outputs the content from the `uptime` command as a head as well as a
+list similar to the output of the `who` command but with more information
+including idle time, JCPU time (time used by all proccess on terminal), PCPU 
+time (time used by current process), and command line of current process.
+
+- `id` outputs the current user`s user id, primary group id (2x), supplementary
+group ids (if they exist), and security context. On the server, my user ID is 
+1017, Since I am only in one group,this command only outputs the primary group 
+id (1019).
+
+- `last | head` displays information about the last ten login sessions. 
+Information includes: username, terminal, IP address or hostname, time of login,
+and duration of session (or `still logged in` if user hasn`t logged out).
+
+- `echo {con,pre}{sent,fer}{s,ed}` prints all combinations of letters that start
+with either `con` or `pre`, have either `ent` or `fer` in the middle, and end 
+with `s` or `ed`. It just so happens that six out of the eight possible 
+combinations are valid English words, with `confered` and `prefered` missing
+the extra `r` to form the past tense.
+
+- `time sleep 5` displays the real-world time elapsed, time 
+spent in user mode, and time spent in kernel mode for a dummy job that is
+delayed for 5 seconds.
+
+- `history | tail` displays the last ten commands executed (does not have to be 
+valid) and their corresponding line numbers.
+
+- Note that `cal`, `date`, `uptime`, and `w` depend on time of execution, and
+`hostname`, `arch`, `uname -a`, `uptime`, `who`, `w`, `id`, last | head, 
+history tail depends on linux system, user, or both, so output presented in the
+html file will be very different from the actual output when this Rmd is re-knit.
+
+
+>>>>>>> 87bd0d4... Finished preliminary draft of hw1
