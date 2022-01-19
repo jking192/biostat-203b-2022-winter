@@ -292,8 +292,8 @@ pre code {
 </div>
 <div id="solution-1" class="section level3">
 <h3>Solution</h3>
-<p>Note that the main advantage of these commands is that they do not uncompress the target files themselves.</p>
 <ul>
+<li><p>Note that the main advantage of these commands is that they do not uncompress the target files themselves.</p></li>
 <li><p><code>cat</code> prints the contents of gzip compressed file.</p></li>
 <li><p><code>zless</code> is used to view the contents of a gzip compressed file screen by screen.The spacebar can be used to move to the next page, but the mouse can also be used to scroll through the file. Press <code>q</code> to exit.</p></li>
 <li><p><code>zmore</code> is similar to <code>zless</code> but is more limited in functionality. For example, mouse scrolling is disabled.</p></li>
@@ -343,50 +343,14 @@ pre code {
 <ul>
 <li>The number of rows in the data file is:</li>
 </ul>
-<pre class="bash"><code>zcat /mnt/mimiciv/1.0/core/admissions.csv.gz | tail -n+2 | wc -l </code></pre>
-<pre><code>## 523740</code></pre>
+<pre class="bash"><code>zcat /mnt/mimiciv/1.0/core/admissions.csv.gz | wc -l </code></pre>
+<pre><code>## 523741</code></pre>
 <ul>
 <li>The number of unique patients in this data file is:</li>
 </ul>
-<pre class="bash"><code>zcat /mnt/mimiciv/1.0/core/admissions.csv.gz | tail -n+2 | awk -F, `{print $1}`\
+<pre class="bash"><code>zcat /mnt/mimiciv/1.0/core/admissions.csv.gz | tail -n+2 | awk -F, &#39;{print $1}&#39;\
 | sort | uniq | wc -l</code></pre>
-<pre><code>## bash: {print: command not found
-## Usage: awk [POSIX or GNU style options] -f progfile [--] file ...
-## Usage: awk [POSIX or GNU style options] [--] &#39;program&#39; file ...
-## POSIX options:       GNU long options: (standard)
-##  -f progfile     --file=progfile
-##  -F fs           --field-separator=fs
-##  -v var=val      --assign=var=val
-## Short options:       GNU long options: (extensions)
-##  -b          --characters-as-bytes
-##  -c          --traditional
-##  -C          --copyright
-##  -d[file]        --dump-variables[=file]
-##  -e &#39;program-text&#39;   --source=&#39;program-text&#39;
-##  -E file         --exec=file
-##  -g          --gen-pot
-##  -h          --help
-##  -L [fatal]      --lint[=fatal]
-##  -n          --non-decimal-data
-##  -N          --use-lc-numeric
-##  -O          --optimize
-##  -p[file]        --profile[=file]
-##  -P          --posix
-##  -r          --re-interval
-##  -S          --sandbox
-##  -t          --lint-old
-##  -V          --version
-## 
-## To report bugs, see node `Bugs&#39; in `gawk.info&#39;, which is
-## section `Reporting Problems and Bugs&#39; in the printed version.
-## 
-## gawk is a pattern scanning and processing language.
-## By default it reads standard input and writes standard output.
-## 
-## Examples:
-##  gawk &#39;{ sum += $1 }; END { print sum }&#39; file
-##  gawk -F: &#39;{ print $1 }&#39; /etc/passwd
-## 0</code></pre>
+<pre><code>## 256878</code></pre>
 <ol start="6" style="list-style-type: decimal">
 <li>What are the possible values taken by each of the variable <code>admission_type</code>, <code>admission_location</code>, <code>insurance</code>, and <code>ethnicity</code>? Also report the count for each unique value of these variables. (Hint: combine Linux commands <code>zcat</code>, <code>head</code>/<code>tail</code>, <code>awk</code>, <code>uniq -c</code>, <code>wc</code>, and so on.)</li>
 </ol>
@@ -396,167 +360,55 @@ pre code {
 <ul>
 <li>Admission type:</li>
 </ul>
-<pre class="bash"><code>zcat /mnt/mimiciv/1.0/core/admissions.csv.gz | tail -n+2 | awk -F, `{print $6}`\
+<pre class="bash"><code>zcat /mnt/mimiciv/1.0/core/admissions.csv.gz | tail -n+2 | awk -F, &#39;{print $6}&#39;\
 | sort | uniq -c</code></pre>
-<pre><code>## bash: {print: command not found
-## Usage: awk [POSIX or GNU style options] -f progfile [--] file ...
-## Usage: awk [POSIX or GNU style options] [--] &#39;program&#39; file ...
-## POSIX options:       GNU long options: (standard)
-##  -f progfile     --file=progfile
-##  -F fs           --field-separator=fs
-##  -v var=val      --assign=var=val
-## Short options:       GNU long options: (extensions)
-##  -b          --characters-as-bytes
-##  -c          --traditional
-##  -C          --copyright
-##  -d[file]        --dump-variables[=file]
-##  -e &#39;program-text&#39;   --source=&#39;program-text&#39;
-##  -E file         --exec=file
-##  -g          --gen-pot
-##  -h          --help
-##  -L [fatal]      --lint[=fatal]
-##  -n          --non-decimal-data
-##  -N          --use-lc-numeric
-##  -O          --optimize
-##  -p[file]        --profile[=file]
-##  -P          --posix
-##  -r          --re-interval
-##  -S          --sandbox
-##  -t          --lint-old
-##  -V          --version
-## 
-## To report bugs, see node `Bugs&#39; in `gawk.info&#39;, which is
-## section `Reporting Problems and Bugs&#39; in the printed version.
-## 
-## gawk is a pattern scanning and processing language.
-## By default it reads standard input and writes standard output.
-## 
-## Examples:
-##  gawk &#39;{ sum += $1 }; END { print sum }&#39; file
-##  gawk -F: &#39;{ print $1 }&#39; /etc/passwd</code></pre>
+<pre><code>##    7254 AMBULATORY OBSERVATION
+##   21581 DIRECT EMER.
+##   19991 DIRECT OBSERVATION
+##   72072 ELECTIVE
+##  100445 EU OBSERVATION
+##  157896 EW EMER.
+##   55497 OBSERVATION ADMIT
+##   41074 SURGICAL SAME DAY ADMISSION
+##   47930 URGENT</code></pre>
 <ul>
 <li>Admission location:</li>
 </ul>
-<pre class="bash"><code>zcat /mnt/mimiciv/1.0/core/admissions.csv.gz | tail -n+2 | awk -F, `{print $7}`\
+<pre class="bash"><code>zcat /mnt/mimiciv/1.0/core/admissions.csv.gz | tail -n+2 | awk -F, &#39;{print $7}&#39;\
 | sort | uniq -c</code></pre>
-<pre><code>## bash: {print: command not found
-## Usage: awk [POSIX or GNU style options] -f progfile [--] file ...
-## Usage: awk [POSIX or GNU style options] [--] &#39;program&#39; file ...
-## POSIX options:       GNU long options: (standard)
-##  -f progfile     --file=progfile
-##  -F fs           --field-separator=fs
-##  -v var=val      --assign=var=val
-## Short options:       GNU long options: (extensions)
-##  -b          --characters-as-bytes
-##  -c          --traditional
-##  -C          --copyright
-##  -d[file]        --dump-variables[=file]
-##  -e &#39;program-text&#39;   --source=&#39;program-text&#39;
-##  -E file         --exec=file
-##  -g          --gen-pot
-##  -h          --help
-##  -L [fatal]      --lint[=fatal]
-##  -n          --non-decimal-data
-##  -N          --use-lc-numeric
-##  -O          --optimize
-##  -p[file]        --profile[=file]
-##  -P          --posix
-##  -r          --re-interval
-##  -S          --sandbox
-##  -t          --lint-old
-##  -V          --version
-## 
-## To report bugs, see node `Bugs&#39; in `gawk.info&#39;, which is
-## section `Reporting Problems and Bugs&#39; in the printed version.
-## 
-## gawk is a pattern scanning and processing language.
-## By default it reads standard input and writes standard output.
-## 
-## Examples:
-##  gawk &#39;{ sum += $1 }; END { print sum }&#39; file
-##  gawk -F: &#39;{ print $1 }&#39; /etc/passwd</code></pre>
+<pre><code>##   60435 
+##     191 AMBULATORY SURGERY TRANSFER
+##   10670 CLINIC REFERRAL
+##  245744 EMERGENCY ROOM
+##     379 INFORMATION NOT AVAILABLE
+##    4467 INTERNAL TRANSFER TO OR FROM PSYCH
+##    6067 PACU
+##  127494 PHYSICIAN REFERRAL
+##    8449 PROCEDURE SITE
+##   39121 TRANSFER FROM HOSPITAL
+##    4063 TRANSFER FROM SKILLED NURSING FACILITY
+##   16660 WALK-IN/SELF REFERRAL</code></pre>
 <ul>
 <li>Insurance:</li>
 </ul>
-<pre class="bash"><code>zcat /mnt/mimiciv/1.0/core/admissions.csv.gz | tail -n+2 | awk -F, `{print $9}`\
+<pre class="bash"><code>zcat /mnt/mimiciv/1.0/core/admissions.csv.gz | tail -n+2 | awk -F, &#39;{print $9}&#39;\
 | sort | uniq -c</code></pre>
-<pre><code>## bash: {print: command not found
-## Usage: awk [POSIX or GNU style options] -f progfile [--] file ...
-## Usage: awk [POSIX or GNU style options] [--] &#39;program&#39; file ...
-## POSIX options:       GNU long options: (standard)
-##  -f progfile     --file=progfile
-##  -F fs           --field-separator=fs
-##  -v var=val      --assign=var=val
-## Short options:       GNU long options: (extensions)
-##  -b          --characters-as-bytes
-##  -c          --traditional
-##  -C          --copyright
-##  -d[file]        --dump-variables[=file]
-##  -e &#39;program-text&#39;   --source=&#39;program-text&#39;
-##  -E file         --exec=file
-##  -g          --gen-pot
-##  -h          --help
-##  -L [fatal]      --lint[=fatal]
-##  -n          --non-decimal-data
-##  -N          --use-lc-numeric
-##  -O          --optimize
-##  -p[file]        --profile[=file]
-##  -P          --posix
-##  -r          --re-interval
-##  -S          --sandbox
-##  -t          --lint-old
-##  -V          --version
-## 
-## To report bugs, see node `Bugs&#39; in `gawk.info&#39;, which is
-## section `Reporting Problems and Bugs&#39; in the printed version.
-## 
-## gawk is a pattern scanning and processing language.
-## By default it reads standard input and writes standard output.
-## 
-## Examples:
-##  gawk &#39;{ sum += $1 }; END { print sum }&#39; file
-##  gawk -F: &#39;{ print $1 }&#39; /etc/passwd</code></pre>
+<pre><code>##   50850 Medicaid
+##  171360 Medicare
+##  301530 Other</code></pre>
 <ul>
 <li>Ethnicity:</li>
 </ul>
 <pre class="bash"><code>zcat /mnt/mimiciv/1.0/core/admissions.csv.gz | tail -n+2 | awk -F, \
-`{print $12}` | sort | uniq -c</code></pre>
-<pre><code>## bash: {print: command not found
-## Usage: awk [POSIX or GNU style options] -f progfile [--] file ...
-## Usage: awk [POSIX or GNU style options] [--] &#39;program&#39; file ...
-## POSIX options:       GNU long options: (standard)
-##  -f progfile     --file=progfile
-##  -F fs           --field-separator=fs
-##  -v var=val      --assign=var=val
-## Short options:       GNU long options: (extensions)
-##  -b          --characters-as-bytes
-##  -c          --traditional
-##  -C          --copyright
-##  -d[file]        --dump-variables[=file]
-##  -e &#39;program-text&#39;   --source=&#39;program-text&#39;
-##  -E file         --exec=file
-##  -g          --gen-pot
-##  -h          --help
-##  -L [fatal]      --lint[=fatal]
-##  -n          --non-decimal-data
-##  -N          --use-lc-numeric
-##  -O          --optimize
-##  -p[file]        --profile[=file]
-##  -P          --posix
-##  -r          --re-interval
-##  -S          --sandbox
-##  -t          --lint-old
-##  -V          --version
-## 
-## To report bugs, see node `Bugs&#39; in `gawk.info&#39;, which is
-## section `Reporting Problems and Bugs&#39; in the printed version.
-## 
-## gawk is a pattern scanning and processing language.
-## By default it reads standard input and writes standard output.
-## 
-## Examples:
-##  gawk &#39;{ sum += $1 }; END { print sum }&#39; file
-##  gawk -F: &#39;{ print $1 }&#39; /etc/passwd</code></pre>
+&#39;{print $12}&#39; | sort | uniq -c</code></pre>
+<pre><code>##    1535 AMERICAN INDIAN/ALASKA NATIVE
+##   24506 ASIAN
+##   80293 BLACK/AFRICAN AMERICAN
+##   29823 HISPANIC/LATINO
+##   26813 OTHER
+##    3740 UNABLE TO OBTAIN
+##   19400 UNKNOWN
+##  337630 WHITE</code></pre>
 </div>
 </div>
 <div id="q4.-whos-popular-in-price-and-prejudice" class="section level2">
@@ -675,7 +527,7 @@ head -n &quot;$2&quot; &quot;$1&quot; | tail -n &quot;$3&quot;</code></pre>
 ## 
 ## 
 ## 
-## Wed Jan 19 01:05:12 UTC 2022</code></pre>
+## Wed Jan 19 01:21:01 UTC 2022</code></pre>
 <pre class="bash"><code>   hostname
    arch
    uname -a
@@ -683,7 +535,7 @@ head -n &quot;$2&quot; &quot;$1&quot; | tail -n &quot;$3&quot;</code></pre>
 <pre><code>## biostat-203b-teaching-server
 ## x86_64
 ## Linux biostat-203b-teaching-server 3.10.0-1160.49.1.el7.x86_64 #1 SMP Tue Nov 30 15:51:32 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux
-##  01:05:12 up 16 days, 38 min,  7 users,  load average: 0.20, 0.25, 0.42</code></pre>
+##  01:21:01 up 16 days, 54 min,  7 users,  load average: 1.57, 0.65, 0.44</code></pre>
 <pre class="bash"><code>   who am i
    who</code></pre>
 <pre><code>## tomokiokuno0528 pts/1        2022-01-11 01:13 (42.166.94.34.bc.googleusercontent.com)
@@ -691,38 +543,38 @@ head -n &quot;$2&quot; &quot;$1&quot; | tail -n &quot;$3&quot;</code></pre>
 ## maschepps pts/6        2022-01-17 19:33 (74.213.228.243)
 ## jiahaotian0702 pts/16       2022-01-19 00:20 (104-54-32-28.lightspeed.irvnca.sbcglobal.net)
 ## yuyuanlin pts/18       2022-01-19 00:20 (149.142.103.176)
-## lillyhuang25 pts/20       2022-01-19 00:24 (64.201.127.119)
+## lillyhuang25 pts/20       2022-01-19 01:13 (64.201.127.119)
 ## inclassdemo pts/17       2022-01-19 00:20 (149.142.103.176)</code></pre>
 <pre class="bash"><code>   w</code></pre>
-<pre><code>##  01:05:12 up 16 days, 38 min,  7 users,  load average: 0.20, 0.25, 0.42
+<pre><code>##  01:21:01 up 16 days, 54 min,  7 users,  load average: 1.57, 0.65, 0.44
 ## USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT
-## tomokiok pts/1    42.166.94.34.bc. 11Jan22  7days  0.01s  0.01s -bash
-## tomokiok pts/3    42.166.94.34.bc. 10Jan22  7days  0.90s  0.72s ssh -i /home/tomokiokuno0528/.ssh/id_rsa tomokiokuno0528@server.ucla-biostat-203b.com
-## maschepp pts/6    74.213.228.243   Mon19   29:21m  0.03s  0.03s -bash
-## jiahaoti pts/16   104-54-32-28.lig 00:20   10:00   0.06s  0.06s -bash
-## yuyuanli pts/18   149.142.103.176  00:20   17:36   0.04s  0.04s -bash
-## lillyhua pts/20   64.201.127.119   00:24    3:12   0.05s  0.05s -bash
-## inclassd pts/17   149.142.103.176  00:20    5:04   0.08s  0.08s -bash</code></pre>
+## tomokiok pts/1    42.166.94.34.bc. 11Jan22  8days  0.01s  0.01s -bash
+## tomokiok pts/3    42.166.94.34.bc. 10Jan22  8days  0.91s  0.73s ssh -i /home/tomokiokuno0528/.ssh/id_rsa tomokiokuno0528@server.ucla-biostat-203b.com
+## maschepp pts/6    74.213.228.243   Mon19   29:37m  0.03s  0.03s -bash
+## jiahaoti pts/16   104-54-32-28.lig 00:20   25:49   0.06s  0.06s -bash
+## yuyuanli pts/18   149.142.103.176  00:20   33:25   0.04s  0.04s -bash
+## lillyhua pts/20   64.201.127.119   01:13    8:01   0.01s  0.01s -bash
+## inclassd pts/17   149.142.103.176  00:20   20:53   0.08s  0.08s -bash</code></pre>
 <pre class="bash"><code>   id
    last | head</code></pre>
 <pre><code>## uid=1017(jonathanking192) gid=1019(jonathanking192) groups=1019(jonathanking192) context=system_u:system_r:initrc_t:s0
-## lillyhua pts/20       64.201.127.119   Wed Jan 19 00:24   still logged in   
+## lillyhua pts/20       64.201.127.119   Wed Jan 19 01:13   still logged in   
+## lillyhua pts/20       64.201.127.119   Wed Jan 19 01:10 - 01:12  (00:01)    
+## lillyhua pts/20       64.201.127.119   Wed Jan 19 00:24 - 01:10  (00:46)    
 ## sharonfe pts/19       38.15.211.52     Wed Jan 19 00:20 - 00:52  (00:31)    
 ## yuyuanli pts/18       149.142.103.176  Wed Jan 19 00:20   still logged in   
 ## inclassd pts/17       149.142.103.176  Wed Jan 19 00:20   still logged in   
 ## jiahaoti pts/16       104-54-32-28.lig Wed Jan 19 00:20   still logged in   
 ## lillyhua pts/14       64.201.127.119   Wed Jan 19 00:10 - 00:11  (00:00)    
 ## lillyhua pts/10       64.201.127.119   Tue Jan 18 22:31 - 22:31  (00:00)    
-## huazhou  pts/10       149.142.103.91   Tue Jan 18 22:03 - 22:03  (00:00)    
-## huazhou  pts/12       76.93.103.195    Tue Jan 18 19:52 - 19:52  (00:00)    
-## huazhou  pts/11       76.93.103.195    Tue Jan 18 18:43 - 18:44  (00:00)</code></pre>
+## huazhou  pts/10       149.142.103.91   Tue Jan 18 22:03 - 22:03  (00:00)</code></pre>
 <pre class="bash"><code>   echo {con,pre}{sent,fer}{s,ed}
    time sleep 5</code></pre>
 <pre><code>## consents consented confers confered presents presented prefers prefered
 ## 
-## real 0m5.001s
+## real 0m5.002s
 ## user 0m0.000s
-## sys  0m0.001s</code></pre>
+## sys  0m0.002s</code></pre>
 <pre class="bash"><code>history | tail</code></pre>
 </div>
 <div id="solution-8" class="section level3">
@@ -744,7 +596,7 @@ head -n &quot;$2&quot; &quot;$1&quot; | tail -n &quot;$3&quot;</code></pre>
 <li><p><code>echo {con,pre}{sent,fer}{s,ed}</code> prints all combinations of letters that start with either <code>con</code> or <code>pre</code>, have either <code>ent</code> or <code>fer</code> in the middle, and end with <code>s</code> or <code>ed</code>. It just so happens that six out of the eight possible combinations are valid English words, with <code>confered</code> and <code>prefered</code> missing the extra <code>r</code> to form the past tense.</p></li>
 <li><p><code>time sleep 5</code> displays the real-world time elapsed, time spent in user mode, and time spent in kernel mode for a dummy job that is delayed for 5 seconds.</p></li>
 <li><p><code>history | tail</code> displays the last ten commands executed (does not have to be valid) and their corresponding line numbers.</p></li>
-<li><p>Note that <code>cal</code>, <code>date</code>, <code>uptime</code>, and <code>w</code> depend on time of execution, and <code>hostname</code>, <code>arch</code>, <code>uname -a</code>, <code>uptime</code>, <code>who</code>, <code>w</code>, <code>id</code>, last | head, history tail depends on linux system, user, or both, so output presented in the html file will be very different from the actual output when this Rmd is re-knit.</p></li>
+<li><p>Note that <code>cal</code>, <code>date</code>, <code>uptime</code>, and <code>w</code> depend on time of execution, and <code>hostname</code>, <code>arch</code>, <code>uname -a</code>, <code>uptime</code>, <code>who</code>, <code>w</code>, <code>id</code>, <code>last | head</code>, <code>history | tail</code> depends on linux system, user, or both, so output presented in the html file could be very different from the actual output when this Rmd is re-knit.</p></li>
 <li><p>Both <code>who am i</code> and <code>history | tail</code> do not work on the teaching server when knitted, so my answers were based on the output I got on my laptop’s terminal.</p></li>
 </ul>
 >>>>>>> 87bd0d4... Finished preliminary draft of hw1

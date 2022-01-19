@@ -54,14 +54,17 @@ Please, do **not** put these data files into Git; they are big. Do **not** copy 
 
 ### Solution 
 - Contents of the `core` folder are:
+
 ```{bash}
 ls -l /mnt/mimiciv/1.0/core
 ```
 - Contents of the `hosp` folder are:
+
 ```{bash}
 ls -l /mnt/mimiciv/1.0/hosp
 ```
  - Contents of the `icu` folder are:
+ 
 ```{bash}
 ls -l /mnt/mimiciv/1.0/icu
 ```
@@ -72,7 +75,12 @@ transfer.
 3. Briefly describe what bash commands `zcat`, `zless`, `zmore`, and `zgrep` do.
 
 ### Solution 
+<<<<<<< HEAD
 Note that the main advantage of these commands is that they do not uncompress 
+=======
+
+- Note that the main advantage of these commands is that they do not uncompress 
+>>>>>>> 755537b... Fixed answer formatting for hw1 Q3 (all parts) and fixed bash commands for Q3.5-3.6
 the target files themselves.
 
 - `cat` prints the contents of gzip compressed file.
@@ -113,11 +121,11 @@ zcat /mnt/mimiciv/1.0/core/admissions.csv.gz | head
 ```
 - The number of rows in the data file is:
 ```{bash}
-zcat /mnt/mimiciv/1.0/core/admissions.csv.gz | tail -n+2 | wc -l 
+zcat /mnt/mimiciv/1.0/core/admissions.csv.gz | wc -l 
 ```
 - The number of unique patients in this data file is:
 ```{bash}
-zcat /mnt/mimiciv/1.0/core/admissions.csv.gz | tail -n+2 | awk -F, `{print $1}`\
+zcat /mnt/mimiciv/1.0/core/admissions.csv.gz | tail -n+2 | awk -F, '{print $1}'\
 | sort | uniq | wc -l
 ``` 
 
@@ -127,23 +135,23 @@ zcat /mnt/mimiciv/1.0/core/admissions.csv.gz | tail -n+2 | awk -F, `{print $1}`\
 
 - Admission type:
 ```{bash}
-zcat /mnt/mimiciv/1.0/core/admissions.csv.gz | tail -n+2 | awk -F, `{print $6}`\
+zcat /mnt/mimiciv/1.0/core/admissions.csv.gz | tail -n+2 | awk -F, '{print $6}'\
 | sort | uniq -c
 ```
 - Admission location:
 ```{bash}
-zcat /mnt/mimiciv/1.0/core/admissions.csv.gz | tail -n+2 | awk -F, `{print $7}`\
+zcat /mnt/mimiciv/1.0/core/admissions.csv.gz | tail -n+2 | awk -F, '{print $7}'\
 | sort | uniq -c
 ```
 - Insurance:
 ```{bash}
-zcat /mnt/mimiciv/1.0/core/admissions.csv.gz | tail -n+2 | awk -F, `{print $9}`\
+zcat /mnt/mimiciv/1.0/core/admissions.csv.gz | tail -n+2 | awk -F, '{print $9}'\
 | sort | uniq -c
 ```
 - Ethnicity:
 ```{bash}
 zcat /mnt/mimiciv/1.0/core/admissions.csv.gz | tail -n+2 | awk -F, \
-`{print $12}` | sort | uniq -c
+'{print $12}' | sort | uniq -c
 ```
 ## Q4. Who`s popular in Price and Prejudice
 
@@ -315,9 +323,10 @@ delayed for 5 seconds.
 valid) and their corresponding line numbers.
 
 - Note that `cal`, `date`, `uptime`, and `w` depend on time of execution, and
-`hostname`, `arch`, `uname -a`, `uptime`, `who`, `w`, `id`, last | head, 
-history tail depends on linux system, user, or both, so output presented in the
-html file will be very different from the actual output when this Rmd is re-knit.
+`hostname`, `arch`, `uname -a`, `uptime`, `who`, `w`, `id`, `last | head`, 
+`history | tail` depends on linux system, user, or both, so output presented in 
+the html file could be very different from the actual output when this Rmd is 
+re-knit.
 
 - Both `who am i` and `history | tail` do not work on the teaching server when
 knitted, so my answers were based on the output I got on my laptop's terminal.
