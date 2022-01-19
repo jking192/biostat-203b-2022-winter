@@ -220,15 +220,28 @@ Try following commands in Bash and interpret the results: `cal`, `cal 2021`, `ca
    cal 2021
    cal 9 1752
    date
+```   
+```{bash}   
    hostname
    arch
    uname -a
    uptime
-   whoami
+```
+
+```{bash}
+   who am i
    who
+```
+```{bash}
    w
+```
+
+```{bash}
    id
    last | head
+```
+
+```{bash}
    echo {con,pre}{sent,fer}{s,ed}
    time sleep 5
 ```
@@ -268,8 +281,8 @@ hr:min, the number of users currently logged on, and the load averages
 over the past 1, 5, and 15 minutes,  which describe the average number of 
 processes that are currently being executed or waiting to be executed.
 
-- `whoami` outputs the username of the current user, which is `jonathanking192` 
-for me.
+- `whoami` outputs the username, terminal, login time, and hostname of the 
+current user.
 
 - `who` outputs a list of all users currently logged on the system. The output 
 includes: username, terminal, login time, and the hostname or IP address.
@@ -305,6 +318,9 @@ valid) and their corresponding line numbers.
 `hostname`, `arch`, `uname -a`, `uptime`, `who`, `w`, `id`, last | head, 
 history tail depends on linux system, user, or both, so output presented in the
 html file will be very different from the actual output when this Rmd is re-knit.
+
+- Both `who am i` and `history | tail` do not work on the teaching server when
+knitted, so my answers were based on the output I got on my laptop's terminal.
 
 
 >>>>>>> 87bd0d4... Finished preliminary draft of hw1

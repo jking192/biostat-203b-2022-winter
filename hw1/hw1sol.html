@@ -623,18 +623,7 @@ head -n &quot;$2&quot; &quot;$1&quot; | tail -n &quot;$3&quot;</code></pre>
 <pre class="bash"><code>   cal
    cal 2021
    cal 9 1752
-   date
-   hostname
-   arch
-   uname -a
-   uptime
-   whoami
-   who
-   w
-   id
-   last | head
-   echo {con,pre}{sent,fer}{s,ed}
-   time sleep 5</code></pre>
+   date</code></pre>
 <pre><code>##     January 2022    
 ## Su Mo Tu We Th Fr Sa
 ##                    1
@@ -686,36 +675,54 @@ head -n &quot;$2&quot; &quot;$1&quot; | tail -n &quot;$3&quot;</code></pre>
 ## 
 ## 
 ## 
-## Tue Jan 18 05:05:43 UTC 2022
-## biostat-203b-teaching-server
+## Wed Jan 19 01:05:12 UTC 2022</code></pre>
+<pre class="bash"><code>   hostname
+   arch
+   uname -a
+   uptime</code></pre>
+<pre><code>## biostat-203b-teaching-server
 ## x86_64
 ## Linux biostat-203b-teaching-server 3.10.0-1160.49.1.el7.x86_64 #1 SMP Tue Nov 30 15:51:32 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux
-##  05:05:43 up 15 days,  4:39,  3 users,  load average: 0.20, 0.17, 0.17
-## jonathanking192
-## tomokiokuno0528 pts/1        2022-01-11 01:13 (42.166.94.34.bc.googleusercontent.com)
+##  01:05:12 up 16 days, 38 min,  7 users,  load average: 0.20, 0.25, 0.42</code></pre>
+<pre class="bash"><code>   who am i
+   who</code></pre>
+<pre><code>## tomokiokuno0528 pts/1        2022-01-11 01:13 (42.166.94.34.bc.googleusercontent.com)
 ## tomokiokuno0528 pts/3        2022-01-10 23:43 (42.166.94.34.bc.googleusercontent.com)
 ## maschepps pts/6        2022-01-17 19:33 (74.213.228.243)
-##  05:05:43 up 15 days,  4:39,  3 users,  load average: 0.20, 0.17, 0.17
+## jiahaotian0702 pts/16       2022-01-19 00:20 (104-54-32-28.lightspeed.irvnca.sbcglobal.net)
+## yuyuanlin pts/18       2022-01-19 00:20 (149.142.103.176)
+## lillyhuang25 pts/20       2022-01-19 00:24 (64.201.127.119)
+## inclassdemo pts/17       2022-01-19 00:20 (149.142.103.176)</code></pre>
+<pre class="bash"><code>   w</code></pre>
+<pre><code>##  01:05:12 up 16 days, 38 min,  7 users,  load average: 0.20, 0.25, 0.42
 ## USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT
 ## tomokiok pts/1    42.166.94.34.bc. 11Jan22  7days  0.01s  0.01s -bash
-## tomokiok pts/3    42.166.94.34.bc. 10Jan22  7days  0.82s  0.64s ssh -i /home/tomokiokuno0528/.ssh/id_rsa tomokiokuno0528@server.ucla-biostat-203b.com
-## maschepp pts/6    74.213.228.243   19:33    9:22m  0.03s  0.03s -bash
-## uid=1017(jonathanking192) gid=1019(jonathanking192) groups=1019(jonathanking192) context=system_u:system_r:initrc_t:s0
-## yllai    pts/13       cpe-172-91-85-15 Tue Jan 18 04:47 - 04:49  (00:02)    
-## wongj172 pts/12       cpe-172-91-87-18 Mon Jan 17 23:29 - 23:29  (00:00)    
-## maschepp pts/6        74.213.228.243   Mon Jan 17 19:33   still logged in   
-## lillyhua pts/5        64.201.127.119   Mon Jan 17 17:54 - 17:56  (00:01)    
-## lillyhua pts/5        64.201.127.119   Mon Jan 17 17:47 - 17:47  (00:00)    
-## lillyhua pts/5        64.201.127.119   Mon Jan 17 17:42 - 17:42  (00:00)    
-## lillyhua pts/5        64.201.127.119   Mon Jan 17 17:37 - 17:39  (00:02)    
-## lillyhua pts/5        64.201.127.119   Mon Jan 17 17:20 - 17:23  (00:03)    
-## wongj172 pts/0        cpe-172-91-87-18 Mon Jan 17 09:32 - 09:36  (00:03)    
-## wongj172 pts/0        cpe-172-91-87-18 Mon Jan 17 09:30 - 09:30  (00:00)    
-## consents consented confers confered presents presented prefers prefered
+## tomokiok pts/3    42.166.94.34.bc. 10Jan22  7days  0.90s  0.72s ssh -i /home/tomokiokuno0528/.ssh/id_rsa tomokiokuno0528@server.ucla-biostat-203b.com
+## maschepp pts/6    74.213.228.243   Mon19   29:21m  0.03s  0.03s -bash
+## jiahaoti pts/16   104-54-32-28.lig 00:20   10:00   0.06s  0.06s -bash
+## yuyuanli pts/18   149.142.103.176  00:20   17:36   0.04s  0.04s -bash
+## lillyhua pts/20   64.201.127.119   00:24    3:12   0.05s  0.05s -bash
+## inclassd pts/17   149.142.103.176  00:20    5:04   0.08s  0.08s -bash</code></pre>
+<pre class="bash"><code>   id
+   last | head</code></pre>
+<pre><code>## uid=1017(jonathanking192) gid=1019(jonathanking192) groups=1019(jonathanking192) context=system_u:system_r:initrc_t:s0
+## lillyhua pts/20       64.201.127.119   Wed Jan 19 00:24   still logged in   
+## sharonfe pts/19       38.15.211.52     Wed Jan 19 00:20 - 00:52  (00:31)    
+## yuyuanli pts/18       149.142.103.176  Wed Jan 19 00:20   still logged in   
+## inclassd pts/17       149.142.103.176  Wed Jan 19 00:20   still logged in   
+## jiahaoti pts/16       104-54-32-28.lig Wed Jan 19 00:20   still logged in   
+## lillyhua pts/14       64.201.127.119   Wed Jan 19 00:10 - 00:11  (00:00)    
+## lillyhua pts/10       64.201.127.119   Tue Jan 18 22:31 - 22:31  (00:00)    
+## huazhou  pts/10       149.142.103.91   Tue Jan 18 22:03 - 22:03  (00:00)    
+## huazhou  pts/12       76.93.103.195    Tue Jan 18 19:52 - 19:52  (00:00)    
+## huazhou  pts/11       76.93.103.195    Tue Jan 18 18:43 - 18:44  (00:00)</code></pre>
+<pre class="bash"><code>   echo {con,pre}{sent,fer}{s,ed}
+   time sleep 5</code></pre>
+<pre><code>## consents consented confers confered presents presented prefers prefered
 ## 
 ## real 0m5.001s
-## user 0m0.001s
-## sys  0m0.000s</code></pre>
+## user 0m0.000s
+## sys  0m0.001s</code></pre>
 <pre class="bash"><code>history | tail</code></pre>
 </div>
 <div id="solution-8" class="section level3">
@@ -729,7 +736,7 @@ head -n &quot;$2&quot; &quot;$1&quot; | tail -n &quot;$3&quot;</code></pre>
 <li><p><code>arch</code> prints the current system architecture for the server. The teaching server runs a 64-bit implementation of the x86 architecture set, making the architecture x86_64.</p></li>
 <li><p><code>uname -a</code> outputs the os kernel name, the hostname, the kernel release, the last time the kernel was compiled in the format of the <code>date</code> command, the machine architecture, the processor architecutre, the computer architecture, and the current operating system.</p></li>
 <li><p><code>uptime</code> outputs the current time in the form hr:min:sec, how long the system (in this case, the teaching server) has been up in the format days, hr:min, the number of users currently logged on, and the load averages over the past 1, 5, and 15 minutes, which describe the average number of processes that are currently being executed or waiting to be executed.</p></li>
-<li><p><code>whoami</code> outputs the username of the current user, which is <code>jonathanking192</code> for me.</p></li>
+<li><p><code>whoami</code> outputs the username, terminal, login time, and hostname of the current user.</p></li>
 <li><p><code>who</code> outputs a list of all users currently logged on the system. The output includes: username, terminal, login time, and the hostname or IP address.</p></li>
 <li><p><code>w</code> outputs the content from the <code>uptime</code> command as a head as well as a list similar to the output of the <code>who</code> command but with more information including idle time, JCPU time (time used by all proccess on terminal), PCPU time (time used by current process), and command line of current process.</p></li>
 <li><p><code>id</code> outputs the current user`s user id, primary group id (2x), supplementary group ids (if they exist), and security context. On the server, my user ID is 1017, Since I am only in one group,this command only outputs the primary group id (1019).</p></li>
@@ -738,6 +745,7 @@ head -n &quot;$2&quot; &quot;$1&quot; | tail -n &quot;$3&quot;</code></pre>
 <li><p><code>time sleep 5</code> displays the real-world time elapsed, time spent in user mode, and time spent in kernel mode for a dummy job that is delayed for 5 seconds.</p></li>
 <li><p><code>history | tail</code> displays the last ten commands executed (does not have to be valid) and their corresponding line numbers.</p></li>
 <li><p>Note that <code>cal</code>, <code>date</code>, <code>uptime</code>, and <code>w</code> depend on time of execution, and <code>hostname</code>, <code>arch</code>, <code>uname -a</code>, <code>uptime</code>, <code>who</code>, <code>w</code>, <code>id</code>, last | head, history tail depends on linux system, user, or both, so output presented in the html file will be very different from the actual output when this Rmd is re-knit.</p></li>
+<li><p>Both <code>who am i</code> and <code>history | tail</code> do not work on the teaching server when knitted, so my answers were based on the output I got on my laptop’s terminal.</p></li>
 </ul>
 >>>>>>> 87bd0d4... Finished preliminary draft of hw1
 </div>
