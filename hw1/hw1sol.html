@@ -422,34 +422,34 @@ pre code {
 <ol style="list-style-type: decimal">
 <li><p>You and your friend just have finished reading <em>Pride and Prejudice</em> by Jane Austen. Among the four main characters in the book, Elizabeth, Jane, Lydia, and Darcy, your friend thinks that Darcy was the most mentioned. You, however, are certain it was Elizabeth. Obtain the full text of the novel from <a href="http://www.gutenberg.org/cache/epub/42671/pg42671.txt" class="uri">http://www.gutenberg.org/cache/epub/42671/pg42671.txt</a> and save to your local folder.</p>
 <pre class="bash"><code>wget -nc http://www.gutenberg.org/cache/epub/42671/pg42671.txt</code></pre>
-<pre><code>## --2022-01-21 09:43:06--  http://www.gutenberg.org/cache/epub/42671/pg42671.txt
+<pre><code>## --2022-01-21 11:00:52--  http://www.gutenberg.org/cache/epub/42671/pg42671.txt
 ## Resolving www.gutenberg.org (www.gutenberg.org)... 152.19.134.47, 2610:28:3090:3000:0:bad:cafe:47
 ## Connecting to www.gutenberg.org (www.gutenberg.org)|152.19.134.47|:80... connected.
 ## HTTP request sent, awaiting response... 302 Found
 ## Location: https://www.gutenberg.org/cache/epub/42671/pg42671.txt [following]
-## --2022-01-21 09:43:06--  https://www.gutenberg.org/cache/epub/42671/pg42671.txt
+## --2022-01-21 11:00:52--  https://www.gutenberg.org/cache/epub/42671/pg42671.txt
 ## Connecting to www.gutenberg.org (www.gutenberg.org)|152.19.134.47|:443... connected.
 ## HTTP request sent, awaiting response... 200 OK
 ## Length: 725060 (708K) [text/plain]
 ## Saving to: ‘pg42671.txt’
 ## 
-##      0K .......... .......... .......... .......... ..........  7%  707K 1s
-##     50K .......... .......... .......... .......... .......... 14%  702K 1s
-##    100K .......... .......... .......... .......... .......... 21%  105M 1s
-##    150K .......... .......... .......... .......... .......... 28%  126M 0s
-##    200K .......... .......... .......... .......... .......... 35%  709K 0s
-##    250K .......... .......... .......... .......... .......... 42%  174M 0s
-##    300K .......... .......... .......... .......... .......... 49%  184M 0s
-##    350K .......... .......... .......... .......... .......... 56%  190M 0s
-##    400K .......... .......... .......... .......... .......... 63%  711K 0s
-##    450K .......... .......... .......... .......... .......... 70%  178M 0s
-##    500K .......... .......... .......... .......... .......... 77%  177M 0s
-##    550K .......... .......... .......... .......... .......... 84%  180M 0s
-##    600K .......... .......... .......... .......... .......... 91%  131M 0s
-##    650K .......... .......... .......... .......... .......... 98%  150M 0s
-##    700K ........                                              100%  119M=0.3s
+##      0K .......... .......... .......... .......... ..........  7%  698K 1s
+##     50K .......... .......... .......... .......... .......... 14%  698K 1s
+##    100K .......... .......... .......... .......... .......... 21%  104M 1s
+##    150K .......... .......... .......... .......... .......... 28%  146M 0s
+##    200K .......... .......... .......... .......... .......... 35%  701K 0s
+##    250K .......... .......... .......... .......... .......... 42% 97.8M 0s
+##    300K .......... .......... .......... .......... .......... 49%  149M 0s
+##    350K .......... .......... .......... .......... .......... 56%  149M 0s
+##    400K .......... .......... .......... .......... .......... 63%  714K 0s
+##    450K .......... .......... .......... .......... .......... 70%  119M 0s
+##    500K .......... .......... .......... .......... .......... 77%  149M 0s
+##    550K .......... .......... .......... .......... .......... 84%  137M 0s
+##    600K .......... .......... .......... .......... .......... 91% 76.6M 0s
+##    650K .......... .......... .......... .......... .......... 98%  139M 0s
+##    700K ........                                              100%  157M=0.3s
 ## 
-## 2022-01-21 09:43:07 (2.42 MB/s) - ‘pg42671.txt’ saved [725060/725060]</code></pre>
+## 2022-01-21 11:00:53 (2.39 MB/s) - ‘pg42671.txt’ saved [725060/725060]</code></pre>
 <p>Explain what <code>wget -nc</code> does. Do <strong>not</strong> put this text file <code>pg42671.txt</code> in Git. Complete the following loop to tabulate the number of times each of the four characters is mentioned using Linux commands.</p></li>
 </ol>
 <div id="solution-6" class="section level3">
@@ -567,7 +567,7 @@ head -n &quot;$2&quot; &quot;$1&quot; | tail -n &quot;$3&quot;</code></pre>
 ## 
 ## 
 ## 
-## Fri Jan 21 09:43:07 UTC 2022</code></pre>
+## Fri Jan 21 11:00:53 UTC 2022</code></pre>
 <pre class="bash"><code>   hostname
    arch
    uname -a
@@ -575,18 +575,18 @@ head -n &quot;$2&quot; &quot;$1&quot; | tail -n &quot;$3&quot;</code></pre>
 <pre><code>## biostat-203b-teaching-server
 ## x86_64
 ## Linux biostat-203b-teaching-server 3.10.0-1160.49.1.el7.x86_64 #1 SMP Tue Nov 30 15:51:32 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux
-##  09:43:07 up 18 days,  9:16,  3 users,  load average: 0.49, 0.32, 0.28</code></pre>
+##  11:00:53 up 18 days, 10:34,  3 users,  load average: 0.55, 0.25, 0.21</code></pre>
 <pre class="bash"><code>   who am i
    who</code></pre>
 <pre><code>## tomokiokuno0528 pts/1        2022-01-11 01:13 (42.166.94.34.bc.googleusercontent.com)
 ## tomokiokuno0528 pts/3        2022-01-10 23:43 (42.166.94.34.bc.googleusercontent.com)
 ## capj245  pts/13       2022-01-21 03:54 (s-164-67-232-61.resnet.ucla.edu)</code></pre>
 <pre class="bash"><code>   w</code></pre>
-<pre><code>##  09:43:07 up 18 days,  9:16,  3 users,  load average: 0.49, 0.32, 0.28
+<pre><code>##  11:00:53 up 18 days, 10:34,  3 users,  load average: 0.55, 0.25, 0.21
 ## USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT
 ## tomokiok pts/1    42.166.94.34.bc. 11Jan22 10days  0.01s  0.01s -bash
 ## tomokiok pts/3    42.166.94.34.bc. 10Jan22 10days  1.17s  0.99s ssh -i /home/tomokiokuno0528/.ssh/id_rsa tomokiokuno0528@server.ucla-biostat-203b.com
-## capj245  pts/13   s-164-67-232-61. 03:54    5:48m  0.01s  0.01s -bash</code></pre>
+## capj245  pts/13   s-164-67-232-61. 03:54    7:05m  0.01s  0.01s -bash</code></pre>
 <pre class="bash"><code>   id
    last | head</code></pre>
 <pre><code>## uid=1017(jonathanking192) gid=1019(jonathanking192) groups=1019(jonathanking192) context=system_u:system_r:initrc_t:s0
@@ -604,9 +604,9 @@ head -n &quot;$2&quot; &quot;$1&quot; | tail -n &quot;$3&quot;</code></pre>
    time sleep 5</code></pre>
 <pre><code>## consents consented confers confered presents presented prefers prefered
 ## 
-## real 0m5.002s
+## real 0m5.001s
 ## user 0m0.000s
-## sys  0m0.002s</code></pre>
+## sys  0m0.001s</code></pre>
 <pre class="bash"><code>history | tail</code></pre>
 </div>
 <div id="solution-10" class="section level3">
