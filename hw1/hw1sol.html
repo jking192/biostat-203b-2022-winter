@@ -293,11 +293,11 @@ pre code {
 <div id="solution-1" class="section level3">
 <h3>Solution</h3>
 <ul>
-<li><p>Note that the main advantage of these commands is that they do not uncompress the target files themselves.</p></li>
-<li><p><code>cat</code> prints the contents of gzip compressed file.</p></li>
-<li><p><code>zless</code> is used to view the contents of a gzip compressed file screen by screen.The spacebar can be used to move to the next page, but the mouse can also be used to scroll through the file. Press <code>q</code> to exit.</p></li>
+<li><p>Note that the main advantage of these commands is that they do not uncompress the target file themselves.</p></li>
+<li><p><code>cat</code> prints the contents of a gzip-compressed file.</p></li>
+<li><p><code>zless</code> is used to view the contents of a gzip-compressed file screen by screen. The spacebar can be used to move to the next page, and the mouse can also be used to scroll through the file. Press <code>q</code> to exit.</p></li>
 <li><p><code>zmore</code> is similar to <code>zless</code> but is more limited in functionality. For example, mouse scrolling is disabled.</p></li>
-<li><p><code>zgrep</code> prints all lines from a gzip compressed file that match a specified expression.</p></li>
+<li><p><code>zgrep</code> prints all lines from a gzip-compressed file that match a specified expression.</p></li>
 </ul>
 <ol start="4" style="list-style-type: decimal">
 <li><p>What`s the output of following bash script?</p>
@@ -307,11 +307,15 @@ pre code {
   done</code></pre>
 <pre><code>## -rw-r--r--. 1 root root 17208966 Jan  4 21:48 /mnt/mimiciv/1.0/core/admissions.csv.gz
 ## -rw-r--r--. 1 root root 2955582 Jan  4 21:48 /mnt/mimiciv/1.0/core/patients.csv.gz
-## -rw-r--r--. 1 root root 53014503 Jan  4 21:48 /mnt/mimiciv/1.0/core/transfers.csv.gz</code></pre>
-<p>Display the number of lines in each data file using a similar loop.</p></li>
+## -rw-r--r--. 1 root root 53014503 Jan  4 21:48 /mnt/mimiciv/1.0/core/transfers.csv.gz</code></pre></li>
 </ol>
 </div>
 <div id="solution-2" class="section level3">
+<h3>Solution</h3>
+<p>The output is a list of all gzip-compressed files from MIMIC-IV in the long list format.</p>
+<p>Display the number of lines in each data file using a similar loop.</p>
+</div>
+<div id="solution-3" class="section level3">
 <h3>Solution</h3>
 <pre class="bash"><code>    for datafile in /mnt/mimiciv/1.0/core/*.gz
       do
@@ -324,12 +328,12 @@ pre code {
 <li>Display the first few lines of <code>admissions.csv.gz</code>. How many rows are in this data file? How many unique patients (identified by <code>subject_id</code>) are in this data file? (Hint: combine Linux commands <code>zcat</code>, <code>head</code>/<code>tail</code>, <code>awk</code>, <code>sort</code>, <code>uniq</code>, <code>wc</code>, and so on.)</li>
 </ol>
 </div>
-<div id="solution-3" class="section level3">
+<div id="solution-4" class="section level3">
 <h3>Solution</h3>
 <ul>
 <li>The first few lines are:</li>
 </ul>
-<pre class="bash"><code>zcat /mnt/mimiciv/1.0/core/admissions.csv.gz | head</code></pre>
+<pre class="bash"><code>zcat /mnt/mimiciv/1.0/core/admissions.csv.gz | head </code></pre>
 <pre><code>## subject_id,hadm_id,admittime,dischtime,deathtime,admission_type,admission_location,discharge_location,insurance,language,marital_status,ethnicity,edregtime,edouttime,hospital_expire_flag
 ## 14679932,21038362,2139-09-26 14:16:00,2139-09-28 11:30:00,,ELECTIVE,,HOME,Other,ENGLISH,SINGLE,UNKNOWN,,,0
 ## 15585972,24941086,2123-10-07 23:56:00,2123-10-12 11:22:00,,ELECTIVE,,HOME,Other,ENGLISH,,WHITE,,,0
@@ -355,7 +359,7 @@ pre code {
 <li>What are the possible values taken by each of the variable <code>admission_type</code>, <code>admission_location</code>, <code>insurance</code>, and <code>ethnicity</code>? Also report the count for each unique value of these variables. (Hint: combine Linux commands <code>zcat</code>, <code>head</code>/<code>tail</code>, <code>awk</code>, <code>uniq -c</code>, <code>wc</code>, and so on.)</li>
 </ol>
 </div>
-<div id="solution-4" class="section level3">
+<div id="solution-5" class="section level3">
 <h3>Solution</h3>
 <ul>
 <li>Admission type:</li>
@@ -419,14 +423,14 @@ pre code {
 <pre><code>## File ‘pg42671.txt’ already there; not retrieving.</code></pre>
 <p>Explain what <code>wget -nc</code> does. Do <strong>not</strong> put this text file <code>pg42671.txt</code> in Git. Complete the following loop to tabulate the number of times each of the four characters is mentioned using Linux commands.</p></li>
 </ol>
-<div id="solution-5" class="section level3">
+<div id="solution-6" class="section level3">
 <h3>Solution</h3>
 <p><code>wget</code> is a command-line utility used to download files from the web. It is non-interactive, so it can work in the background. It supports HTTPS, HTTP, and FTP, the most widely used Internet protocals. The <code>-nc</code> option prevents a file from being downloaded again if it has already been downloaded.</p>
 <pre class="bash"><code>    #wget -nc http://www.gutenberg.org/cache/epub/42671/pg42671.txt
     for char in Elizabeth Jane Lydia Darcy
     do
       echo $char:
-       cat pg42671.txt | grep -o -i $char | wc -l
+       cat pg42671.txt | grep -oi $char | wc -l
     done</code></pre>
 <pre><code>## Elizabeth:
 ## 634
@@ -443,7 +447,7 @@ pre code {
 <pre class="bash"><code>echo `hello, world` &gt;&gt; test2.txt</code></pre></li>
 </ol>
 </div>
-<div id="solution-6" class="section level3">
+<div id="solution-7" class="section level3">
 <h3>Solution</h3>
 <p>Both the <code>&gt;</code> and <code>&gt;&gt;</code> operators will create the specified file if it does not exist already in the current directory and add <code>hello, world</code> to it. However, if the files have already been created, the <code>&gt;</code> operator will overwrite the existing file while <code>&gt;&gt;</code> will append to the existing file.</p>
 <ol start="3" style="list-style-type: decimal">
@@ -463,7 +467,7 @@ head -n &quot;$2&quot; &quot;$1&quot; | tail -n &quot;$3&quot;</code></pre>
 <p>Explain the output. Explain the meaning of <code>&quot;$1&quot;</code>, <code>&quot;$2&quot;</code>, and <code>&quot;$3&quot;</code> in this shell script. Why do we need the first line of the shell script?</p></li>
 </ol>
 </div>
-<div id="solution-7" class="section level3">
+<div id="solution-8" class="section level3">
 <h3>Solution</h3>
 <p>The output is lines 16-20 from the downloaded version of <em>Pride and Prejudice</em>. <code>&quot;$1&quot;</code> is the first argument passed to the <code>middle.sh</code> script, <code>&quot;$2&quot;</code> is the second argument passed to the script, and <code>&quot;$3&quot;</code> is the third argument. When executing the script above, <code>pg42671.txt</code> is the first argument, <code>20</code> is the second argument, and <code>5</code> is the third argument. Therefore, the commands being executed above, according to the script is: <code>head -n 20 pg42671.txt | tail -n 5</code>. The first line of the shell script specifies that the script should always be run with the Bourne Shell (sh).</p>
 </div>
@@ -527,7 +531,7 @@ head -n &quot;$2&quot; &quot;$1&quot; | tail -n &quot;$3&quot;</code></pre>
 ## 
 ## 
 ## 
-## Wed Jan 19 01:21:01 UTC 2022</code></pre>
+## Fri Jan 21 06:12:05 UTC 2022</code></pre>
 <pre class="bash"><code>   hostname
    arch
    uname -a
@@ -535,69 +539,66 @@ head -n &quot;$2&quot; &quot;$1&quot; | tail -n &quot;$3&quot;</code></pre>
 <pre><code>## biostat-203b-teaching-server
 ## x86_64
 ## Linux biostat-203b-teaching-server 3.10.0-1160.49.1.el7.x86_64 #1 SMP Tue Nov 30 15:51:32 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux
-##  01:21:01 up 16 days, 54 min,  7 users,  load average: 1.57, 0.65, 0.44</code></pre>
+##  06:12:05 up 18 days,  5:45,  5 users,  load average: 1.23, 0.72, 0.55</code></pre>
 <pre class="bash"><code>   who am i
    who</code></pre>
 <pre><code>## tomokiokuno0528 pts/1        2022-01-11 01:13 (42.166.94.34.bc.googleusercontent.com)
 ## tomokiokuno0528 pts/3        2022-01-10 23:43 (42.166.94.34.bc.googleusercontent.com)
 ## maschepps pts/6        2022-01-17 19:33 (74.213.228.243)
-## jiahaotian0702 pts/16       2022-01-19 00:20 (104-54-32-28.lightspeed.irvnca.sbcglobal.net)
-## yuyuanlin pts/18       2022-01-19 00:20 (149.142.103.176)
-## lillyhuang25 pts/20       2022-01-19 01:13 (64.201.127.119)
-## inclassdemo pts/17       2022-01-19 00:20 (149.142.103.176)</code></pre>
+## capj245  pts/13       2022-01-21 03:54 (s-164-67-232-61.resnet.ucla.edu)
+## tokramm  pts/18       2022-01-21 05:07 (76.82.34.63)</code></pre>
 <pre class="bash"><code>   w</code></pre>
-<pre><code>##  01:21:01 up 16 days, 54 min,  7 users,  load average: 1.57, 0.65, 0.44
+<pre><code>##  06:12:05 up 18 days,  5:45,  5 users,  load average: 1.23, 0.72, 0.55
 ## USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT
-## tomokiok pts/1    42.166.94.34.bc. 11Jan22  8days  0.01s  0.01s -bash
-## tomokiok pts/3    42.166.94.34.bc. 10Jan22  8days  0.91s  0.73s ssh -i /home/tomokiokuno0528/.ssh/id_rsa tomokiokuno0528@server.ucla-biostat-203b.com
-## maschepp pts/6    74.213.228.243   Mon19   29:37m  0.03s  0.03s -bash
-## jiahaoti pts/16   104-54-32-28.lig 00:20   25:49   0.06s  0.06s -bash
-## yuyuanli pts/18   149.142.103.176  00:20   33:25   0.04s  0.04s -bash
-## lillyhua pts/20   64.201.127.119   01:13    8:01   0.01s  0.01s -bash
-## inclassd pts/17   149.142.103.176  00:20   20:53   0.08s  0.08s -bash</code></pre>
+## tomokiok pts/1    42.166.94.34.bc. 11Jan22 10days  0.01s  0.01s -bash
+## tomokiok pts/3    42.166.94.34.bc. 10Jan22 10days  1.14s  0.96s ssh -i /home/tomokiokuno0528/.ssh/id_rsa tomokiokuno0528@server.ucla-biostat-203b.com
+## maschepp pts/6    74.213.228.243   Mon19    3days  0.03s  0.03s -bash
+## capj245  pts/13   s-164-67-232-61. 03:54    2:17m  0.01s  0.01s -bash
+## tokramm  pts/18   76.82.34.63      05:07    1:04m  0.01s  0.01s -bash</code></pre>
 <pre class="bash"><code>   id
    last | head</code></pre>
 <pre><code>## uid=1017(jonathanking192) gid=1019(jonathanking192) groups=1019(jonathanking192) context=system_u:system_r:initrc_t:s0
-## lillyhua pts/20       64.201.127.119   Wed Jan 19 01:13   still logged in   
-## lillyhua pts/20       64.201.127.119   Wed Jan 19 01:10 - 01:12  (00:01)    
-## lillyhua pts/20       64.201.127.119   Wed Jan 19 00:24 - 01:10  (00:46)    
-## sharonfe pts/19       38.15.211.52     Wed Jan 19 00:20 - 00:52  (00:31)    
-## yuyuanli pts/18       149.142.103.176  Wed Jan 19 00:20   still logged in   
-## inclassd pts/17       149.142.103.176  Wed Jan 19 00:20   still logged in   
-## jiahaoti pts/16       104-54-32-28.lig Wed Jan 19 00:20   still logged in   
-## lillyhua pts/14       64.201.127.119   Wed Jan 19 00:10 - 00:11  (00:00)    
-## lillyhua pts/10       64.201.127.119   Tue Jan 18 22:31 - 22:31  (00:00)    
-## huazhou  pts/10       149.142.103.91   Tue Jan 18 22:03 - 22:03  (00:00)</code></pre>
+## tokramm  pts/18       76.82.34.63      Fri Jan 21 05:07   still logged in   
+## tokramm  pts/18       76.82.34.63      Fri Jan 21 04:58 - 05:02  (00:04)    
+## blei001  pts/18       cpe-76-171-0-146 Fri Jan 21 04:56 - 04:56  (00:00)    
+## tokramm  pts/18       76.82.34.63      Fri Jan 21 04:53 - 04:54  (00:00)    
+## tokramm  pts/18       76.82.34.63      Fri Jan 21 04:31 - 04:53  (00:21)    
+## capj245  pts/13       s-164-67-232-61. Fri Jan 21 03:54   still logged in   
+## capj245  pts/13       s-164-67-232-61. Fri Jan 21 03:45 - 03:49  (00:04)    
+## capj245  pts/13       s-164-67-232-61. Fri Jan 21 03:36 - 03:38  (00:01)    
+## yuyuanli pts/30       149.142.103.176  Fri Jan 21 01:13 - 01:14  (00:00)    
+## huazhou  pts/7        108-64-58-205.li Fri Jan 21 01:03 - 01:52  (00:48)</code></pre>
 <pre class="bash"><code>   echo {con,pre}{sent,fer}{s,ed}
    time sleep 5</code></pre>
 <pre><code>## consents consented confers confered presents presented prefers prefered
 ## 
-## real 0m5.002s
+## real 0m5.001s
 ## user 0m0.000s
-## sys  0m0.002s</code></pre>
+## sys  0m0.001s</code></pre>
 <pre class="bash"><code>history | tail</code></pre>
 </div>
-<div id="solution-8" class="section level3">
+<div id="solution-9" class="section level3">
 <h3>Solution</h3>
 <ul>
-<li><p><code>cal</code> displays a calendar of the current month with the current day highlighted.</p></li>
-<li><p><code>cal 2021</code> prints out a calendar of the year 2021.</p></li>
-<li><p><code>cal 9 1752</code> prints out a calendar of September 1752. September 3-13 are not shown on the calendar.</p></li>
-<li><p><code>date</code> prints out the abbreviated day of the week, abbreviated month, day of the month, time seperated by colons in the form hr:min:sec, the abbreviated time zone name, and the current year.</p></li>
-<li><p><code>hostname</code> prints the current hostname. Currently, the hostname is <code>biostat-203b-teaching-server</code>.</p></li>
-<li><p><code>arch</code> prints the current system architecture for the server. The teaching server runs a 64-bit implementation of the x86 architecture set, making the architecture x86_64.</p></li>
-<li><p><code>uname -a</code> outputs the os kernel name, the hostname, the kernel release, the last time the kernel was compiled in the format of the <code>date</code> command, the machine architecture, the processor architecutre, the computer architecture, and the current operating system.</p></li>
-<li><p><code>uptime</code> outputs the current time in the form hr:min:sec, how long the system (in this case, the teaching server) has been up in the format days, hr:min, the number of users currently logged on, and the load averages over the past 1, 5, and 15 minutes, which describe the average number of processes that are currently being executed or waiting to be executed.</p></li>
+<li><p><code>cal</code> outputs a calendar of the current month with the current day highlighted.</p></li>
+<li><p><code>cal 2021</code> outputs a calendar of the year 2021.</p></li>
+<li><p><code>cal 9 1752</code> outputs a calendar of September 1752. September 3-13 are not shown on the calendar.</p></li>
+<li><p><code>date</code> outputs the abbreviated day of the week, abbreviated month, day of the month, current time, the abbreviated time zone name, and the current year.</p></li>
+<li><p><code>hostname</code> outputs the current hostname of the Linux system.</p></li>
+<li><p><code>arch</code> outputs the current machine architecture. The teaching server runs a 64-bit implementation of the x86 architecture set, making the architecture x86_64.</p></li>
+<li><p><code>uname -a</code> outputs the operating system kernel name, the hostname, the kernel release, the last time the kernel was compiled in the format of the <code>date</code> command, the machine architecture, the processor architecture, the operating system architecture, and the current operating system.</p></li>
+<li><p><code>uptime</code> outputs the current time in the form hr:min:sec, how long the system has been up in the format days, hr:min, the number of users currently logged on, and the load averages over the past 1, 5, and 15 minutes,<br />
+which describe the average number of processes that are currently being executed or waiting to be executed.</p></li>
 <li><p><code>whoami</code> outputs the username, terminal, login time, and hostname of the current user.</p></li>
 <li><p><code>who</code> outputs a list of all users currently logged on the system. The output includes: username, terminal, login time, and the hostname or IP address.</p></li>
-<li><p><code>w</code> outputs the content from the <code>uptime</code> command as a head as well as a list similar to the output of the <code>who</code> command but with more information including idle time, JCPU time (time used by all proccess on terminal), PCPU time (time used by current process), and command line of current process.</p></li>
-<li><p><code>id</code> outputs the current user`s user id, primary group id (2x), supplementary group ids (if they exist), and security context. On the server, my user ID is 1017, Since I am only in one group,this command only outputs the primary group id (1019).</p></li>
+<li><p><code>w</code> outputs the content from the <code>uptime</code> command as a head as well as a list similar to the output of the <code>who</code> command but with more information including idle time, JCPU time (time used by all processes on terminal), PCPU time (time used by current process), and command line of current process.</p></li>
+<li><p><code>id</code> outputs the current user`s user id, primary group id (2x), supplementary group ids (if they exist), and security context.</p></li>
 <li><p><code>last | head</code> displays information about the last ten login sessions. Information includes: username, terminal, IP address or hostname, time of login, and duration of session (or <code>still logged in</code> if user hasn`t logged out).</p></li>
 <li><p><code>echo {con,pre}{sent,fer}{s,ed}</code> prints all combinations of letters that start with either <code>con</code> or <code>pre</code>, have either <code>ent</code> or <code>fer</code> in the middle, and end with <code>s</code> or <code>ed</code>. It just so happens that six out of the eight possible combinations are valid English words, with <code>confered</code> and <code>prefered</code> missing the extra <code>r</code> to form the past tense.</p></li>
 <li><p><code>time sleep 5</code> displays the real-world time elapsed, time spent in user mode, and time spent in kernel mode for a dummy job that is delayed for 5 seconds.</p></li>
 <li><p><code>history | tail</code> displays the last ten commands executed (does not have to be valid) and their corresponding line numbers.</p></li>
-<li><p>Note that <code>cal</code>, <code>date</code>, <code>uptime</code>, and <code>w</code> depend on time of execution, and <code>hostname</code>, <code>arch</code>, <code>uname -a</code>, <code>uptime</code>, <code>who</code>, <code>w</code>, <code>id</code>, <code>last | head</code>, <code>history | tail</code> depends on linux system, user, or both, so output presented in the html file could be very different from the actual output when this Rmd is re-knit.</p></li>
-<li><p>Both <code>who am i</code> and <code>history | tail</code> do not work on the teaching server when knitted, so my answers were based on the output I got on my laptop’s terminal.</p></li>
+<li><p>Note that <code>cal</code>, <code>date</code>, <code>uptime</code>, <code>who</code>, <code>w</code>, <code>last | head</code>, and <code>history |  tail</code> depend on time of execution, and <code>hostname</code>, <code>arch</code>, <code>uname -a</code>, <code>uptime</code>, <code>who</code>, <code>w</code>, <code>id</code>, <code>last | head</code>, and <code>history | tail</code> depends on Linux system, user, or both, so output presented in the submitted html file will be very different from the output when this Rmd is re-knit.</p></li>
+<li><p>Both <code>who am i</code> and <code>history | tail</code> do not yield any output after knitting the Rmd file, so my answers were based on the output from my laptop’s terminal.</p></li>
 </ul>
 >>>>>>> 87bd0d4... Finished preliminary draft of hw1
 </div>

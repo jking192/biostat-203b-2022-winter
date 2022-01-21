@@ -80,19 +80,23 @@ Note that the main advantage of these commands is that they do not uncompress
 =======
 
 - Note that the main advantage of these commands is that they do not uncompress 
+<<<<<<< HEAD
 >>>>>>> 755537b... Fixed answer formatting for hw1 Q3 (all parts) and fixed bash commands for Q3.5-3.6
 the target files themselves.
+=======
+the target file themselves.
+>>>>>>> a1f6bfd... Finalized hw2 by making minor edits to Q3-5
 
-- `cat` prints the contents of gzip compressed file.
+- `cat` prints the contents of a gzip-compressed file.
 
-- `zless` is used to view the contents of a gzip compressed file screen by 
-screen.The spacebar can be used to move to the next page, but the mouse can also 
-be used to scroll through the file. Press `q` to exit.
+- `zless` is used to view the contents of a gzip-compressed file screen by 
+screen. The spacebar can be used to move to the next page, and the mouse can 
+also be used to scroll through the file. Press `q` to exit.
 
 - `zmore` is similar to `zless` but is more limited in functionality. 
 For example, mouse scrolling is disabled.
 
-- `zgrep` prints all lines from a gzip compressed file that match a specified 
+- `zgrep` prints all lines from a gzip-compressed file that match a specified 
 expression.
 
 4. What`s the output of following bash script?
@@ -102,6 +106,12 @@ expression.
         ls -l $datafile
       done
     ```
+
+### Solution
+
+The output is a list of all gzip-compressed files from MIMIC-IV in the long
+list format. 
+
 Display the number of lines in each data file using a similar loop.
 
 ### Solution 
@@ -117,7 +127,7 @@ Display the number of lines in each data file using a similar loop.
 
 - The first few lines are:
 ```{bash}
-zcat /mnt/mimiciv/1.0/core/admissions.csv.gz | head
+zcat /mnt/mimiciv/1.0/core/admissions.csv.gz | head 
 ```
 - The number of rows in the data file is:
 ```{bash}
@@ -173,7 +183,7 @@ from being downloaded again if it has already been downloaded.
     for char in Elizabeth Jane Lydia Darcy
     do
       echo $char:
-       cat pg42671.txt | grep -o -i $char | wc -l
+       cat pg42671.txt | grep -oi $char | wc -l
     done
 ```
 
@@ -259,35 +269,33 @@ history | tail
 ```
 
 ### Solution
-- `cal` displays a calendar of the current month with the current day 
+- `cal` outputs a calendar of the current month with the current day 
 highlighted.
 
-- `cal 2021` prints out a calendar of the year 2021.
+- `cal 2021` outputs a calendar of the year 2021.
 
-- `cal 9 1752` prints out a calendar of September 1752. September 3-13 are not 
+- `cal 9 1752` outputs a calendar of September 1752. September 3-13 are not 
 shown on the calendar.
 
-- `date` prints out the abbreviated day of the week, abbreviated month, day of 
-the month, time seperated by colons in the form hr:min:sec, the abbreviated
-time zone name, and the current year.
+- `date` outputs the abbreviated day of the week, abbreviated month, day of 
+the month, current time, the abbreviated time zone name, and the current year.
 
-- `hostname` prints the current hostname. Currently, the hostname is
-`biostat-203b-teaching-server`.
+- `hostname` outputs the current hostname of the Linux system.
 
-- `arch` prints the current system architecture for the server. The teaching 
+- `arch` outputs the current machine architecture. The teaching 
 server runs a 64-bit implementation of the x86 architecture set, making the
 architecture x86_64.
 
-- `uname -a` outputs the os kernel name, the hostname, the kernel release,
-the last time the kernel was compiled in the format of the `date` command, 
-the machine architecture, the processor architecutre, the computer architecture,
-and the current operating system.
+- `uname -a` outputs the operating system kernel name, the hostname, 
+the kernel release, the last time the kernel was compiled in the format of the 
+`date` command, the machine architecture, the processor architecture, 
+the operating system architecture, and the current operating system.
 
 - `uptime` outputs the current time in the form hr:min:sec, how long the 
-system (in this case, the teaching server) has been up in the format days,
-hr:min, the number of users currently logged on, and the load averages 
-over the past 1, 5, and 15 minutes,  which describe the average number of 
-processes that are currently being executed or waiting to be executed.
+system has been up in the format days, hr:min, the number of users currently 
+logged on, and the load averages over the past 1, 5, and 15 minutes,  
+which describe the average number of  processes that are currently being 
+executed or waiting to be executed.
 
 - `whoami` outputs the username, terminal, login time, and hostname of the 
 current user.
@@ -297,13 +305,11 @@ includes: username, terminal, login time, and the hostname or IP address.
 
 - `w` outputs the content from the `uptime` command as a head as well as a
 list similar to the output of the `who` command but with more information
-including idle time, JCPU time (time used by all proccess on terminal), PCPU 
+including idle time, JCPU time (time used by all processes on terminal), PCPU 
 time (time used by current process), and command line of current process.
 
 - `id` outputs the current user`s user id, primary group id (2x), supplementary
-group ids (if they exist), and security context. On the server, my user ID is 
-1017, Since I am only in one group,this command only outputs the primary group 
-id (1019).
+group ids (if they exist), and security context. 
 
 - `last | head` displays information about the last ten login sessions. 
 Information includes: username, terminal, IP address or hostname, time of login,
@@ -322,14 +328,14 @@ delayed for 5 seconds.
 - `history | tail` displays the last ten commands executed (does not have to be 
 valid) and their corresponding line numbers.
 
-- Note that `cal`, `date`, `uptime`, and `w` depend on time of execution, and
-`hostname`, `arch`, `uname -a`, `uptime`, `who`, `w`, `id`, `last | head`, 
-`history | tail` depends on linux system, user, or both, so output presented in 
-the html file could be very different from the actual output when this Rmd is 
-re-knit.
+- Note that `cal`, `date`, `uptime`, `who`, `w`, `last | head`, and 
+`history |  tail` depend on time of execution, and `hostname`, `arch`, 
+`uname -a`, `uptime`, `who`, `w`, `id`, `last | head`, and `history | tail` 
+depends on Linux system, user, or both, so output presented in the submitted
+html file will be very different from the output when this Rmd is re-knit.
 
-- Both `who am i` and `history | tail` do not work on the teaching server when
-knitted, so my answers were based on the output I got on my laptop's terminal.
+- Both `who am i` and `history | tail` do not yield any output after knitting 
+the Rmd file, so my answers were based on the output from my laptop's terminal.
 
 
 >>>>>>> 87bd0d4... Finished preliminary draft of hw1
