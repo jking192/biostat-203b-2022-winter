@@ -422,34 +422,34 @@ pre code {
 <ol style="list-style-type: decimal">
 <li><p>You and your friend just have finished reading <em>Pride and Prejudice</em> by Jane Austen. Among the four main characters in the book, Elizabeth, Jane, Lydia, and Darcy, your friend thinks that Darcy was the most mentioned. You, however, are certain it was Elizabeth. Obtain the full text of the novel from <a href="http://www.gutenberg.org/cache/epub/42671/pg42671.txt" class="uri">http://www.gutenberg.org/cache/epub/42671/pg42671.txt</a> and save to your local folder.</p>
 <pre class="bash"><code>wget -nc http://www.gutenberg.org/cache/epub/42671/pg42671.txt</code></pre>
-<pre><code>## --2022-01-21 11:00:52--  http://www.gutenberg.org/cache/epub/42671/pg42671.txt
+<pre><code>## --2022-01-21 13:26:55--  http://www.gutenberg.org/cache/epub/42671/pg42671.txt
 ## Resolving www.gutenberg.org (www.gutenberg.org)... 152.19.134.47, 2610:28:3090:3000:0:bad:cafe:47
 ## Connecting to www.gutenberg.org (www.gutenberg.org)|152.19.134.47|:80... connected.
 ## HTTP request sent, awaiting response... 302 Found
 ## Location: https://www.gutenberg.org/cache/epub/42671/pg42671.txt [following]
-## --2022-01-21 11:00:52--  https://www.gutenberg.org/cache/epub/42671/pg42671.txt
+## --2022-01-21 13:26:55--  https://www.gutenberg.org/cache/epub/42671/pg42671.txt
 ## Connecting to www.gutenberg.org (www.gutenberg.org)|152.19.134.47|:443... connected.
 ## HTTP request sent, awaiting response... 200 OK
 ## Length: 725060 (708K) [text/plain]
 ## Saving to: ‘pg42671.txt’
 ## 
-##      0K .......... .......... .......... .......... ..........  7%  698K 1s
-##     50K .......... .......... .......... .......... .......... 14%  698K 1s
-##    100K .......... .......... .......... .......... .......... 21%  104M 1s
-##    150K .......... .......... .......... .......... .......... 28%  146M 0s
-##    200K .......... .......... .......... .......... .......... 35%  701K 0s
-##    250K .......... .......... .......... .......... .......... 42% 97.8M 0s
-##    300K .......... .......... .......... .......... .......... 49%  149M 0s
-##    350K .......... .......... .......... .......... .......... 56%  149M 0s
+##      0K .......... .......... .......... .......... ..........  7%  699K 1s
+##     50K .......... .......... .......... .......... .......... 14%  702K 1s
+##    100K .......... .......... .......... .......... .......... 21% 78.1M 1s
+##    150K .......... .......... .......... .......... .......... 28%  132M 0s
+##    200K .......... .......... .......... .......... .......... 35%  707K 0s
+##    250K .......... .......... .......... .......... .......... 42%  138M 0s
+##    300K .......... .......... .......... .......... .......... 49%  168M 0s
+##    350K .......... .......... .......... .......... .......... 56%  197M 0s
 ##    400K .......... .......... .......... .......... .......... 63%  714K 0s
-##    450K .......... .......... .......... .......... .......... 70%  119M 0s
-##    500K .......... .......... .......... .......... .......... 77%  149M 0s
-##    550K .......... .......... .......... .......... .......... 84%  137M 0s
-##    600K .......... .......... .......... .......... .......... 91% 76.6M 0s
-##    650K .......... .......... .......... .......... .......... 98%  139M 0s
-##    700K ........                                              100%  157M=0.3s
+##    450K .......... .......... .......... .......... .......... 70%  130M 0s
+##    500K .......... .......... .......... .......... .......... 77%  179M 0s
+##    550K .......... .......... .......... .......... .......... 84%  192M 0s
+##    600K .......... .......... .......... .......... .......... 91%  167M 0s
+##    650K .......... .......... .......... .......... .......... 98%  199M 0s
+##    700K ........                                              100%  164M=0.3s
 ## 
-## 2022-01-21 11:00:53 (2.39 MB/s) - ‘pg42671.txt’ saved [725060/725060]</code></pre>
+## 2022-01-21 13:26:57 (2.41 MB/s) - ‘pg42671.txt’ saved [725060/725060]</code></pre>
 <p>Explain what <code>wget -nc</code> does. Do <strong>not</strong> put this text file <code>pg42671.txt</code> in Git. Complete the following loop to tabulate the number of times each of the four characters is mentioned using Linux commands.</p></li>
 </ol>
 <div id="solution-6" class="section level3">
@@ -506,7 +506,7 @@ head -n &quot;$2&quot; &quot;$1&quot; | tail -n &quot;$3&quot;</code></pre>
 <div id="solution-9" class="section level3">
 <h3>Solution</h3>
 <ul>
-<li>The output is lines 16-20 from the downloaded version of <em>Pride and Prejudice</em>. <code>&quot;$1&quot;</code> is the first argument passed to the <code>middle.sh</code> script, <code>&quot;$2&quot;</code> is thesecond argument passed to the script, and <code>&quot;$3&quot;</code> is the third argument. When executing the script above, <code>pg42671.txt</code> is the first argument, <code>20</code> is the second argument, and <code>5</code> is the third argument. Therefore,the commands being executed above, according to the script is:<code>head -n 20  pg42671.txt | tail -n 5</code>. The first line of the shell script specifies that the script should always be run with the Bourne Shell (sh).</li>
+<li>The output is lines 16-20 from the downloaded version of <em>Pride and Prejudice</em>.<code>&quot;$1&quot;</code> is the first argument passed to the <code>middle.sh</code> script, <code>&quot;$2&quot;</code> is the second argument passed to the script, and <code>&quot;$3&quot;</code> is the third argument. When executing the script above, <code>pg42671.txt</code> is the first argument, <code>20</code> is the second argument, and <code>5</code> is the third argument. Therefore, the commands being executed above, according to the script is: <code>head -n 20 pg42671.txt | tail -n 5</code>. The first line of the shell script specifies that the script should always be run with the Bourne Shell (sh).</li>
 </ul>
 </div>
 <div id="q5.-more-fun-with-linux" class="section level3">
@@ -567,7 +567,7 @@ head -n &quot;$2&quot; &quot;$1&quot; | tail -n &quot;$3&quot;</code></pre>
 ## 
 ## 
 ## 
-## Fri Jan 21 11:00:53 UTC 2022</code></pre>
+## Fri Jan 21 13:26:58 UTC 2022</code></pre>
 <pre class="bash"><code>   hostname
    arch
    uname -a
@@ -575,18 +575,18 @@ head -n &quot;$2&quot; &quot;$1&quot; | tail -n &quot;$3&quot;</code></pre>
 <pre><code>## biostat-203b-teaching-server
 ## x86_64
 ## Linux biostat-203b-teaching-server 3.10.0-1160.49.1.el7.x86_64 #1 SMP Tue Nov 30 15:51:32 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux
-##  11:00:53 up 18 days, 10:34,  3 users,  load average: 0.55, 0.25, 0.21</code></pre>
+##  13:26:58 up 18 days, 13:00,  3 users,  load average: 0.70, 0.24, 0.11</code></pre>
 <pre class="bash"><code>   who am i
    who</code></pre>
 <pre><code>## tomokiokuno0528 pts/1        2022-01-11 01:13 (42.166.94.34.bc.googleusercontent.com)
 ## tomokiokuno0528 pts/3        2022-01-10 23:43 (42.166.94.34.bc.googleusercontent.com)
 ## capj245  pts/13       2022-01-21 03:54 (s-164-67-232-61.resnet.ucla.edu)</code></pre>
 <pre class="bash"><code>   w</code></pre>
-<pre><code>##  11:00:53 up 18 days, 10:34,  3 users,  load average: 0.55, 0.25, 0.21
+<pre><code>##  13:26:58 up 18 days, 13:00,  3 users,  load average: 0.70, 0.24, 0.11
 ## USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT
 ## tomokiok pts/1    42.166.94.34.bc. 11Jan22 10days  0.01s  0.01s -bash
-## tomokiok pts/3    42.166.94.34.bc. 10Jan22 10days  1.17s  0.99s ssh -i /home/tomokiokuno0528/.ssh/id_rsa tomokiokuno0528@server.ucla-biostat-203b.com
-## capj245  pts/13   s-164-67-232-61. 03:54    7:05m  0.01s  0.01s -bash</code></pre>
+## tomokiok pts/3    42.166.94.34.bc. 10Jan22 10days  1.19s  1.01s ssh -i /home/tomokiokuno0528/.ssh/id_rsa tomokiokuno0528@server.ucla-biostat-203b.com
+## capj245  pts/13   s-164-67-232-61. 03:54    9:31m  0.01s  0.01s -bash</code></pre>
 <pre class="bash"><code>   id
    last | head</code></pre>
 <pre><code>## uid=1017(jonathanking192) gid=1019(jonathanking192) groups=1019(jonathanking192) context=system_u:system_r:initrc_t:s0
@@ -619,16 +619,16 @@ head -n &quot;$2&quot; &quot;$1&quot; | tail -n &quot;$3&quot;</code></pre>
 <li><p><code>hostname</code> outputs the current hostname of the Linux system.</p></li>
 <li><p><code>arch</code> outputs the current machine architecture. The teaching server runs a 64-bit implementation of the x86 architecture set, making the architecture x86_64.</p></li>
 <li><p><code>uname -a</code> outputs the operating system kernel name, the hostname, the kernel release, the last time the kernel was compiled in the format of the <code>date</code> command, the machine architecture, the processor architecture, the operating system architecture, and the current operating system.</p></li>
-<li><p><code>uptime</code> outputs the current time in the form hr:min:sec, how long the system has been up in the format days, hr:min, the number of users currently logged on, and the load averages over the past 1, 5, and 15 minutes,<br />
-which describe the average number of processes that are currently being executed or waiting to be executed.</p></li>
+<li><p><code>uptime</code> outputs the current time in the form hr:min:sec, how long the system has been up in the format days, hr:min, the number of users currently logged on, and the load averages over the past 1, 5, and 15 minutes, which describe the average number of processes that are currently being executed or waiting to be executed.</p></li>
 <li><p><code>who am i</code> outputs the username, terminal, login time, and hostname of the current user.</p></li>
-<li><p><code>who</code> outputs a list of all users currently logged on the system. The output includes: username, terminal, login time, and the hostname or IP address.</p></li>
+<li><p><code>who</code> outputs a list of all users currently logged in to the Linux system/server. The output includes: username, terminal, login time, and the hostname or IP address.</p></li>
 <li><p><code>w</code> outputs the content from the <code>uptime</code> command as a head as well as a list similar to the output of the <code>who</code> command but with more information including idle time, JCPU time (time used by all processes on terminal), PCPU time (time used by current process), and command line of current process.</p></li>
 <li><p><code>id</code> outputs the current user`s user id, primary group id (2x), supplementary group ids (if they exist), and security context.</p></li>
-<li><p><code>last | head</code> displays information about the last ten login sessions. Information includes: username, terminal, IP address or hostname, time of login, and duration of session (or <code>still logged in</code> if user hasn`t logged out).</p></li>
+<li><p><code>last | head</code> displays information about the last ten login sessions. Information includes: username, terminal, IP address or hostname, time of login, and duration of session (or <code>still logged in</code> if user hasn’t logged out).</p></li>
 <li><p><code>echo {con,pre}{sent,fer}{s,ed}</code> prints all combinations of letters that start with either <code>con</code> or <code>pre</code>, have either <code>ent</code> or <code>fer</code> in the middle, and end with <code>s</code> or <code>ed</code>. It just so happens that six out of the eight possible combinations are valid English words, with <code>confered</code> and <code>prefered</code> missing the extra <code>r</code> to form the past tense.</p></li>
 <li><p><code>time sleep 5</code> displays the real-world time elapsed, time spent in user mode, and time spent in kernel mode for a dummy job that is delayed for 5 seconds.</p></li>
-<li><p><code>history | tail</code> displays the last ten commands executed (does not have to be valid) and their corresponding line numbers.</p></li>
+<li><p><code>history | tail</code> displays the current user’s last ten commands executed (does not have to be valid) and their corresponding line numbers.</p></li>
+<li><p>Note that <code>cal</code>, <code>date</code>, <code>uptime</code>, <code>who</code>, <code>w</code>, <code>last | head</code>, and <code>history | tail</code> depend on time of execution, and <code>hostname</code>, <code>arch</code>, <code>uname -a</code>, <code>uptime</code>, <code>who</code>, <code>w</code>, <code>id</code>, <code>last | head</code>, and <code>history | tail</code> depends on Linux system, user, or both, so output presented in the submitted html file will be very different from the output when this Rmd is re-knit.</p></li>
 <li><p>Note that <code>cal</code>, <code>date</code>, <code>uptime</code>, <code>who</code>, <code>w</code>, and <code>last | head</code> depend on time of execution, and <code>hostname</code>, <code>arch</code>, <code>uname -a</code>, <code>uptime</code>, <code>who</code>, <code>w</code>, <code>id</code>, <code>last | head</code>, <code>who am i</code>, and <code>history | tail</code> depends on Linux system, user, or both, so output presented in the submitted html file will be very different from the output when this Rmd is re-knit.</p></li>
 <li><p>Both <code>who am i</code> and <code>history | tail</code> did not yield any output after knitting the Rmd file on the teaching server, so my answers were based on the output from my laptop’s terminal.</p></li>
 </ul>

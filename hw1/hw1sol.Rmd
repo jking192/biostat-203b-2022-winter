@@ -74,7 +74,7 @@ transfer.
 
 3. Briefly describe what bash commands `zcat`, `zless`, `zmore`, and `zgrep` do.
 
-### Solution 
+### Solution
 
 - Note that the main advantage of these commands is that they do not uncompress 
 the target file.
@@ -215,14 +215,15 @@ Explain the output. Explain the meaning of `"$1"`, `"$2"`, and `"$3"` in this sh
 
 ### Solution
 
+
 - The output is lines 16-20 from the downloaded version of *Pride and 
-Prejudice*. `"$1"` is the first argument passed to the `middle.sh` script, 
-`"$2"` is thesecond argument passed to the script, and `"$3"` is the third 
-argument. When executing the script above, `pg42671.txt` is the first argument, 
-`20` is the second argument, and `5` is the third argument. Therefore,the 
-commands being executed above, according to the script is:`head -n 20 
-pg42671.txt | tail -n 5`. The first line of the shell script specifies that the 
-script should always be run with the Bourne Shell (sh).
+Prejudice*.`"$1"` is the first argument passed to the `middle.sh` script, `"$2"`
+is the second argument passed to the script, and `"$3"` is the third argument. 
+When executing the script above, `pg42671.txt` is the first argument, 
+`20` is the second argument, and `5` is the third argument. Therefore,
+the commands being executed above, according to the script is:
+`head -n 20 pg42671.txt | tail -n 5`. The first line of the shell script 
+specifies that the script should always be run with the Bourne Shell (sh).
 
 ### Q5. More fun with Linux
 
@@ -288,15 +289,16 @@ the operating system architecture, and the current operating system.
 
 - `uptime` outputs the current time in the form hr:min:sec, how long the 
 system has been up in the format days, hr:min, the number of users currently 
-logged on, and the load averages over the past 1, 5, and 15 minutes,  
-which describe the average number of  processes that are currently being 
-executed or waiting to be executed.
+logged on, and the load averages over the past 1, 5, and 15 minutes, which 
+describe the average number of  processes that are currently being executed 
+or waiting to be executed.
 
 - `who am i` outputs the username, terminal, login time, and hostname of the 
 current user.
 
-- `who` outputs a list of all users currently logged on the system. The output 
-includes: username, terminal, login time, and the hostname or IP address.
+- `who` outputs a list of all users currently logged in to the Linux 
+system/server. The output includes: username, terminal, login time, and 
+the hostname or IP address.
 
 - `w` outputs the content from the `uptime` command as a head as well as a
 list similar to the output of the `who` command but with more information
@@ -308,7 +310,7 @@ group ids (if they exist), and security context.
 
 - `last | head` displays information about the last ten login sessions. 
 Information includes: username, terminal, IP address or hostname, time of login,
-and duration of session (or `still logged in` if user hasn`t logged out).
+and duration of session (or `still logged in` if user hasn't logged out).
 
 - `echo {con,pre}{sent,fer}{s,ed}` prints all combinations of letters that start
 with either `con` or `pre`, have either `ent` or `fer` in the middle, and end 
@@ -320,8 +322,14 @@ the extra `r` to form the past tense.
 spent in user mode, and time spent in kernel mode for a dummy job that is
 delayed for 5 seconds.
 
-- `history | tail` displays the last ten commands executed (does not have to be 
-valid) and their corresponding line numbers.
+- `history | tail` displays the current user's  last ten commands executed 
+(does not have to be valid) and their corresponding line numbers.
+
+- Note that `cal`, `date`, `uptime`, `who`, `w`, `last | head`, and 
+`history | tail` depend on time of execution, and `hostname`, `arch`, 
+`uname -a`, `uptime`, `who`, `w`, `id`, `last | head`, and `history | tail` 
+depends on Linux system, user, or both, so output presented in the submitted
+html file will be very different from the output when this Rmd is re-knit.
 
 
 - Note that `cal`, `date`, `uptime`, `who`, `w`, and `last | head` 
@@ -334,5 +342,6 @@ will be very different from the output when this Rmd is re-knit.
 - Both `who am i` and `history | tail` did not yield any output after knitting
 the Rmd file on the teaching server, so my answers were based on the output from
 my laptop's terminal.
+
 
 
