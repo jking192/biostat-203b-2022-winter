@@ -104,7 +104,7 @@ There are 53,150 unique `subject_id`, and they can have multiple ICU stays.
 ## Solution
 
 ```{r}
-  distinct(icustays_tble, subject_id, .keep_all = TRUE)
+icustays_tble <- distinct(icustays_tble, subject_id, .keep_all = TRUE)
 ```
 ## Q3. `admission` data
 
@@ -121,9 +121,21 @@ system(
 ```
 
 1. Import `admissions.csv.gz` as a tibble `admissions_tble`.
+### Solution
+
+```{r}
+admissions_tble <- read_csv("./core/admissions.csv.gz")
+```
 
 2. Let's only keep the admissions that have a match in `icustays_tble` according to `subject_id` and `hadmi_id`.
 
+### Solution
+
+```{r}
+admissions_tble <- semi_join(admissions_tble,
+  icustays_tble, 
+  by = c("subject_id", "hadm_id"))
+```
 3. Summarize the following variables by graphics. 
 
 - admission year  
@@ -131,6 +143,54 @@ system(
 - admission month day  
 - admission week day  
 - admission hour (anything unusual?)  
+
+### Solution
+
+```{r}
+admissions_tble %>% 
+  mutate(year = year(admittime)) %>% 
+  ggplot() +
+  geom_histogram (mapping = aes(x = year), fill = "skyblue", binwidth = 15) +
+  labs(title = " ICU Admission by Year", x = "Year", y = "Admission Count") +
+  theme(plot.title = element_text(hjust = 0.5))
+admissions_tble %>% 
+  mutate(month = month(admittime, label = TRUE)) %>% 
+  ggplot() +
+  geom_bar(mapping = aes(x = month, fill = month)) +
+  scale_fill_brewer(palette = "Set3") + 
+  theme(legend.position = "none") +
+  labs(title = "ICU Admissions by Month", x = "Month", y = "Admission Count") +
+  theme(plot.title = element_text(hjust = 0.5))
+admissions_tble %>% 
+  mutate(mday = mday(admittime)) %>% 
+  ggplot() +
+  geom_histogram(mapping = aes(x=mday), fill = "lightblue", binwidth = 5) +
+  labs(title = "ICU Admissions by Day of the Month", 
+       x = "Day of the Month",
+       y = "Admission Count"
+       ) +
+  theme(plot.title = element_text(hjust = 0.5))
+admissions_tble %>% 
+  mutate(wday = wday(admittime, label = TRUE)) %>% 
+  ggplot() +
+  geom_bar(mapping = aes(x = wday, fill = wday)) +
+  theme(legend.position = "none") +
+  labs(title = "ICU Admissions by Day of the Week", 
+       x = "Day of the Week",
+       y = "Admission Count"
+       ) +
+  theme(plot.title = element_text(hjust = 0.5))
+admissions_tble %>% 
+  mutate(hour = hour(admittime)) %>% 
+  ggplot() +
+  geom_bar(mapping = aes(x = hour)) +
+  theme(legend.position = "none") +
+  labs(title = "ICU Admissions by Hour", x = "Hour", y = "Admission Count") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+- The 12 a.m. hour was when the most patients were admitted. Fewer patients
+are admitted in the morning hours after, except for an usual spike in the 7 a.m. hour.
 
 ## Q4. `patients` data
 
