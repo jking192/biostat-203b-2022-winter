@@ -208,8 +208,50 @@ system(
 
 1. Import `patients.csv.gz` (<https://mimic.mit.edu/docs/iv/modules/core/patients/>) as a tibble `patients_tble` and only keep the patients who have a match in `icustays_tble` (according to `subject_id`).
 
+### Solution
+
+```{r}
+patients_tble <- read_csv("./core/patients.csv.gz")
+patients_tble <- semi_join(patients_tble, icustays_tble)
+```
+
 2. Summarize variables `gender` and `anchor_age`, and explain any patterns you see.
 
+### Solution
+
+```{r}
+ggplot(data = patients_tble) +
+  geom_bar (aes(x = gender, fill = gender)) +
+  theme(legend.position = "none") +
+  labs(title = "Patient Gender", x = "Gender", y = "Patient Count") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+ggplot (data = patients_tble) +
+  geom_histogram (
+    aes(x= anchor_age), 
+    fill = "orangered2", 
+    binwidth = 5,
+    center = 17.5
+    ) +
+  labs(title = "Patient Age", x = "Age (yrs.)", y = "Patient Count") +
+  theme(plot.title = element_text(hjust = 0.5))
+  
+patients_tble %>%
+  group_by(gender) %>%
+  summarise(
+    n = n(), 
+    mean_age = mean(anchor_age), 
+    median_age = median(anchor_age), 
+    sd_age = sd(anchor_age),
+    min = min(anchor_age),
+    max = max(anchor_age)
+  )
+```
+
+- Most patients were male and older than 60 with the highest number of patients being around 66-70 years old compared to any other age range.
+Mean and median age were lower for male patients compared to female patients. 
+Standard deviation in age was also lower for male patients.
+Minimum patient age was 18 years old, and maximum patient age was 91 years old, so no data on minors were collected.
 ## Q5. Lab results
 
 `labevents.csv.gz` (<https://mimic.mit.edu/docs/iv/modules/hosp/labevents/>) contains all laboratory measurements for patients. The first 10 lines are
@@ -236,6 +278,12 @@ system(
 ```
 
 1. Find how many rows are in `labevents.csv.gz`.
+
+### Solution
+
+```{bash}
+zcat /mnt/mimiciv/1.0/hosp/labevents.csv.gz | tail -n+2 | wc -l 
+```
 
 2. We are interested in the lab measurements of creatinine (50912), potassium (50971), sodium (50983), chloride (50902), bicarbonate (50882), hematocrit (51221), white blood cell count (51301), glucose (50931), magnesium (50960), and calcium (50893). Retrieve a subset of `labevents.csv.gz` only containing these items for the patients in `icustays_tble` as a tibble `labevents_tble`. 
 
