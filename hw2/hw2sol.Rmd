@@ -232,7 +232,7 @@ ggplot (data = patients_tble) +
     fill = "orangered2", 
     binwidth = 5,
     center = 17.5
-    ) +
+  ) +
   labs(title = "Patient Age", x = "Age (yrs.)", y = "Patient Count") +
   theme(plot.title = element_text(hjust = 0.5))
   
@@ -245,7 +245,7 @@ patients_tble %>%
     sd_age = sd(anchor_age),
     min = min(anchor_age),
     max = max(anchor_age)
-  )
+ )
 ```
 
 - Most patients were male and older than 60 with the highest number of patients being around 66-70 years old compared to any other age range.
@@ -288,9 +288,69 @@ zcat /mnt/mimiciv/1.0/hosp/labevents.csv.gz | tail -n+2 | wc -l
 2. We are interested in the lab measurements of creatinine (50912), potassium (50971), sodium (50983), chloride (50902), bicarbonate (50882), hematocrit (51221), white blood cell count (51301), glucose (50931), magnesium (50960), and calcium (50893). Retrieve a subset of `labevents.csv.gz` only containing these items for the patients in `icustays_tble` as a tibble `labevents_tble`. 
 
     Hint: `labevents.csv.gz` is a data file too big to be read in by the `read_csv` function in its default setting. Utilize the `col_select` and `lazy` options in the `read_csv` function to reduce the memory burden.
+### Solution
 
-3. Further restrict `labevents_tble` to the first lab measurement during the ICU stay. 
+```{r}
+labevents_tble <- read_csv(
+  "./hosp/labevents_filtered_itemid.csv.gz",
+  col_select = c(subject_id, itemid, valuenum),
+  lazy = TRUE
+)
+item <- c(50912, 50971, 50983, 50902, 50882, 51221, 51301, 50931, 50960, 50893)
+labevents_tble <- labevents_tble %>%
+  semi_join(icustays_tble) %>%
+  filter(itemid %in% item)
+```
+
+3. Further restrict `labevents_tble` to the first lab measurement during the ICU stay.
+
+### Solution
+
+```{r}
+labevents_tble <- distinct (labevents_tble, subject_id, .keep_all = TRUE)
+labevents_tble
+```
+
 4. Summarize the lab measurements by appropriate numerics and graphics. 
+
+### Solution
+
+```{r}
+# labevents_dict <- read_csv ("./hosp/d_labitems.csv.gz")
+# labevents_dict <- labevents_dict %>%
+#   select (itemid, label) %>%
+#   filter(itemid %in% labevents_tble$itemid)
+# labevents_dict
+# labevents_tble_wide <- labevents_tble %>%
+#   left_join(labevents_tble, labevents_dict, by = "itemid")
+labevents_tble <- labevents_tble %>%
+  mutate (class = case_when(itemid == 50912 ~ "Creatinine",
+                           itemid == 50971 ~ "Potassium",
+                           itemid == 50983 ~ "Sodium",
+                           itemid == 50902 ~ "Chloride",
+                           itemid == 50882 ~ "Bicarbonate",
+                           itemid == 51221 ~ "Hematocrit",
+                           itemid == 51301 ~ "White Blood Cell Count",
+                           itemid == 50931 ~ "Glucose",
+                           itemid == 50960 ~ "Magnesium",
+                           itemid == 50893 ~"Calcium"))
+labevents_tble %>% 
+  group_by(class) %>%
+  summarize (
+    n = n(),
+    mean = mean(valuenum), 
+    sd = sd(valuenum), 
+    median = median(valuenum),
+    min = min(valuenum),
+    max = max(valuenum))
+
+labevents_tble %>%
+  ggplot() +
+  geom_histogram(aes(x = valuenum), bins = 10) +
+  facet_wrap(~ class, scales = "free") +
+  labs(title = "Lab Measurements", x = "Measurement Value") +
+  theme(plot.title = element_text(hjust = 0.5)) 
+```
 
 ## Q6. Vitals from charted events
 
