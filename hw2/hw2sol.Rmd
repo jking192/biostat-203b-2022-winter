@@ -377,9 +377,64 @@ system(
 
 1. We are interested in the vitals for ICU patients: heart rate (220045), mean non-invasive blood pressure (220181), systolic non-invasive blood pressure (220179), body temperature in Fahrenheit (223761), and respiratory rate (220210). Retrieve a subset of `chartevents.csv.gz` only containing these items for the patients in `icustays_tble` as a tibble `chartevents_tble`.
 
+```{r}
+chartevents_tble <- read_csv ("./icu/chartevents_filtered_itemid.csv.gz")
+item <- c(220045, 220181, 220179, 223761, 220210)
+chartevents_tble <- chartevents_tble %>%
+  semi_join(icustays_tble, by = c("subject_id", "hadm_id")) %>%
+  filter(itemid %in% item)
+
+```
 2. Further restrict `chartevents_tble` to the first vital measurement during the ICU stay. 
 
+```{r}
+chartevents_tble <- distinct (chartevents_tble, hadm_id, .keep_all = TRUE)
+chartevents_tble
+```
 3. Summarize these vital measurements by appropriate numerics and graphics. 
+
+```{r}
+ chartevents_dict <- read_csv ("./icu/d_items.csv.gz")
+chartevents_dict <- chartevents_dict %>%
+   select (itemid, label) %>%
+   filter(itemid %in% chartevents_tble$itemid)
+chartevents_tble_wide <- chartevents_tble %>%
+   inner_join(chartevents_dict, by = "itemid")
+
+chartevents_tble_wide %>% 
+  group_by(label) %>%
+  summarize (
+    n = n(),
+    mean = mean(valuenum), 
+    sd = sd(valuenum), 
+    median = median(valuenum),
+    min = min(valuenum),
+    max = max(valuenum))
+
+chartevents_tble_wide_1 <- chartevents_tble_wide %>%
+  filter(label == "Temperature Fahrenheit") %>%
+  select(valuenum) %>%
+  arrange(valuenum)
+
+chartevents_tble_wide$eliminate <-
+  (chartevents_tble_wide$label == "Temperature Fahrenheit") &
+  (chartevents_tble_wide$valuenum < 85)
+
+chartevents_tble_wide_1
+# Remove outliers
+chartevents_tble_wide %>%
+  filter(valuenum <= 253) %>% 
+  filter(eliminate == FALSE) %>%
+  ggplot() +
+  geom_histogram(aes(x = valuenum), bins = 10) +
+  facet_wrap(~ label, scales = "free") +
+  labs(
+    title = "Chart Measurements", 
+    x = "Measurement Value", 
+    y = "Measurement Count" 
+  ) +
+  theme(plot.title = element_text(hjust = 0.5)) 
+```
 
 ## Q7. Putting things together
 
