@@ -300,21 +300,26 @@ zcat /mnt/mimiciv/1.0/hosp/labevents.csv.gz | tail -n+2 | wc -l
 labevents_tble <- read_csv("./hosp/labevents_filtered_itemid.csv.gz")
 labevents_dict <- read_csv ("./hosp/d_labitems.csv.gz")
 labevents_tble <- labevents_tble %>%
-  semi_join(icustays_tble) %>%
-  filter(itemid %in% labevents_dict$itemid)
-labevents_tble
+  semi_join(icustays_tble) 
+# categories <- unique(labevents_tble$itemid)
+# categories
 ```
 
 3. Further restrict `labevents_tble` to the first lab measurement during the ICU stay.
 
 ### Solution
 
-```{r}
- chartime <- select(icustays_tble, subject_id, intime)
- labevents_tble <- left_join(labevents_tble, chartime)
+```{r} 
+chartime <- select(icustays_tble, subject_id, intime)
+labevents_tble <- full_join(labevents_tble, chartime)
 labevents_tble <-labevents_tble %>% 
+   arrange (subject_id) %>%
   filter (charttime >= intime) %>%
-  distinct (subject_id, itemid, .keep_all = TRUE)
+  distinct (subject_id, itemid, .keep_all = TRUE) %>%
+  inner_join(labevents_dict, by = "itemid") %>%
+  select (subject_id, label, valuenum) %>%
+  spread (label, valuenum)
+
 labevents_tble
 ```
 
@@ -323,29 +328,29 @@ labevents_tble
 ### Solution
 
 ```{r}
- labevents_dict <- labevents_dict %>%
-  select (itemid, label) %>%
-  filter(itemid %in% labevents_tble$itemid)
- labevents_tble_wide <- labevents_tble %>%
-  inner_join(labevents_dict, by = "itemid")
-  
-labevents_tble_wide %>% 
-  group_by(label) %>%
-  summarize (
-    n = n(),
-    mean = mean(valuenum, na.rm = TRUE), 
-    sd = sd(valuenum,na.rm = TRUE), 
-    median = median(valuenum,na.rm = TRUE),
-    min = min(valuenum,na.rm = TRUE),
-    max = max(valuenum, na.rm = TRUE))
-
-labevents_tble_wide %>%
-  filter (valuenum < 200) %>%
-  ggplot() +
-  geom_histogram(aes(x = valuenum), bins = 10) +
-  facet_wrap(~ label, scales = "free") +
-  labs(title = "Lab Measurements", x = "Measurement Value") +
-  theme(plot.title = element_text(hjust = 0.5)) 
+#  labevents_dict <- labevents_dict %>%
+#   select (itemid, label) %>%
+#   filter(itemid %in% labevents_tble$itemid)
+#  labevents_tble <- labevents_tble %>%
+#   inner_join(labevents_dict, by = "itemid")
+#   
+# labevents_tble_wide %>% 
+#   group_by(label) %>%
+#   summarize (
+#     n = n(),
+#     mean = mean(valuenum, na.rm = TRUE), 
+#     sd = sd(valuenum,na.rm = TRUE), 
+#     median = median(valuenum,na.rm = TRUE),
+#     min = min(valuenum,na.rm = TRUE),
+#     max = max(valuenum, na.rm = TRUE))
+# 
+# labevents_tble_wide %>%
+#   filter (valuenum < 200) %>%
+#   ggplot() +
+#   geom_histogram(aes(x = valuenum), bins = 10) +
+#   facet_wrap(~ label, scales = "free") +
+#   labs(title = "Lab Measurements", x = "Measurement Value") +
+#   theme(plot.title = element_text(hjust = 0.5)) 
 ```
 
 ## Q6. Vitals from charted events
@@ -377,8 +382,7 @@ system(
 chartevents_tble <- read_csv ("./icu/chartevents_filtered_itemid.csv.gz")
  chartevents_dict <- read_csv ("./icu/d_items.csv.gz")
 chartevents_tble <- chartevents_tble %>%
-  semi_join(icustays_tble, by = c("subject_id", "hadm_id")) %>%
-  filter(itemid %in% chartevents_dict$itemid)
+  semi_join(icustays_tble, by = "subject_id") 
 chartevents_tble
 
 ```
@@ -390,51 +394,52 @@ chartevents_tble
 chartevents_tble <- left_join(chartevents_tble, chartime)
 chartevents_tble
 chartevents_tble <-chartevents_tble %>% 
-  filter (charttime >= intime) %>%
-  distinct (subject_id, itemid, .keep_all = TRUE)
+  filter(charttime >= intime) %>%
+  distinct(subject_id, itemid, .keep_all = TRUE) %>%
+  arrange(subject_id) %>%
+  inner_join(chartevents_dict, by = "itemid") %>%
+  select (subject_id, label, valuenum) %>%
+  spread (label, valuenum)
 chartevents_tble
 ```
 3. Summarize these vital measurements by appropriate numerics and graphics. 
 
 ```{r}
-chartevents_dict <- chartevents_dict %>%
-   select (itemid, label) %>%
-   filter(itemid %in% chartevents_tble$itemid)
-chartevents_tble_wide <- chartevents_tble %>%
-   inner_join(chartevents_dict, by = "itemid")
-
-chartevents_tble_wide %>% 
-  group_by(label) %>%
-  summarize (
-    n = n(),
-    mean = mean(valuenum), 
-    sd = sd(valuenum), 
-    median = median(valuenum),
-    min = min(valuenum),
-    max = max(valuenum))
-
-chartevents_tble_wide_1 <- chartevents_tble_wide %>%
-  filter(label == "Temperature Fahrenheit") %>%
-  select(valuenum) %>%
-  arrange(valuenum)
-
-chartevents_tble_wide$eliminate <-
-  (chartevents_tble_wide$label == "Temperature Fahrenheit") &
-  (chartevents_tble_wide$valuenum < 85)
-
-# Remove outliers
-chartevents_tble_wide %>%
-  filter(valuenum <= 253) %>% 
-  filter(eliminate == FALSE) %>%
-  ggplot() +
-  geom_histogram(aes(x = valuenum), bins = 10) +
-  facet_wrap(~ label, scales = "free") +
-  labs(
-    title = "Chart Measurements", 
-    x = "Measurement Value", 
-    y = "Measurement Count" 
-  ) +
-  theme(plot.title = element_text(hjust = 0.5)) 
+# 
+# chartevents_tble %>% 
+#  select(-subject_id) %>%
+#   summarize_all(
+#     list(n = n(),
+#         mean = mean(), 
+#         sd = sd(), 
+#         median = median(),
+#         min = min(),
+#         max = max())
+#   )
+#     
+# 
+# chartevents_tble_wide_1 <- chartevents_tble_wide %>%
+#   filter(label == "Temperature Fahrenheit") %>%
+#   select(valuenum) %>%
+#   arrange(valuenum)
+# 
+# chartevents_tble_wide$eliminate <-
+#   (chartevents_tble_wide$label == "Temperature Fahrenheit") &
+#   (chartevents_tble_wide$valuenum < 85)
+# 
+# # Remove outliers
+# chartevents_tble_wide %>%
+#   filter(valuenum <= 253) %>% 
+#   filter(eliminate == FALSE) %>%
+#   ggplot() +
+#   geom_histogram(aes(x = valuenum), bins = 10) +
+#   facet_wrap(~ label, scales = "free") +
+#   labs(
+#     title = "Chart Measurements", 
+#     x = "Measurement Value", 
+#     y = "Measurement Count" 
+#   ) +
+#   theme(plot.title = element_text(hjust = 0.5)) 
 ```
 
 ## Q7. Putting things together
@@ -452,6 +457,21 @@ and columns contain at least following variables
 - first vital measurements during ICU stay
 - an indicator variable `thirty_day_mort` whether the patient died within 30 days of hospital admission (30 day mortality)
 
+### Solution
+
+```{r}
+admissions_tble <- admissions_tble %>%
+mutate(thirty_day_mort = ifelse(deathtime - admittime < 43200, 1, 0))
+admissions_tble$thirty_day_mort[is.na(admissions_tble$thirty_day_mort)] <- 0
+mimic_icu_cohort <- admissions_tble %>%
+  inner_join(icustays_tble, by = "subject_id", "hadm_id") %>%
+  inner_join(patients_tble) %>%
+  left_join(labevents_tble) %>%
+  inner_join(chartevents_tble) %>%
+  filter(anchor_age > 18)
+mimic_icu_cohort
+  
+```
 ## Q8. Exploratory data analysis (EDA)
 
 Summarize following information using appropriate numerics or graphs.
