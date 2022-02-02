@@ -85,6 +85,7 @@ system(
 
 ```{r}
 icustays_tble <- read_csv ("./icu/icustays.csv.gz")
+icustays_tble
 ```
 
 2. How many unique `subject_id`? Can a `subject_id` have multiple ICU stays? 
@@ -95,6 +96,7 @@ icustays_tble %>%
   group_by(subject_id) %>%
   summarise (number_of_stays = n_distinct(stay_id)) %>%
   arrange (desc(number_of_stays))
+
 ```
 
 There are 53,150 unique `subject_id`, and they can have multiple ICU stays.
@@ -104,7 +106,11 @@ There are 53,150 unique `subject_id`, and they can have multiple ICU stays.
 ## Solution
 
 ```{r}
-icustays_tble <- distinct(icustays_tble, subject_id, .keep_all = TRUE)
+icustays_tble <- icustays_tble %>%
+  group_by(subject_id) %>% 
+  arrange (intime) %>% 
+  distinct(subject_id, .keep_all = TRUE)
+icustays_tble
 ```
 ## Q3. `admission` data
 
@@ -245,7 +251,7 @@ patients_tble %>%
     sd_age = sd(anchor_age),
     min = min(anchor_age),
     max = max(anchor_age)
- )
+  )
 ```
 
 - Most patients were male and older than 60 with the highest number of patients being around 66-70 years old compared to any other age range.
@@ -291,15 +297,12 @@ zcat /mnt/mimiciv/1.0/hosp/labevents.csv.gz | tail -n+2 | wc -l
 ### Solution
 
 ```{r}
-labevents_tble <- read_csv(
-  "./hosp/labevents_filtered_itemid.csv.gz",
-  col_select = c(subject_id, itemid, valuenum),
-  lazy = TRUE
-)
-item <- c(50912, 50971, 50983, 50902, 50882, 51221, 51301, 50931, 50960, 50893)
+labevents_tble <- read_csv("./hosp/labevents_filtered_itemid.csv.gz")
+labevents_dict <- read_csv ("./hosp/d_labitems.csv.gz")
 labevents_tble <- labevents_tble %>%
   semi_join(icustays_tble) %>%
-  filter(itemid %in% item)
+  filter(itemid %in% labevents_dict$itemid)
+labevents_tble
 ```
 
 3. Further restrict `labevents_tble` to the first lab measurement during the ICU stay.
@@ -307,7 +310,11 @@ labevents_tble <- labevents_tble %>%
 ### Solution
 
 ```{r}
-labevents_tble <- distinct (labevents_tble, subject_id, .keep_all = TRUE)
+ chartime <- select(icustays_tble, subject_id, intime)
+ labevents_tble <- left_join(labevents_tble, chartime)
+labevents_tble <-labevents_tble %>% 
+  filter (charttime >= intime) %>%
+  distinct (subject_id, itemid, .keep_all = TRUE)
 labevents_tble
 ```
 
@@ -316,38 +323,27 @@ labevents_tble
 ### Solution
 
 ```{r}
-# labevents_dict <- read_csv ("./hosp/d_labitems.csv.gz")
-# labevents_dict <- labevents_dict %>%
-#   select (itemid, label) %>%
-#   filter(itemid %in% labevents_tble$itemid)
-# labevents_dict
-# labevents_tble_wide <- labevents_tble %>%
-#   left_join(labevents_tble, labevents_dict, by = "itemid")
-labevents_tble <- labevents_tble %>%
-  mutate (class = case_when(itemid == 50912 ~ "Creatinine",
-                           itemid == 50971 ~ "Potassium",
-                           itemid == 50983 ~ "Sodium",
-                           itemid == 50902 ~ "Chloride",
-                           itemid == 50882 ~ "Bicarbonate",
-                           itemid == 51221 ~ "Hematocrit",
-                           itemid == 51301 ~ "White Blood Cell Count",
-                           itemid == 50931 ~ "Glucose",
-                           itemid == 50960 ~ "Magnesium",
-                           itemid == 50893 ~"Calcium"))
-labevents_tble %>% 
-  group_by(class) %>%
+ labevents_dict <- labevents_dict %>%
+  select (itemid, label) %>%
+  filter(itemid %in% labevents_tble$itemid)
+ labevents_tble_wide <- labevents_tble %>%
+  inner_join(labevents_dict, by = "itemid")
+  
+labevents_tble_wide %>% 
+  group_by(label) %>%
   summarize (
     n = n(),
-    mean = mean(valuenum), 
-    sd = sd(valuenum), 
-    median = median(valuenum),
-    min = min(valuenum),
-    max = max(valuenum))
+    mean = mean(valuenum, na.rm = TRUE), 
+    sd = sd(valuenum,na.rm = TRUE), 
+    median = median(valuenum,na.rm = TRUE),
+    min = min(valuenum,na.rm = TRUE),
+    max = max(valuenum, na.rm = TRUE))
 
-labevents_tble %>%
+labevents_tble_wide %>%
+  filter (valuenum < 200) %>%
   ggplot() +
   geom_histogram(aes(x = valuenum), bins = 10) +
-  facet_wrap(~ class, scales = "free") +
+  facet_wrap(~ label, scales = "free") +
   labs(title = "Lab Measurements", x = "Measurement Value") +
   theme(plot.title = element_text(hjust = 0.5)) 
 ```
@@ -379,22 +375,28 @@ system(
 
 ```{r}
 chartevents_tble <- read_csv ("./icu/chartevents_filtered_itemid.csv.gz")
-item <- c(220045, 220181, 220179, 223761, 220210)
+ chartevents_dict <- read_csv ("./icu/d_items.csv.gz")
 chartevents_tble <- chartevents_tble %>%
   semi_join(icustays_tble, by = c("subject_id", "hadm_id")) %>%
-  filter(itemid %in% item)
+  filter(itemid %in% chartevents_dict$itemid)
+chartevents_tble
 
 ```
 2. Further restrict `chartevents_tble` to the first vital measurement during the ICU stay. 
 
 ```{r}
-chartevents_tble <- distinct (chartevents_tble, hadm_id, .keep_all = TRUE)
+# chartevents_tble <- distinct (chartevents_tble, hadm_id, .keep_all = TRUE)
+# chartevents_tble
+chartevents_tble <- left_join(chartevents_tble, chartime)
+chartevents_tble
+chartevents_tble <-chartevents_tble %>% 
+  filter (charttime >= intime) %>%
+  distinct (subject_id, itemid, .keep_all = TRUE)
 chartevents_tble
 ```
 3. Summarize these vital measurements by appropriate numerics and graphics. 
 
 ```{r}
- chartevents_dict <- read_csv ("./icu/d_items.csv.gz")
 chartevents_dict <- chartevents_dict %>%
    select (itemid, label) %>%
    filter(itemid %in% chartevents_tble$itemid)
@@ -420,7 +422,6 @@ chartevents_tble_wide$eliminate <-
   (chartevents_tble_wide$label == "Temperature Fahrenheit") &
   (chartevents_tble_wide$valuenum < 85)
 
-chartevents_tble_wide_1
 # Remove outliers
 chartevents_tble_wide %>%
   filter(valuenum <= 253) %>% 
