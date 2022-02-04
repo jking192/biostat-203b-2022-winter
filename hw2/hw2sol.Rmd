@@ -241,7 +241,7 @@ ggplot (data = patients_tble) +
   ) +
   labs(title = "Patient Age", x = "Age (yrs.)", y = "Patient Count") +
   theme(plot.title = element_text(hjust = 0.5))
-  
+# Summary
 patients_tble %>%
   group_by(gender) %>%
   summarise(
@@ -392,7 +392,6 @@ chartevents_tble
 # chartevents_tble <- distinct (chartevents_tble, hadm_id, .keep_all = TRUE)
 # chartevents_tble
 chartevents_tble <- left_join(chartevents_tble, chartime)
-chartevents_tble
 chartevents_tble <-chartevents_tble %>% 
   filter(charttime >= intime) %>%
   distinct(subject_id, itemid, .keep_all = TRUE) %>%
@@ -461,14 +460,14 @@ and columns contain at least following variables
 
 ```{r}
 admissions_tble <- admissions_tble %>%
-mutate(thirty_day_mort = ifelse(deathtime - admittime < 43200, 1, 0))
-admissions_tble$thirty_day_mort[is.na(admissions_tble$thirty_day_mort)] <- 0
+mutate(thirty_day_mort = ifelse(deathtime - admittime < 43200, "Yes", "No"))
+admissions_tble$thirty_day_mort[is.na(admissions_tble$thirty_day_mort)] <- "No"
 mimic_icu_cohort <- admissions_tble %>%
   inner_join(icustays_tble, by = "subject_id", "hadm_id") %>%
   inner_join(patients_tble) %>%
   left_join(labevents_tble) %>%
   inner_join(chartevents_tble) %>%
-  filter(anchor_age > 18)
+  filter(year(admittime) - (anchor_year - anchor_age) > 18)
 mimic_icu_cohort
   
 ```
@@ -477,10 +476,124 @@ mimic_icu_cohort
 Summarize following information using appropriate numerics or graphs.
 
 - `thirty_day_mort` vs demographic variables (ethnicity, language, insurance, marital_status, gender, age at hospital admission)
+```{r}
+# Age at admission
+age = year(mimic_icu_cohort$admittime) - 
+  (mimic_icu_cohort$anchor_year - mimic_icu_cohort$anchor_age)
+#Ethnicity Chart
+mimic_icu_cohort %>%
+  ggplot() +
+  geom_bar(mapping = aes(x = thirty_day_mort, fill = thirty_day_mort)) +
+  theme(legend.position = "none") +
+  labs(title = "30 Day Mortality by Ethnicity", x = "Ethnicity") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  facet_wrap(~ ethnicity, scales = "free", nrow = 3)
+# Make language chart
+mimic_icu_cohort %>%
+  ggplot() +
+  geom_bar(mapping = aes(x = thirty_day_mort, fill = thirty_day_mort)) +
+  theme(legend.position = "none") +
+  labs(title = "30 Day Mortality by Language", x = "Language") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  facet_wrap(~ language, scales = "free", nrow = 2)
+# Make insurance chart
+mimic_icu_cohort %>%
+  ggplot() +
+  geom_bar(mapping = aes(x = thirty_day_mort, fill = thirty_day_mort)) +
+  theme(legend.position = "none") +
+  labs(title = "30 Day Mortality by Insurance", x = "Insurance") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  facet_wrap(~ insurance, scales = "free", nrow = 3)
+# Make maritial status chart
+mimic_icu_cohort %>%
+  ggplot() +
+  geom_bar(mapping = aes(x = thirty_day_mort, fill = thirty_day_mort)) +
+  theme(legend.position = "none") +
+  labs(title = "30 Day Mortality by Marital Status", x = "Marital Status") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  facet_wrap(~ marital_status, scales = "free", nrow = 3)
+# Make Gender chart
+mimic_icu_cohort %>%
+  ggplot() +
+  geom_bar(mapping = aes(x = thirty_day_mort, fill = thirty_day_mort)) +
+  theme(legend.position = "none") +
+  labs(title = "30 Day Mortality by Gender", x = "Gender") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  facet_wrap(~ gender, scales = "free", nrow = 2)
+
+# Make Age of admission chart
+mimic_icu_cohort %>%
+  mutate (age = (year(admittime) - (anchor_year - anchor_age))) %>%
+  ggplot() +
+  geom_boxplot(
+    mapping = aes(
+    x = thirty_day_mort, 
+    y = age, 
+    fill = thirty_day_mort)
+  ) +
+  theme(legend.position = "none") +
+  labs(title = "Distribution of Age of Admission by 30 Day Mortality", 
+    y= "Age (years)",
+    x = "30 Day Mortality"
+  ) +
+  theme(plot.title = element_text(hjust = 0.5)) 
+  
+  
+```
 
 - `thirty_day_mort` vs first lab measurements
 
+```{r}
+mimic_icu_cohort %>%
+  group_by (thirty_day_mort) %>%
+  select (16,28:37) %>%
+    summarize_all( 
+      list(n = ~ sum(!is.na(.)), 
+        mean = mean,
+        sd = sd,
+        median = median,
+        min = min,
+        max = max
+      ),
+      na.rm = TRUE
+   ) %>%
+  print(width = Inf)
+```
+
 - `thirty_day_mort` vs first vital measurements
 
+```{r}
+
+
+mimic_icu_cohort %>%
+  group_by (thirty_day_mort) %>%
+  select (16,38:43) %>%
+    summarize_all( 
+      list(n = ~ sum(!is.na(.)), 
+        mean = mean,
+        sd = sd,
+        median = median,
+        min = min,
+        max = max
+      ),
+      na.rm = TRUE
+    ) %>%
+  print(width = Inf)
+```
+
 - `thirty_day_mort` vs first ICU unit
+
+```{r}
+mimic_icu_cohort %>%
+  ggplot() +
+  geom_bar(mapping = aes(x = thirty_day_mort, fill = thirty_day_mort)) +
+  theme(legend.position = "none") +
+  labs(title = "30 Day Mortality by First ICU Unit ", x = "30 Day Mortality") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  facet_wrap(~ first_careunit, 
+    scales = "free", 
+    nrow = 3, 
+    labeller = labeller(first_careunit = label_wrap_gen(width = 25))
+  )
+```
 
