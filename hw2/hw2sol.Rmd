@@ -157,7 +157,7 @@ admissions_tble %>%
   mutate(year = year(admittime)) %>% 
   ggplot() +
   geom_histogram (mapping = aes(x = year), fill = "skyblue", binwidth = 15) +
-  labs(title = " ICU Admission by Year", x = "Year", y = "Admission Count") +
+  labs(title = " ICU Admissions by Year", x = "Year", y = "Admission Count") +
   theme(plot.title = element_text(hjust = 0.5))
 admissions_tble %>% 
   mutate(month = month(admittime, label = TRUE)) %>% 
@@ -328,29 +328,71 @@ labevents_tble
 ### Solution
 
 ```{r}
-#  labevents_dict <- labevents_dict %>%
-#   select (itemid, label) %>%
-#   filter(itemid %in% labevents_tble$itemid)
-#  labevents_tble <- labevents_tble %>%
-#   inner_join(labevents_dict, by = "itemid")
-#   
-# labevents_tble_wide %>% 
-#   group_by(label) %>%
-#   summarize (
-#     n = n(),
-#     mean = mean(valuenum, na.rm = TRUE), 
-#     sd = sd(valuenum,na.rm = TRUE), 
-#     median = median(valuenum,na.rm = TRUE),
-#     min = min(valuenum,na.rm = TRUE),
-#     max = max(valuenum, na.rm = TRUE))
-# 
-# labevents_tble_wide %>%
-#   filter (valuenum < 200) %>%
-#   ggplot() +
-#   geom_histogram(aes(x = valuenum), bins = 10) +
-#   facet_wrap(~ label, scales = "free") +
-#   labs(title = "Lab Measurements", x = "Measurement Value") +
-#   theme(plot.title = element_text(hjust = 0.5)) 
+# Calculate summary statistics for all variables
+labevents_tble %>%
+  select (-subject_id) %>%
+    summarize_all( 
+      list(n_valid = ~ sum(!is.na(.)), 
+        mean = mean,
+        sd = sd,
+        median = median,
+        min = min,
+        max = max
+      ),
+      na.rm = TRUE
+   ) %>%
+  print(width = Inf)
+
+# Make boxplots for each Lab Measurment unfiltered
+
+for (i in 2:11)
+{
+  # Temporary variables needed to make plots
+  name <- colnames(labevents_tble[,i])
+  col <- labevents_tble[,i]
+  col_vec <- labevents_tble[[i]]
+  iqr <- IQR (col_vec, na.rm = TRUE)
+  q1 <- quantile(col_vec, 0.25, na.rm = TRUE)
+  q3 <- quantile(col_vec, 0.75, na.rm = TRUE)
+  sd <- sd (col_vec, na.rm = TRUE)
+  # Constructing plots inside the loop
+  print (labevents_tble %>%
+    ggplot() +
+    geom_boxplot(mapping = aes(y = .data[[name]])) +
+    labs(title = paste("Patient", name, "Levels"), y = "Measurement Value") +
+    theme(
+      plot.title = element_text(hjust = 0.5), 
+      axis.text.x=element_blank(),
+      axis.ticks.x=element_blank()
+    )
+  )
+}
+# Make boxplots for each Lab Measurement filtered using 1.5 IQR rule
+for (i in 2:11)
+{
+  # Temporary variables needed to make plots
+  name <- colnames(labevents_tble[,i])
+  col <- labevents_tble[,i]
+  col_vec <- labevents_tble[[i]]
+  iqr <- IQR (col_vec, na.rm = TRUE)
+  q1 <- quantile(col_vec, 0.25, na.rm = TRUE)
+  q3 <- quantile(col_vec, 0.75, na.rm = TRUE)
+  sd <- sd (col_vec, na.rm = TRUE)
+  # Constructing plots inside the loop
+  print (labevents_tble %>%
+    filter (col < ( q3 + 1.5 * iqr) & col > (q1 - 1.5 * iqr)) %>%
+    ggplot() +
+    geom_boxplot(mapping = aes(y = .data[[name]])) +
+    labs(title = paste("Patient", name, "Levels"), y = "Measurement Value") +
+    theme(
+      plot.title = element_text(hjust = 0.5), 
+      axis.text.x=element_blank(),
+      axis.ticks.x=element_blank()
+    )
+  )
+}
+# Remove temporary variables
+rm(name, col, col_vec, iqr, med, sd, q1, q3)
 ```
 
 ## Q6. Vitals from charted events
@@ -404,41 +446,68 @@ chartevents_tble
 3. Summarize these vital measurements by appropriate numerics and graphics. 
 
 ```{r}
-# 
-# chartevents_tble %>% 
-#  select(-subject_id) %>%
-#   summarize_all(
-#     list(n = n(),
-#         mean = mean(), 
-#         sd = sd(), 
-#         median = median(),
-#         min = min(),
-#         max = max())
-#   )
-#     
-# 
-# chartevents_tble_wide_1 <- chartevents_tble_wide %>%
-#   filter(label == "Temperature Fahrenheit") %>%
-#   select(valuenum) %>%
-#   arrange(valuenum)
-# 
-# chartevents_tble_wide$eliminate <-
-#   (chartevents_tble_wide$label == "Temperature Fahrenheit") &
-#   (chartevents_tble_wide$valuenum < 85)
-# 
-# # Remove outliers
-# chartevents_tble_wide %>%
-#   filter(valuenum <= 253) %>% 
-#   filter(eliminate == FALSE) %>%
-#   ggplot() +
-#   geom_histogram(aes(x = valuenum), bins = 10) +
-#   facet_wrap(~ label, scales = "free") +
-#   labs(
-#     title = "Chart Measurements", 
-#     x = "Measurement Value", 
-#     y = "Measurement Count" 
-#   ) +
-#   theme(plot.title = element_text(hjust = 0.5)) 
+chartevents_tble %>% 
+  select (-subject_id) %>%
+    summarize_all( 
+      list(n_valid = ~ sum(!is.na(.)), 
+        mean = mean,
+        sd = sd,
+        median = median,
+        min = min,
+        max = max
+      ),
+      na.rm = TRUE
+   ) %>%
+  print(width = Inf)
+# Make boxplots for vital measurements unfiltered
+for (i in 2:6)
+{
+  # Temporary variables needed to make plots
+  name <- colnames(chartevents_tble[,i])
+  col <- chartevents_tble[,i]
+  col_vec <- chartevents_tble[[i]]
+  iqr <- IQR (col_vec, na.rm = TRUE)
+  q1 <- quantile(col_vec, 0.25, na.rm = TRUE)
+  q3 <- quantile(col_vec, 0.75, na.rm = TRUE)
+  sd <- sd (col_vec, na.rm = TRUE)
+  # Constructing plots inside the loop
+  print (chartevents_tble %>%
+    ggplot() +
+    geom_boxplot(mapping = aes(y = .data[[name]])) +
+    labs(title = paste("Patient", name, "Levels"), y = "Measurement Value") +
+    theme(
+      plot.title = element_text(hjust = 0.5), 
+      axis.text.x=element_blank(),
+      axis.ticks.x=element_blank()
+    )
+  )
+}
+# Make boxplots for each Vital Measurement filtered using 1.5 IQR rule
+for (i in 2:6)
+{
+  # Temporary variables needed to make plots
+  name <- colnames(chartevents_tble[,i])
+  col <- chartevents_tble[,i]
+  col_vec <- chartevents_tble[[i]]
+  iqr <- IQR (col_vec, na.rm = TRUE)
+  q1 <- quantile(col_vec, 0.25, na.rm = TRUE)
+  q3 <- quantile(col_vec, 0.75, na.rm = TRUE)
+  sd <- sd (col_vec, na.rm = TRUE)
+  # Constructing plots inside the loop
+  print (chartevents_tble %>%
+    filter (col < ( q3 + 1.5 * iqr) & col > (q1 - 1.5 * iqr)) %>%
+    ggplot() +
+    geom_boxplot(mapping = aes(y = .data[[name]])) +
+    labs(title = paste("Patient", name, "Levels"), y = "Measurement Value") +
+    theme(
+      plot.title = element_text(hjust = 0.5), 
+      axis.text.x=element_blank(),
+      axis.ticks.x=element_blank()
+    )
+  )
+}
+# Remove temporary variables
+rm(name, col, col_vec, iqr, med, sd, q1, q3)
 ```
 
 ## Q7. Putting things together
@@ -546,9 +615,9 @@ mimic_icu_cohort %>%
 ```{r}
 mimic_icu_cohort %>%
   group_by (thirty_day_mort) %>%
-  select (16,28:37) %>%
+  select (16,29:38) %>%
     summarize_all( 
-      list(n = ~ sum(!is.na(.)), 
+      list(n_valid = ~ sum(!is.na(.)), 
         mean = mean,
         sd = sd,
         median = median,
@@ -595,5 +664,6 @@ mimic_icu_cohort %>%
     nrow = 3, 
     labeller = labeller(first_careunit = label_wrap_gen(width = 25))
   )
+group_by(mimic_icu_cohort, thirty_day_mort) %>% summarize (n=n())
 ```
 
