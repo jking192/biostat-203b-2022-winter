@@ -1,11 +1,11 @@
 ---
 title: "Biostat 203B Homework 2"
-subtitle: Due Feb 6 @ 11:59PM
-author: Jonathan King
-output: 
+author: "Jonathan King"
+subtitle: Due Feb 8 @ 11:59PM
+output:
   html_document:
-    toc: true
-    toc_depth: 4 
+    toc: yes
+    toc_depth: 4
 ---
 
 Display machine information for reproducibility:
@@ -15,6 +15,7 @@ sessionInfo()
 
 ```{r setup, message=F}
 knitr::opts_chunk$set(echo = TRUE, cache = TRUE, cache.lazy = FALSE)
+# Set root directory to simplify file importing
 knitr::opts_knit$set(root.dir = '/mnt/mimiciv/1.0')
 library(tidyverse)
 library(data.table)
@@ -30,7 +31,7 @@ if (str_detect(os, "Linux")) {
 }
 ```
 
-In this exercise, we use tidyverse (ggpot2, dplyr, etc) to explore the [MIMIC-IV](https://mimic.mit.edu/docs/iv/) data introduced in [homework 1](https://ucla-biostat-203b.github.io/2022winter/hw/hw1/hw1.html) and to build a cohort of ICU stays.
+In this exercise, we use tidyverse (ggplot2, dplyr, etc) to explore the [MIMIC-IV](https://mimic.mit.edu/docs/iv/) data introduced in [homework 1](https://ucla-biostat-203b.github.io/2022winter/hw/hw1/hw1.html) and to build a cohort of ICU stays.
 
 ```{r}
 # tree -s -L 2 /Users/huazhou/Documents/Box\ Sync/MIMIC/mimic-iv-1.0
@@ -51,19 +52,20 @@ For later questions, we stick to the tidyverse.
 # Compare run times of different file reading functions
 system.time(read_1 <- read.csv("./core/admissions.csv.gz"))
 system.time(read_2 <- read_csv("./core/admissions.csv.gz"))
-system.time (read_3 <- fread("./core/admissions.csv.gz"))
+system.time(read_3 <- fread("./core/admissions.csv.gz"))
 # Check for differences in parsed data types
 str(read_1)
 str(read_2)
-str (read_3)
+str(read_3)
+# Delete temporary reads
+rm(read_1, read_2, read_3)
 ```
 
-`fread` is the fastest function overall. By default, `read.csv` parsed all character variables
+- `fread` is the fastest function overall, with it and 'read_csv'
+both being much faster than `read.csv`. By default, `read.csv` parsed all character variables
 and dates as factors, while both `read_csv` and `fread` correctly parsed character variables 
-and parsed dates as POSIXct variables. Also, 'read_csv' parsed id numbers as numeric, while the other
+and parsed dates as POSIXct variables. Also, `read_csv` parsed id numbers as numeric, while the other
 two file reading functions parsed the id numbers as integers.
-
-
 
 ## Q2. ICU stays
 
@@ -79,39 +81,41 @@ system(
 )
 ```
 
-1. Import `icustatys.csv.gz` as a tibble `icustays_tble`. 
+1. Import `icustays.csv.gz` as a tibble `icustays_tble`. 
 
 ### Solution
 
 ```{r}
-icustays_tble <- read_csv ("./icu/icustays.csv.gz")
-icustays_tble
+icustays_tble <- read_csv("./icu/icustays.csv.gz") %>%
+  print(width = Inf)
 ```
 
 2. How many unique `subject_id`? Can a `subject_id` have multiple ICU stays? 
 
 ### Solution
+
 ```{r}
 icustays_tble %>%
   group_by(subject_id) %>%
-  summarise (number_of_stays = n_distinct(stay_id)) %>%
-  arrange (desc(number_of_stays))
+  summarise(number_of_stays = n_distinct(stay_id)) %>%
+  arrange(desc(number_of_stays))
 
 ```
 
-There are 53,150 unique `subject_id`, and they can have multiple ICU stays.
+- There are 53,150 unique `subject_id`, and each one can have multiple ICU stays.
 
 3. For each `subject_id`, let's only keep the first ICU stay in the tibble `icustays_tble`.
 
-## Solution
+### Solution
 
 ```{r}
 icustays_tble <- icustays_tble %>%
   group_by(subject_id) %>% 
-  arrange (intime) %>% 
-  distinct(subject_id, .keep_all = TRUE)
-icustays_tble
+  arrange(intime) %>% 
+  distinct(subject_id, .keep_all = TRUE) %>%
+  print(width = Inf)
 ```
+
 ## Q3. `admission` data
 
 Information of the patients admitted into hospital is available in `admissions.csv.gz`. See <https://mimic.mit.edu/docs/iv/modules/core/admissions/> for details of each field in this file. The first 10 lines are
@@ -127,10 +131,12 @@ system(
 ```
 
 1. Import `admissions.csv.gz` as a tibble `admissions_tble`.
+
 ### Solution
 
 ```{r}
-admissions_tble <- read_csv("./core/admissions.csv.gz")
+admissions_tble <- read_csv("./core/admissions.csv.gz") %>%
+  print(width = Inf)
 ```
 
 2. Let's only keep the admissions that have a match in `icustays_tble` according to `subject_id` and `hadmi_id`.
@@ -138,10 +144,11 @@ admissions_tble <- read_csv("./core/admissions.csv.gz")
 ### Solution
 
 ```{r}
-admissions_tble <- semi_join(admissions_tble,
-  icustays_tble, 
-  by = c("subject_id", "hadm_id"))
+admissions_tble <- admissions_tble %>%
+  semi_join(icustays_tble, by = c("subject_id", "hadm_id")) %>%
+  print(width = Inf)
 ```
+
 3. Summarize the following variables by graphics. 
 
 - admission year  
@@ -153,12 +160,14 @@ admissions_tble <- semi_join(admissions_tble,
 ### Solution
 
 ```{r}
+# Summarize by admission year
 admissions_tble %>% 
   mutate(year = year(admittime)) %>% 
   ggplot() +
-  geom_histogram (mapping = aes(x = year), fill = "skyblue", binwidth = 15) +
+  geom_histogram(mapping = aes(x = year), fill = "skyblue", binwidth = 15) +
   labs(title = " ICU Admissions by Year", x = "Year", y = "Admission Count") +
   theme(plot.title = element_text(hjust = 0.5))
+# Summarize by admission month
 admissions_tble %>% 
   mutate(month = month(admittime, label = TRUE)) %>% 
   ggplot() +
@@ -167,25 +176,35 @@ admissions_tble %>%
   theme(legend.position = "none") +
   labs(title = "ICU Admissions by Month", x = "Month", y = "Admission Count") +
   theme(plot.title = element_text(hjust = 0.5))
+# Summarize by day of the month
 admissions_tble %>% 
   mutate(mday = mday(admittime)) %>% 
   ggplot() +
-  geom_histogram(mapping = aes(x=mday), fill = "lightblue", binwidth = 5) +
-  labs(title = "ICU Admissions by Day of the Month", 
-       x = "Day of the Month",
-       y = "Admission Count"
-       ) +
+  geom_histogram(
+    mapping = aes(x = mday), 
+    fill = "lightblue", 
+    binwidth = 5,
+    center = 2.5
+  ) +
+  labs(
+    title = "ICU Admissions by Day of the Month", 
+    x = "Day of the Month",
+    y = "Admission Count"
+  ) +
   theme(plot.title = element_text(hjust = 0.5))
+# Summarize by day of the week
 admissions_tble %>% 
   mutate(wday = wday(admittime, label = TRUE)) %>% 
   ggplot() +
   geom_bar(mapping = aes(x = wday, fill = wday)) +
   theme(legend.position = "none") +
-  labs(title = "ICU Admissions by Day of the Week", 
-       x = "Day of the Week",
-       y = "Admission Count"
-       ) +
+  labs(
+    title = "ICU Admissions by Day of the Week", 
+    x = "Day of the Week",
+    y = "Admission Count"
+  ) +
   theme(plot.title = element_text(hjust = 0.5))
+# Summarize by admission hour
 admissions_tble %>% 
   mutate(hour = hour(admittime)) %>% 
   ggplot() +
@@ -196,7 +215,7 @@ admissions_tble %>%
 ```
 
 - The 12 a.m. hour was when the most patients were admitted. Fewer patients
-are admitted in the morning hours after, except for an usual spike in the 7 a.m. hour.
+are admitted in the morning hours after, except for an unusual spike in the 7 a.m. hour.
 
 ## Q4. `patients` data
 
@@ -217,8 +236,9 @@ system(
 ### Solution
 
 ```{r}
-patients_tble <- read_csv("./core/patients.csv.gz")
-patients_tble <- semi_join(patients_tble, icustays_tble)
+patients_tble <- read_csv("./core/patients.csv.gz") %>%
+  semi_join(icustays_tble) %>%
+  print(width = Inf)
 ```
 
 2. Summarize variables `gender` and `anchor_age`, and explain any patterns you see.
@@ -226,38 +246,45 @@ patients_tble <- semi_join(patients_tble, icustays_tble)
 ### Solution
 
 ```{r}
+# Make barplot of gender
 ggplot(data = patients_tble) +
-  geom_bar (aes(x = gender, fill = gender)) +
+  geom_bar(aes(x = gender, fill = gender)) +
   theme(legend.position = "none") +
   labs(title = "Patient Gender", x = "Gender", y = "Patient Count") +
   theme(plot.title = element_text(hjust = 0.5))
-
-ggplot (data = patients_tble) +
-  geom_histogram (
-    aes(x= anchor_age), 
+# Create histogram of patient anchor age
+ggplot(data = patients_tble) +
+  geom_histogram(
+    aes(x = anchor_age), 
     fill = "orangered2", 
     binwidth = 5,
     center = 17.5
   ) +
-  labs(title = "Patient Age", x = "Age (yrs.)", y = "Patient Count") +
+  labs(
+    title = "Patient Anchor Age", 
+    x = "Anchor Age (yrs.)", 
+    y = "Patient Count"
+  ) +
   theme(plot.title = element_text(hjust = 0.5))
-# Summary
+# Generate numeric summary of anchor_age by gender
 patients_tble %>%
   group_by(gender) %>%
   summarise(
     n = n(), 
-    mean_age = mean(anchor_age), 
-    median_age = median(anchor_age), 
-    sd_age = sd(anchor_age),
-    min = min(anchor_age),
-    max = max(anchor_age)
-  )
+    mean_anchor_age = mean(anchor_age), 
+    median_anchor_age = median(anchor_age), 
+    sd_anchor_age = sd(anchor_age),
+    min_anchor_age = min(anchor_age),
+    max_anchor_age = max(anchor_age)
+  ) %>%
+  print(width = Inf)
 ```
 
-- Most patients were male and older than 60 with the highest number of patients being around 66-70 years old compared to any other age range.
-Mean and median age were lower for male patients compared to female patients. 
-Standard deviation in age was also lower for male patients.
-Minimum patient age was 18 years old, and maximum patient age was 91 years old, so no data on minors were collected.
+- Most patients were male and had an anchor age above 60, with the highest number of patients having an anchor age between 65 and 70 compared to any other five-year age range.
+Mean and median anchor age were lower for male patients compared to female patients. 
+Standard deviation in anchor age was also lower for male patients.
+Minimum patient anchor age was 18 years, and maximum patient anchor age was 91 years for both genders.
+
 ## Q5. Lab results
 
 `labevents.csv.gz` (<https://mimic.mit.edu/docs/iv/modules/hosp/labevents/>) contains all laboratory measurements for patients. The first 10 lines are
@@ -294,15 +321,15 @@ zcat /mnt/mimiciv/1.0/hosp/labevents.csv.gz | tail -n+2 | wc -l
 2. We are interested in the lab measurements of creatinine (50912), potassium (50971), sodium (50983), chloride (50902), bicarbonate (50882), hematocrit (51221), white blood cell count (51301), glucose (50931), magnesium (50960), and calcium (50893). Retrieve a subset of `labevents.csv.gz` only containing these items for the patients in `icustays_tble` as a tibble `labevents_tble`. 
 
     Hint: `labevents.csv.gz` is a data file too big to be read in by the `read_csv` function in its default setting. Utilize the `col_select` and `lazy` options in the `read_csv` function to reduce the memory burden.
+
 ### Solution
 
 ```{r}
-labevents_tble <- read_csv("./hosp/labevents_filtered_itemid.csv.gz")
-labevents_dict <- read_csv ("./hosp/d_labitems.csv.gz")
-labevents_tble <- labevents_tble %>%
-  semi_join(icustays_tble) 
-# categories <- unique(labevents_tble$itemid)
-# categories
+labevents_tble <- read_csv("./hosp/labevents_filtered_itemid.csv.gz") %>%
+  semi_join(icustays_tble) %>%
+  print()
+# Read in dictionary of lab measurements
+labevents_dict <- read_csv("./hosp/d_labitems.csv.gz")
 ```
 
 3. Further restrict `labevents_tble` to the first lab measurement during the ICU stay.
@@ -310,17 +337,18 @@ labevents_tble <- labevents_tble %>%
 ### Solution
 
 ```{r} 
+# Create table to determine first lab measurement
 chartime <- select(icustays_tble, subject_id, intime)
-labevents_tble <- full_join(labevents_tble, chartime)
-labevents_tble <-labevents_tble %>% 
-   arrange (subject_id) %>%
-  filter (charttime >= intime) %>%
-  distinct (subject_id, itemid, .keep_all = TRUE) %>%
+# Find first measurement after check-in and restrict lab events
+labevents_tble <- left_join(labevents_tble, chartime) %>% 
+  arrange(subject_id) %>%
+  filter(charttime >= intime) %>%
+  distinct(subject_id, itemid, .keep_all = TRUE) %>%
+# Create separate columns for each lab measurement and use measurement names
   inner_join(labevents_dict, by = "itemid") %>%
-  select (subject_id, label, valuenum) %>%
-  spread (label, valuenum)
-
-labevents_tble
+  select(subject_id, label, valuenum) %>%
+  pivot_wider(names_from = label, values_from = valuenum) %>%
+  print(width = Inf)
 ```
 
 4. Summarize the lab measurements by appropriate numerics and graphics. 
@@ -328,71 +356,70 @@ labevents_tble
 ### Solution
 
 ```{r}
-# Calculate summary statistics for all variables
+# Calculate summary statistics for all lab measurements
 labevents_tble %>%
-  select (-subject_id) %>%
-    summarize_all( 
-      list(n_valid = ~ sum(!is.na(.)), 
-        mean = mean,
-        sd = sd,
-        median = median,
-        min = min,
-        max = max
-      ),
-      na.rm = TRUE
-   ) %>%
+  select(-subject_id) %>%
+  summarize_all( 
+    list(
+      n_valid = ~ sum(!is.na(.)), 
+      mean = mean,
+      sd = sd,
+      median = median,
+      min = min,
+      max = max
+    ),
+    na.rm = TRUE
+  ) %>%
   print(width = Inf)
-
-# Make boxplots for each Lab Measurment unfiltered
-
-for (i in 2:11)
-{
+# Make a boxplot for each lab measurement unfiltered
+for (i in 2:11) {
   # Temporary variables needed to make plots
-  name <- colnames(labevents_tble[,i])
-  col <- labevents_tble[,i]
+  name <- colnames(labevents_tble[, i])
+  col <- labevents_tble[, i]
   col_vec <- labevents_tble[[i]]
-  iqr <- IQR (col_vec, na.rm = TRUE)
+  iqr <- IQR(col_vec, na.rm = TRUE)
   q1 <- quantile(col_vec, 0.25, na.rm = TRUE)
   q3 <- quantile(col_vec, 0.75, na.rm = TRUE)
-  sd <- sd (col_vec, na.rm = TRUE)
+  sd <- sd(col_vec, na.rm = TRUE)
   # Constructing plots inside the loop
-  print (labevents_tble %>%
-    ggplot() +
-    geom_boxplot(mapping = aes(y = .data[[name]])) +
-    labs(title = paste("Patient", name, "Levels"), y = "Measurement Value") +
-    theme(
-      plot.title = element_text(hjust = 0.5), 
-      axis.text.x=element_blank(),
-      axis.ticks.x=element_blank()
-    )
+  print(
+    labevents_tble %>%
+      ggplot() +
+      geom_boxplot(mapping = aes(y = .data[[name]])) +
+      labs(title = paste("Patient", name, "Levels"), y = "Measurement Value") +
+      theme(
+        plot.title = element_text(hjust = 0.5), 
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank()
+      )
   )
 }
-# Make boxplots for each Lab Measurement filtered using 1.5 IQR rule
-for (i in 2:11)
-{
+# Make a boxplot for each lab measurement filtered using the 1.5 IQR rule
+for (i in 2:11) {
   # Temporary variables needed to make plots
-  name <- colnames(labevents_tble[,i])
-  col <- labevents_tble[,i]
+  name <- colnames(labevents_tble[, i])
+  col <- labevents_tble[, i]
   col_vec <- labevents_tble[[i]]
-  iqr <- IQR (col_vec, na.rm = TRUE)
+  iqr <- IQR(col_vec, na.rm = TRUE)
   q1 <- quantile(col_vec, 0.25, na.rm = TRUE)
   q3 <- quantile(col_vec, 0.75, na.rm = TRUE)
-  sd <- sd (col_vec, na.rm = TRUE)
+  sd <- sd(col_vec, na.rm = TRUE)
   # Constructing plots inside the loop
-  print (labevents_tble %>%
-    filter (col < ( q3 + 1.5 * iqr) & col > (q1 - 1.5 * iqr)) %>%
-    ggplot() +
-    geom_boxplot(mapping = aes(y = .data[[name]])) +
-    labs(title = paste("Patient", name, "Levels"), y = "Measurement Value") +
-    theme(
-      plot.title = element_text(hjust = 0.5), 
-      axis.text.x=element_blank(),
-      axis.ticks.x=element_blank()
-    )
+  print(
+    labevents_tble %>%
+      filter(col < (q3 + 1.5 * iqr) & col > (q1 - 1.5 * iqr)) %>%
+      ggplot() +
+      geom_boxplot(mapping = aes(y = .data[[name]])) +
+      labs(title = paste("Patient", name, "Levels"), y = "Measurement Value") +
+      theme(
+        plot.title = element_text(hjust = 0.5), 
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank()
+      )
   )
 }
 # Remove temporary variables
-rm(name, col, col_vec, iqr, med, sd, q1, q3)
+rm(name, col, col_vec, iqr, sd, q1, q3)
 ```
 
 ## Q6. Vitals from charted events
@@ -420,94 +447,106 @@ system(
 
 1. We are interested in the vitals for ICU patients: heart rate (220045), mean non-invasive blood pressure (220181), systolic non-invasive blood pressure (220179), body temperature in Fahrenheit (223761), and respiratory rate (220210). Retrieve a subset of `chartevents.csv.gz` only containing these items for the patients in `icustays_tble` as a tibble `chartevents_tble`.
 
+### Solution
+
 ```{r}
-chartevents_tble <- read_csv ("./icu/chartevents_filtered_itemid.csv.gz")
- chartevents_dict <- read_csv ("./icu/d_items.csv.gz")
-chartevents_tble <- chartevents_tble %>%
-  semi_join(icustays_tble, by = "subject_id") 
-chartevents_tble
+chartevents_tble <- read_csv("./icu/chartevents_filtered_itemid.csv.gz") %>% 
+  semi_join(icustays_tble, by = "subject_id") %>%
+  print()
+# Read in dictionary of chart measurements
+ chartevents_dict <- read_csv("./icu/d_items.csv.gz")
+ 
 
 ```
 2. Further restrict `chartevents_tble` to the first vital measurement during the ICU stay. 
 
+### Solution
+
 ```{r}
-# chartevents_tble <- distinct (chartevents_tble, hadm_id, .keep_all = TRUE)
-# chartevents_tble
-chartevents_tble <- left_join(chartevents_tble, chartime)
-chartevents_tble <-chartevents_tble %>% 
+# Find first measurement after check-in and restrict chart events
+chartevents_tble <- left_join(chartevents_tble, chartime) %>%
   filter(charttime >= intime) %>%
   distinct(subject_id, itemid, .keep_all = TRUE) %>%
   arrange(subject_id) %>%
+  # Create separate columns for each vital measurement and use measurement names
   inner_join(chartevents_dict, by = "itemid") %>%
-  select (subject_id, label, valuenum) %>%
-  spread (label, valuenum)
-chartevents_tble
+  select(subject_id, label, valuenum) %>%
+  pivot_wider(names_from = label, values_from = valuenum) %>%
+  print(width = Inf)
 ```
 3. Summarize these vital measurements by appropriate numerics and graphics. 
 
+### Solution
+
 ```{r}
+# Summarize all vital measurements
 chartevents_tble %>% 
-  select (-subject_id) %>%
-    summarize_all( 
-      list(n_valid = ~ sum(!is.na(.)), 
-        mean = mean,
-        sd = sd,
-        median = median,
-        min = min,
-        max = max
-      ),
-      na.rm = TRUE
-   ) %>%
+  select(-subject_id) %>%
+  summarize_all( 
+    list(
+      n_valid = ~ sum(!is.na(.)), 
+      mean = mean,
+      sd = sd,
+      median = median,
+      min = min,
+      max = max
+    ),
+    na.rm = TRUE
+  ) %>%
   print(width = Inf)
 # Make boxplots for vital measurements unfiltered
 for (i in 2:6)
 {
   # Temporary variables needed to make plots
-  name <- colnames(chartevents_tble[,i])
-  col <- chartevents_tble[,i]
+  name <- colnames(chartevents_tble[, i])
+  col <- chartevents_tble[, i]
   col_vec <- chartevents_tble[[i]]
-  iqr <- IQR (col_vec, na.rm = TRUE)
+  iqr <- IQR(col_vec, na.rm = TRUE)
   q1 <- quantile(col_vec, 0.25, na.rm = TRUE)
   q3 <- quantile(col_vec, 0.75, na.rm = TRUE)
-  sd <- sd (col_vec, na.rm = TRUE)
+  sd <- sd(col_vec, na.rm = TRUE)
   # Constructing plots inside the loop
-  print (chartevents_tble %>%
-    ggplot() +
-    geom_boxplot(mapping = aes(y = .data[[name]])) +
-    labs(title = paste("Patient", name, "Levels"), y = "Measurement Value") +
-    theme(
-      plot.title = element_text(hjust = 0.5), 
-      axis.text.x=element_blank(),
-      axis.ticks.x=element_blank()
-    )
+  print(
+    chartevents_tble %>%
+      ggplot() +
+      geom_boxplot(mapping = aes(y = .data[[name]])) +
+      labs(title = paste("Patient", name), y = "Measurement Value") +
+      theme(
+        plot.title = element_text(hjust = 0.5), 
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank()
+      )
   )
 }
-# Make boxplots for each Vital Measurement filtered using 1.5 IQR rule
+# Make a boxplot for each vital measurement filtered using the 1.5 IQR rule
 for (i in 2:6)
 {
   # Temporary variables needed to make plots
-  name <- colnames(chartevents_tble[,i])
-  col <- chartevents_tble[,i]
+  name <- colnames(chartevents_tble[, i])
+  col <- chartevents_tble[, i]
   col_vec <- chartevents_tble[[i]]
-  iqr <- IQR (col_vec, na.rm = TRUE)
+  iqr <- IQR(col_vec, na.rm = TRUE)
   q1 <- quantile(col_vec, 0.25, na.rm = TRUE)
   q3 <- quantile(col_vec, 0.75, na.rm = TRUE)
-  sd <- sd (col_vec, na.rm = TRUE)
+  sd <- sd(col_vec, na.rm = TRUE)
   # Constructing plots inside the loop
-  print (chartevents_tble %>%
-    filter (col < ( q3 + 1.5 * iqr) & col > (q1 - 1.5 * iqr)) %>%
-    ggplot() +
-    geom_boxplot(mapping = aes(y = .data[[name]])) +
-    labs(title = paste("Patient", name, "Levels"), y = "Measurement Value") +
-    theme(
-      plot.title = element_text(hjust = 0.5), 
-      axis.text.x=element_blank(),
-      axis.ticks.x=element_blank()
-    )
+  print(
+    chartevents_tble %>%
+      filter(col < ( q3 + 1.5 * iqr) & col > (q1 - 1.5 * iqr)) %>%
+      ggplot() +
+      geom_boxplot(mapping = aes(y = .data[[name]])) +
+      labs(title = paste("Patient", name), y = "Measurement Value") +
+      theme(
+        plot.title = element_text(hjust = 0.5), 
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank()
+      )
   )
 }
 # Remove temporary variables
-rm(name, col, col_vec, iqr, med, sd, q1, q3)
+rm(name, col, col_vec, iqr, sd, q1, q3)
+# Remove temporary table need to determine first measurements
+rm(chartime)
 ```
 
 ## Q7. Putting things together
@@ -528,16 +567,19 @@ and columns contain at least following variables
 ### Solution
 
 ```{r}
+# Create 30 day mortality variable
 admissions_tble <- admissions_tble %>%
-mutate(thirty_day_mort = ifelse(deathtime - admittime < 43200, "Yes", "No"))
+  mutate(thirty_day_mort = ifelse(deathtime - admittime < 43200, "Yes", "No"))
+# Assign 30 day mortality as "No" for individuals who did not pass away
 admissions_tble$thirty_day_mort[is.na(admissions_tble$thirty_day_mort)] <- "No"
 mimic_icu_cohort <- admissions_tble %>%
   inner_join(icustays_tble, by = "subject_id", "hadm_id") %>%
   inner_join(patients_tble) %>%
   left_join(labevents_tble) %>%
-  inner_join(chartevents_tble) %>%
-  filter(year(admittime) - (anchor_year - anchor_age) > 18)
-mimic_icu_cohort
+  left_join(chartevents_tble) %>%
+# Restrict age at admission > 18
+  filter(year(admittime) - (anchor_year - anchor_age) > 18) %>%
+  print(width = Inf)
   
 ```
 ## Q8. Exploratory data analysis (EDA)
@@ -545,24 +587,29 @@ mimic_icu_cohort
 Summarize following information using appropriate numerics or graphs.
 
 - `thirty_day_mort` vs demographic variables (ethnicity, language, insurance, marital_status, gender, age at hospital admission)
+
+### Solution
+
 ```{r}
-# Age at admission
-age = year(mimic_icu_cohort$admittime) - 
-  (mimic_icu_cohort$anchor_year - mimic_icu_cohort$anchor_age)
-#Ethnicity Chart
+# Make ethnicity chart
 mimic_icu_cohort %>%
   ggplot() +
   geom_bar(mapping = aes(x = thirty_day_mort, fill = thirty_day_mort)) +
   theme(legend.position = "none") +
-  labs(title = "30 Day Mortality by Ethnicity", x = "Ethnicity") +
+  labs(title = "30 Day Mortality by Ethnicity", x = "30 Day Mortality") +
   theme(plot.title = element_text(hjust = 0.5)) +
-  facet_wrap(~ ethnicity, scales = "free", nrow = 3)
+  facet_wrap(
+    ~ ethnicity, 
+    scales = "free", 
+    nrow = 3, 
+    labeller = labeller(ethnicity = label_wrap_gen(width = 20))
+  )
 # Make language chart
 mimic_icu_cohort %>%
   ggplot() +
   geom_bar(mapping = aes(x = thirty_day_mort, fill = thirty_day_mort)) +
   theme(legend.position = "none") +
-  labs(title = "30 Day Mortality by Language", x = "Language") +
+  labs(title = "30 Day Mortality by Language", x = "30 Day Mortality") +
   theme(plot.title = element_text(hjust = 0.5)) +
   facet_wrap(~ language, scales = "free", nrow = 2)
 # Make insurance chart
@@ -570,7 +617,7 @@ mimic_icu_cohort %>%
   ggplot() +
   geom_bar(mapping = aes(x = thirty_day_mort, fill = thirty_day_mort)) +
   theme(legend.position = "none") +
-  labs(title = "30 Day Mortality by Insurance", x = "Insurance") +
+  labs(title = "30 Day Mortality by Insurance", x = "30 Day Mortality") +
   theme(plot.title = element_text(hjust = 0.5)) +
   facet_wrap(~ insurance, scales = "free", nrow = 3)
 # Make maritial status chart
@@ -578,21 +625,21 @@ mimic_icu_cohort %>%
   ggplot() +
   geom_bar(mapping = aes(x = thirty_day_mort, fill = thirty_day_mort)) +
   theme(legend.position = "none") +
-  labs(title = "30 Day Mortality by Marital Status", x = "Marital Status") +
+  labs(title = "30 Day Mortality by Marital Status", x = "30 Day Mortality") +
   theme(plot.title = element_text(hjust = 0.5)) +
   facet_wrap(~ marital_status, scales = "free", nrow = 3)
-# Make Gender chart
+# Make gender chart
 mimic_icu_cohort %>%
   ggplot() +
   geom_bar(mapping = aes(x = thirty_day_mort, fill = thirty_day_mort)) +
   theme(legend.position = "none") +
-  labs(title = "30 Day Mortality by Gender", x = "Gender") +
+  labs(title = "30 Day Mortality by Gender", x = "30 Day Mortality") +
   theme(plot.title = element_text(hjust = 0.5)) +
   facet_wrap(~ gender, scales = "free", nrow = 2)
 
-# Make Age of admission chart
+# Make age at admission plot
 mimic_icu_cohort %>%
-  mutate (age = (year(admittime) - (anchor_year - anchor_age))) %>%
+  mutate(age = (year(admittime) - (anchor_year - anchor_age))) %>%
   ggplot() +
   geom_boxplot(
     mapping = aes(
@@ -601,8 +648,9 @@ mimic_icu_cohort %>%
     fill = thirty_day_mort)
   ) +
   theme(legend.position = "none") +
-  labs(title = "Distribution of Age of Admission by 30 Day Mortality", 
-    y= "Age (years)",
+  labs(
+    title = "Age at Admission by 30 Day Mortality", 
+    y = "Age (yrs.)",
     x = "30 Day Mortality"
   ) +
   theme(plot.title = element_text(hjust = 0.5)) 
@@ -612,45 +660,51 @@ mimic_icu_cohort %>%
 
 - `thirty_day_mort` vs first lab measurements
 
+### Solution
+
 ```{r}
 mimic_icu_cohort %>%
-  group_by (thirty_day_mort) %>%
-  select (16,29:38) %>%
-    summarize_all( 
-      list(n_valid = ~ sum(!is.na(.)), 
-        mean = mean,
-        sd = sd,
-        median = median,
-        min = min,
-        max = max
-      ),
-      na.rm = TRUE
-   ) %>%
+  group_by(thirty_day_mort) %>%
+  select(16, 29:38) %>%
+  summarize_all( 
+    list(
+      n_valid = ~ sum(!is.na(.)), 
+      mean = mean,
+      sd = sd,
+      median = median,
+      min = min,
+      max = max
+    ),
+    na.rm = TRUE
+  ) %>%
   print(width = Inf)
 ```
+
+### Solution
 
 - `thirty_day_mort` vs first vital measurements
 
 ```{r}
-
-
 mimic_icu_cohort %>%
-  group_by (thirty_day_mort) %>%
-  select (16,38:43) %>%
-    summarize_all( 
-      list(n = ~ sum(!is.na(.)), 
-        mean = mean,
-        sd = sd,
-        median = median,
-        min = min,
-        max = max
-      ),
-      na.rm = TRUE
-    ) %>%
+  group_by(thirty_day_mort) %>%
+  select(16, 39:43) %>%
+  summarize_all( 
+    list(
+      n = ~ sum(!is.na(.)), 
+      mean = mean,
+      sd = sd,
+      median = median,
+      min = min,
+      max = max
+    ),
+    na.rm = TRUE
+  ) %>%
   print(width = Inf)
 ```
 
 - `thirty_day_mort` vs first ICU unit
+
+### Solution
 
 ```{r}
 mimic_icu_cohort %>%
@@ -659,11 +713,11 @@ mimic_icu_cohort %>%
   theme(legend.position = "none") +
   labs(title = "30 Day Mortality by First ICU Unit ", x = "30 Day Mortality") +
   theme(plot.title = element_text(hjust = 0.5)) +
-  facet_wrap(~ first_careunit, 
+  facet_wrap(
+    ~ first_careunit, 
     scales = "free", 
     nrow = 3, 
     labeller = labeller(first_careunit = label_wrap_gen(width = 25))
   )
-group_by(mimic_icu_cohort, thirty_day_mort) %>% summarize (n=n())
 ```
 

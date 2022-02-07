@@ -422,34 +422,7 @@ pre code {
 <ol style="list-style-type: decimal">
 <li><p>You and your friend just have finished reading <em>Pride and Prejudice</em> by Jane Austen. Among the four main characters in the book, Elizabeth, Jane, Lydia, and Darcy, your friend thinks that Darcy was the most mentioned. You, however, are certain it was Elizabeth. Obtain the full text of the novel from <a href="http://www.gutenberg.org/cache/epub/42671/pg42671.txt" class="uri">http://www.gutenberg.org/cache/epub/42671/pg42671.txt</a> and save to your local folder.</p>
 <pre class="bash"><code>wget -nc http://www.gutenberg.org/cache/epub/42671/pg42671.txt</code></pre>
-<pre><code>## --2022-01-21 13:26:55--  http://www.gutenberg.org/cache/epub/42671/pg42671.txt
-## Resolving www.gutenberg.org (www.gutenberg.org)... 152.19.134.47, 2610:28:3090:3000:0:bad:cafe:47
-## Connecting to www.gutenberg.org (www.gutenberg.org)|152.19.134.47|:80... connected.
-## HTTP request sent, awaiting response... 302 Found
-## Location: https://www.gutenberg.org/cache/epub/42671/pg42671.txt [following]
-## --2022-01-21 13:26:55--  https://www.gutenberg.org/cache/epub/42671/pg42671.txt
-## Connecting to www.gutenberg.org (www.gutenberg.org)|152.19.134.47|:443... connected.
-## HTTP request sent, awaiting response... 200 OK
-## Length: 725060 (708K) [text/plain]
-## Saving to: ‘pg42671.txt’
-## 
-##      0K .......... .......... .......... .......... ..........  7%  699K 1s
-##     50K .......... .......... .......... .......... .......... 14%  702K 1s
-##    100K .......... .......... .......... .......... .......... 21% 78.1M 1s
-##    150K .......... .......... .......... .......... .......... 28%  132M 0s
-##    200K .......... .......... .......... .......... .......... 35%  707K 0s
-##    250K .......... .......... .......... .......... .......... 42%  138M 0s
-##    300K .......... .......... .......... .......... .......... 49%  168M 0s
-##    350K .......... .......... .......... .......... .......... 56%  197M 0s
-##    400K .......... .......... .......... .......... .......... 63%  714K 0s
-##    450K .......... .......... .......... .......... .......... 70%  130M 0s
-##    500K .......... .......... .......... .......... .......... 77%  179M 0s
-##    550K .......... .......... .......... .......... .......... 84%  192M 0s
-##    600K .......... .......... .......... .......... .......... 91%  167M 0s
-##    650K .......... .......... .......... .......... .......... 98%  199M 0s
-##    700K ........                                              100%  164M=0.3s
-## 
-## 2022-01-21 13:26:57 (2.41 MB/s) - ‘pg42671.txt’ saved [725060/725060]</code></pre>
+<pre><code>## File ‘pg42671.txt’ already there; not retrieving.</code></pre>
 <p>Explain what <code>wget -nc</code> does. Do <strong>not</strong> put this text file <code>pg42671.txt</code> in Git. Complete the following loop to tabulate the number of times each of the four characters is mentioned using Linux commands.</p></li>
 </ol>
 <div id="solution-6" class="section level3">
@@ -567,7 +540,7 @@ head -n &quot;$2&quot; &quot;$1&quot; | tail -n &quot;$3&quot;</code></pre>
 ## 
 ## 
 ## 
-## Fri Jan 21 13:26:58 UTC 2022</code></pre>
+## Sat Jan 22 02:06:41 UTC 2022</code></pre>
 <pre class="bash"><code>   hostname
    arch
    uname -a
@@ -575,38 +548,38 @@ head -n &quot;$2&quot; &quot;$1&quot; | tail -n &quot;$3&quot;</code></pre>
 <pre><code>## biostat-203b-teaching-server
 ## x86_64
 ## Linux biostat-203b-teaching-server 3.10.0-1160.49.1.el7.x86_64 #1 SMP Tue Nov 30 15:51:32 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux
-##  13:26:58 up 18 days, 13:00,  3 users,  load average: 0.70, 0.24, 0.11</code></pre>
+##  02:06:41 up 19 days,  1:40,  3 users,  load average: 0.93, 0.49, 0.44</code></pre>
 <pre class="bash"><code>   who am i
    who</code></pre>
 <pre><code>## tomokiokuno0528 pts/1        2022-01-11 01:13 (42.166.94.34.bc.googleusercontent.com)
 ## tomokiokuno0528 pts/3        2022-01-10 23:43 (42.166.94.34.bc.googleusercontent.com)
-## capj245  pts/13       2022-01-21 03:54 (s-164-67-232-61.resnet.ucla.edu)</code></pre>
+## zixiz    pts/6        2022-01-22 01:13 (s-169-232-191-144.resnet.ucla.edu)</code></pre>
 <pre class="bash"><code>   w</code></pre>
-<pre><code>##  13:26:58 up 18 days, 13:00,  3 users,  load average: 0.70, 0.24, 0.11
+<pre><code>##  02:06:41 up 19 days,  1:40,  3 users,  load average: 0.93, 0.49, 0.44
 ## USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT
-## tomokiok pts/1    42.166.94.34.bc. 11Jan22 10days  0.01s  0.01s -bash
-## tomokiok pts/3    42.166.94.34.bc. 10Jan22 10days  1.19s  1.01s ssh -i /home/tomokiokuno0528/.ssh/id_rsa tomokiokuno0528@server.ucla-biostat-203b.com
-## capj245  pts/13   s-164-67-232-61. 03:54    9:31m  0.01s  0.01s -bash</code></pre>
+## tomokiok pts/1    42.166.94.34.bc. 11Jan22 11days  0.01s  0.01s -bash
+## tomokiok pts/3    42.166.94.34.bc. 10Jan22 11days  1.26s  1.08s ssh -i /home/tomokiokuno0528/.ssh/id_rsa tomokiokuno0528@server.ucla-biostat-203b.com
+## zixiz    pts/6    s-169-232-191-14 01:13   52:25   0.01s  0.01s -bash</code></pre>
 <pre class="bash"><code>   id
    last | head</code></pre>
 <pre><code>## uid=1017(jonathanking192) gid=1019(jonathanking192) groups=1019(jonathanking192) context=system_u:system_r:initrc_t:s0
+## lillyhua pts/14       64.201.127.119   Sat Jan 22 01:59 - 02:02  (00:02)    
+## zixiz    pts/6        s-169-232-191-14 Sat Jan 22 01:13   still logged in   
+## zixiz    pts/24       s-169-232-191-14 Sat Jan 22 00:51 - 00:58  (00:06)    
+## zixiz    pts/24       s-169-232-191-14 Sat Jan 22 00:44 - 00:45  (00:00)    
+## zixiz    pts/21       s-169-232-191-14 Sat Jan 22 00:14 - 00:35  (00:20)    
+## yuruidon pts/10       42.166.94.34.bc. Fri Jan 21 21:08 - 22:51  (01:42)    
+## yuruidon pts/2        s-169-232-70-203 Fri Jan 21 21:06 - 22:51  (01:45)    
+## yuruidon pts/10       s-169-232-70-203 Fri Jan 21 20:40 - 21:03  (00:22)    
 ## tokramm  pts/18       76.82.34.63      Fri Jan 21 05:07 - 07:32  (02:25)    
-## tokramm  pts/18       76.82.34.63      Fri Jan 21 04:58 - 05:02  (00:04)    
-## blei001  pts/18       cpe-76-171-0-146 Fri Jan 21 04:56 - 04:56  (00:00)    
-## tokramm  pts/18       76.82.34.63      Fri Jan 21 04:53 - 04:54  (00:00)    
-## tokramm  pts/18       76.82.34.63      Fri Jan 21 04:31 - 04:53  (00:21)    
-## capj245  pts/13       s-164-67-232-61. Fri Jan 21 03:54   still logged in   
-## capj245  pts/13       s-164-67-232-61. Fri Jan 21 03:45 - 03:49  (00:04)    
-## capj245  pts/13       s-164-67-232-61. Fri Jan 21 03:36 - 03:38  (00:01)    
-## yuyuanli pts/30       149.142.103.176  Fri Jan 21 01:13 - 01:14  (00:00)    
-## huazhou  pts/7        108-64-58-205.li Fri Jan 21 01:03 - 01:52  (00:48)</code></pre>
+## tokramm  pts/18       76.82.34.63      Fri Jan 21 04:58 - 05:02  (00:04)</code></pre>
 <pre class="bash"><code>   echo {con,pre}{sent,fer}{s,ed}
    time sleep 5</code></pre>
 <pre><code>## consents consented confers confered presents presented prefers prefered
 ## 
-## real 0m5.001s
-## user 0m0.000s
-## sys  0m0.001s</code></pre>
+## real 0m5.002s
+## user 0m0.002s
+## sys  0m0.000s</code></pre>
 <pre class="bash"><code>history | tail</code></pre>
 </div>
 <div id="solution-10" class="section level3">
