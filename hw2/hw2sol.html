@@ -979,11 +979,12 @@ labevents_dict &lt;- read_csv(&quot;./hosp/d_labitems.csv.gz&quot;)</code></pre>
 <div id="solution-11" class="section level3">
 <h3>Solution</h3>
 <pre class="r"><code># Create table to determine first lab measurement
-chartime &lt;- select(icustays_tble, subject_id, intime)
+chartime &lt;- select(icustays_tble, subject_id, intime, outtime)
 # Find first measurement after check-in and restrict lab events
 labevents_tble &lt;- left_join(labevents_tble, chartime) %&gt;% 
   arrange(subject_id) %&gt;%
   filter(charttime &gt;= intime) %&gt;%
+  filter(charttime &lt;= outtime) %&gt;%
   distinct(subject_id, itemid, .keep_all = TRUE) %&gt;%
 # Create separate columns for each lab measurement and use measurement names
   inner_join(labevents_dict, by = &quot;itemid&quot;) %&gt;%
@@ -991,32 +992,32 @@ labevents_tble &lt;- left_join(labevents_tble, chartime) %&gt;%
   pivot_wider(names_from = label, values_from = valuenum) %&gt;%
   print(width = Inf)</code></pre>
 <pre><code>## Joining, by = &quot;subject_id&quot;</code></pre>
-<pre><code>## # A tibble: 52,544 × 11
+<pre><code>## # A tibble: 51,623 × 11
 ##    subject_id Bicarbonate `Calcium, Total` Chloride Creatinine Magnesium
 ##         &lt;dbl&gt;       &lt;dbl&gt;            &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt;
 ##  1   10000032          21              9.3      102        0.5       2.3
-##  2   10000980          23              9.2      103        2.2       2  
-##  3   10001217          23              8.2      104        0.4       1.9
-##  4   10001725          24              9.1      106        0.8       1.5
-##  5   10001884          33              9.8       96        1.1       2.2
-##  6   10002013          23              8.2      109        1.1       2.1
-##  7   10002155          25              8.8      106        0.9       2  
-##  8   10002223          26              8.7      102        0.8       2  
-##  9   10002348          23              9.4      107        0.8       1.6
-## 10   10002428          20              7.4       98        0.8       1.4
-##    Potassium Sodium Hematocrit `White Blood Cells` Glucose
-##        &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt;               &lt;dbl&gt;   &lt;dbl&gt;
-##  1       4.7    132       34.8                 4.1      87
-##  2       4.2    139       30.8                 5.4     122
-##  3       3.6    138       33.6                19        95
-##  4       3.9    140       39.1                17       146
-##  5       4      136       36                  18.4     145
-##  6       4      140       28.6                18.2     611
-##  7       4.5    139       37.9                 5.5      95
-##  8       3.9    138       32.5                10.1     103
-##  9       4.8    142       39.3                 4.3      99
-## 10       3.9    129       28.7                22.4      77
-## # … with 52,534 more rows</code></pre>
+##  2   10001217          23              8.2      104        0.4       1.9
+##  3   10001725          24              9.1      106        0.8       1.5
+##  4   10001884          33              9.8       96        1.1       2.2
+##  5   10002013          23             NA        109        1.1       2.1
+##  6   10002155          25              8.8      106        0.9       2  
+##  7   10002223          26              8.7      102        0.8       2  
+##  8   10002348          23              9.4      107        0.8       1.6
+##  9   10002428          20              7.4       98        0.8       1.4
+## 10   10002430          22              9.2      105        2.2       2.3
+##    Potassium Sodium Glucose Hematocrit `White Blood Cells`
+##        &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;      &lt;dbl&gt;               &lt;dbl&gt;
+##  1       4.7    132     115       NA                  NA  
+##  2       3.6    138     113       33.6                19  
+##  3       3.9    140     146       39.1                17  
+##  4       4      136     145       36                  18.4
+##  5       4      140      98       28.6                18.2
+##  6       4.5    139      95       37.9                 5.5
+##  7       3.9    138      88       32.5                10.1
+##  8       4.8    142      99       39.3                 4.3
+##  9       3.9    129      72       28.7                22.4
+## 10       3.8    144     135       36.6                10.3
+## # … with 51,613 more rows</code></pre>
 <ol start="4" style="list-style-type: decimal">
 <li>Summarize the lab measurements by appropriate numerics and graphics.</li>
 </ol>
@@ -1240,6 +1241,7 @@ rm(name, col, col_vec, iqr, sd, q1, q3)</code></pre>
 <pre class="r"><code># Find first measurement after check-in and restrict chart events
 chartevents_tble &lt;- left_join(chartevents_tble, chartime) %&gt;%
   filter(charttime &gt;= intime) %&gt;%
+  filter(charttime &lt;= outtime) %&gt;%
   distinct(subject_id, itemid, .keep_all = TRUE) %&gt;%
   arrange(subject_id) %&gt;%
   # Create separate columns for each vital measurement and use measurement names
@@ -1248,7 +1250,7 @@ chartevents_tble &lt;- left_join(chartevents_tble, chartime) %&gt;%
   pivot_wider(names_from = label, values_from = valuenum) %&gt;%
   print(width = Inf)</code></pre>
 <pre><code>## Joining, by = &quot;subject_id&quot;</code></pre>
-<pre><code>## # A tibble: 53,150 × 6
+<pre><code>## # A tibble: 53,136 × 6
 ##    subject_id `Temperature Fahrenheit` `Non Invasive Blood Pressure systolic`
 ##         &lt;dbl&gt;                    &lt;dbl&gt;                                  &lt;dbl&gt;
 ##  1   10000032                     98.7                                     84
@@ -1273,7 +1275,7 @@ chartevents_tble &lt;- left_join(chartevents_tble, chartime) %&gt;%
 ##  8                                 80          100                 29
 ##  9                                 85           72                 14
 ## 10                                 53          124                 25
-## # … with 53,140 more rows</code></pre>
+## # … with 53,126 more rows</code></pre>
 <ol start="3" style="list-style-type: decimal">
 <li>Summarize these vital measurements by appropriate numerics and graphics.</li>
 </ol>

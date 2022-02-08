@@ -338,11 +338,12 @@ labevents_dict <- read_csv("./hosp/d_labitems.csv.gz")
 
 ```{r} 
 # Create table to determine first lab measurement
-chartime <- select(icustays_tble, subject_id, intime)
+chartime <- select(icustays_tble, subject_id, intime, outtime)
 # Find first measurement after check-in and restrict lab events
 labevents_tble <- left_join(labevents_tble, chartime) %>% 
   arrange(subject_id) %>%
   filter(charttime >= intime) %>%
+  filter(charttime <= outtime) %>%
   distinct(subject_id, itemid, .keep_all = TRUE) %>%
 # Create separate columns for each lab measurement and use measurement names
   inner_join(labevents_dict, by = "itemid") %>%
@@ -466,6 +467,7 @@ chartevents_tble <- read_csv("./icu/chartevents_filtered_itemid.csv.gz") %>%
 # Find first measurement after check-in and restrict chart events
 chartevents_tble <- left_join(chartevents_tble, chartime) %>%
   filter(charttime >= intime) %>%
+  filter(charttime <= outtime) %>%
   distinct(subject_id, itemid, .keep_all = TRUE) %>%
   arrange(subject_id) %>%
   # Create separate columns for each vital measurement and use measurement names
