@@ -148,12 +148,39 @@ chartime <- select(icustays_tble, subject_id, intime, outtime)
 7. Connect to `chartevents` table and retrieve a subset that only contain subjects who appear in `icustays_tble` and the chart events listed in HW2.
 ```{r}
 # # TODO
-# chartevents_tble <- 
+chart <- c(220045, 220181, 220179, 223761, 220210)
+chartevents_dict <- tbl(con, "d_items") %>%
+  filter(itemid %in% chart) %>%
+  mutate(label = str_replace(label," ", "_")) %>%
+  show_query() %>%
+  print(width = Inf)
+chartevents_tble <- tbl(con, "chartevents") %>%
+  semi_join(icustays_tble, by = "subject_id") %>%
+  filter(itemid %in% chart) %>%
+  select(subject_id, itemid, charttime, valuenum) %>%
+  show_query() %>%
+  print(width = Inf)
+ 
 ```
 Only keep the first chart events during ICU stay and pivot chart events to become variables/columns.
 ```{r}
 # # TODO
-# chartevents_tble <- chartevents_tble %>% ...
+ chartevents_tble <- chartevents_tble %>%  
+  left_join(chartime, by = "subject_id") %>% 
+  filter(charttime >= intime) %>%
+  filter(charttime <= outtime) %>%
+  select(subject_id, itemid, charttime) %>% 
+  group_by(subject_id, itemid) %>% 
+  summarise_all(min) %>%
+  left_join(chartevents_tble, by = c("subject_id", "itemid", "charttime")) %>%
+  inner_join(chartevents_dict, by = "itemid") %>%
+  select(subject_id, label, valuenum) %>%
+  pivot_wider(names_from = label, values_from = valuenum) %>%
+  #ungroup %>%
+  arrange(subject_id) %>%
+  show_query() %>%
+  #summarise(n = n()) %>%
+  print(width = Inf)
 ```
 
 8. Put things together. This step is similar to Q7 of HW2. Using one chain of pipes `%>%` to perform following data wrangling steps: (i) start with the `icustays_tble` for the first ICU stay of each unique patient, (ii) merge in admissions and patients tables, (iii) keep adults only (age at admission >= 18), (iv) merge in the labevents and chartevents tables, (v) create an indicator for 30-day mortality, (vi) save the final tibble to an `icu_cohort.rds` R data file in the `mimiciv_shiny` folder.
@@ -167,7 +194,30 @@ if (!dir.exists("mimiciv_shiny")) {
 
 ```{r}
 # # TODO
-# icu_cohort <- icustays_tble %>% ...
+# 
+icu_cohort <- admissions_tble %>%
+  inner_join(icustays_tble, by = c("subject_id", "hadm_id")) %>%
+  inner_join(patients_tble) %>%
+  left_join(labevents_tble) %>%
+  left_join(chartevents_tble) %>%
+# Restrict age at admission > 18
+  filter(year(admittime) - (anchor_year - anchor_age) > 18) %>%
+  mutate(thirty_day_mort_check = DATE_DIFF(dod, admittime, DAY)) %>%
+  mutate(
+     thirty_day_mort = ifelse(thirty_day_mort_check < 30, 
+     "Yes", 
+     "No"
+  )) %>%
+# Assign 30 day mortality as "No" for individuals who did not pass away
+  mutate(
+    thirty_day_mort = ifelse(is.na(thirty_day_mort), 
+    "No",
+    thirty_day_mort
+  )) %>%
+  select (-thirty_day_mort_check) %>%  
+  show_query() %>%
+  print(width = Inf) %>%
+  write_rds("./mimiciv_shiny/icu_cohort.rds") 
 ```
 
 Close database connection and clear workspace.
