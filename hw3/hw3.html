@@ -336,8 +336,7 @@ icustays_tble &lt;- tbl(con, &quot;icustays&quot;) %&gt;%
 <ol start="4" style="list-style-type: decimal">
 <li>Connect to the <code>admissions</code> table and only keep the patients who have a match in <code>icustays_tble</code> (according to <code>subject_id</code> and <code>hadm_id</code>).</li>
 </ol>
-<pre class="r"><code># # TODO
-admissions_tble &lt;- tbl(con, &quot;admissions&quot;) %&gt;%
+<pre class="r"><code>admissions_tble &lt;- tbl(con, &quot;admissions&quot;) %&gt;%
   semi_join(icustays_tble, by = c(&quot;subject_id&quot;, &quot;hadm_id&quot;)) %&gt;%
   show_query() %&gt;%
   print(width = Inf)</code></pre>
@@ -417,10 +416,6 @@ admissions_tble &lt;- tbl(con, &quot;admissions&quot;) %&gt;%
 ##  9                    1
 ## 10                    0
 ## # … with more rows</code></pre>
-<pre class="r"><code># admissions_tble %&gt;%
-#   summarise(n = n()) %&gt;%
-#   show_query() %&gt;%
-#   print(width = Inf)</code></pre>
 <ol start="5" style="list-style-type: decimal">
 <li>Connect to the <code>patients</code> table and only keep the patients who have a match in <code>icustays_tble</code> (according to <code>subject_id</code>).</li>
 </ol>
@@ -428,7 +423,7 @@ admissions_tble &lt;- tbl(con, &quot;admissions&quot;) %&gt;%
  patients_tble &lt;- tbl(con, &quot;patients&quot;) %&gt;%
  semi_join(icustays_tble, by = &quot;subject_id&quot;) %&gt;%
  show_query() %&gt;%
- print (width = Inf)</code></pre>
+ print(width = Inf)</code></pre>
 <pre><code>## &lt;SQL&gt;
 ## SELECT * FROM `patients` AS `LHS`
 ## WHERE EXISTS (
@@ -460,10 +455,11 @@ admissions_tble &lt;- tbl(con, &quot;admissions&quot;) %&gt;%
 <ol start="6" style="list-style-type: decimal">
 <li>Connect to the <code>labevents</code> table and retrieve a subset that only contain subjects who appear in <code>icustays_tble</code> and the lab items listed in HW2.</li>
 </ol>
-<pre class="r"><code># # TODO
+<pre class="r"><code># Select the lab measurements we are interested in 
 lab &lt;- c(50912, 50971, 50983, 50902, 50882, 51221, 51301, 50931, 50960, 50893)
 labevents_dict &lt;- tbl(con, &quot;d_labitems&quot;) %&gt;%
   filter(itemid %in% lab) %&gt;%
+  # Rename lab measurements 
   mutate(label = ifelse(label == &quot;Calcium, Total&quot;, &quot;Calcium&quot;, label)) %&gt;%
   mutate(label = ifelse(label == &quot;White Blood Cells&quot;, &quot;WBC&quot;, label)) %&gt;%
   mutate(label = tolower(label)) %&gt;%
@@ -489,7 +485,8 @@ labevents_dict &lt;- tbl(con, &quot;d_labitems&quot;) %&gt;%
 ##  8  50983 sodium      Blood Chemistry  2951-2    
 ##  9  51221 hematocrit  Blood Hematology 4544-3    
 ## 10  51301 wbc         Blood Hematology 804-5</code></pre>
-<pre class="r"><code>labevents_tble &lt;- tbl(con, &quot;labevents&quot;) %&gt;%
+<pre class="r"><code># Filter labevents table
+labevents_tble &lt;- tbl(con, &quot;labevents&quot;) %&gt;%
   semi_join(icustays_tble, by = &quot;subject_id&quot;) %&gt;%
   filter(itemid %in% lab) %&gt;%
   select(subject_id, itemid, charttime, valuenum) %&gt;%
@@ -526,9 +523,10 @@ labevents_dict &lt;- tbl(con, &quot;d_labitems&quot;) %&gt;%
 ## 10   10035631  51221 2116-01-05 10:20:00     39.5
 ## # … with more rows</code></pre>
 <p>Only keep the first lab measurements during ICU stay and pivot lab items to become variables/columns.</p>
-<pre class="r"><code># # TODO
+<pre class="r"><code># Create table to determine first lab measurement
 chartime &lt;- select(icustays_tble, subject_id, intime, outtime)
-  labevents_tble &lt;- labevents_tble %&gt;%  
+# Find first measurement after check-in and restrict lab events
+labevents_tble &lt;- labevents_tble %&gt;%  
   left_join(chartime, by = &quot;subject_id&quot;) %&gt;% 
   filter(charttime &gt;= intime) %&gt;%
   filter(charttime &lt;= outtime) %&gt;%
@@ -536,13 +534,12 @@ chartime &lt;- select(icustays_tble, subject_id, intime, outtime)
   group_by(subject_id, itemid) %&gt;% 
   summarise_all(min) %&gt;%
   left_join(labevents_tble, by = c(&quot;subject_id&quot;, &quot;itemid&quot;, &quot;charttime&quot;)) %&gt;%
+# Create separate columns for each lab measurement and use measurement names
   inner_join(labevents_dict, by = &quot;itemid&quot;) %&gt;%
   select(subject_id, label, valuenum) %&gt;%
   pivot_wider(names_from = label, values_from = valuenum) %&gt;%
-  #ungroup %&gt;%
   arrange(subject_id) %&gt;%
   show_query() %&gt;%
-  #summarise(n = n()) %&gt;%
   print(width = Inf)</code></pre>
 <pre><code>## &lt;SQL&gt;
 ## SELECT `subject_id`, MAX(IF(`label` = &#39;wbc&#39;, `valuenum`, NULL)) AS `wbc`, MAX(IF(`label` = &#39;sodium&#39;, `valuenum`, NULL)) AS `sodium`, MAX(IF(`label` = &#39;calcium&#39;, `valuenum`, NULL)) AS `calcium`, MAX(IF(`label` = &#39;glucose&#39;, `valuenum`, NULL)) AS `glucose`, MAX(IF(`label` = &#39;chloride&#39;, `valuenum`, NULL)) AS `chloride`, MAX(IF(`label` = &#39;magnesium&#39;, `valuenum`, NULL)) AS `magnesium`, MAX(IF(`label` = &#39;potassium&#39;, `valuenum`, NULL)) AS `potassium`, MAX(IF(`label` = &#39;creatinine&#39;, `valuenum`, NULL)) AS `creatinine`, MAX(IF(`label` = &#39;hematocrit&#39;, `valuenum`, NULL)) AS `hematocrit`, MAX(IF(`label` = &#39;bicarbonate&#39;, `valuenum`, NULL)) AS `bicarbonate`
@@ -638,10 +635,11 @@ chartime &lt;- select(icustays_tble, subject_id, intime, outtime)
 <ol start="7" style="list-style-type: decimal">
 <li>Connect to <code>chartevents</code> table and retrieve a subset that only contain subjects who appear in <code>icustays_tble</code> and the chart events listed in HW2.</li>
 </ol>
-<pre class="r"><code># # TODO
+<pre class="r"><code># Select the vital measurements we are interested in 
 chart &lt;- c(220045, 220181, 220179, 223761, 220210)
 chartevents_dict &lt;- tbl(con, &quot;d_items&quot;) %&gt;%
   filter(itemid %in% chart) %&gt;%
+# Rename vital measurements to eliminate whitespace
   mutate(label = str_replace(label,&quot; &quot;, &quot;_&quot;)) %&gt;%
   mutate(label = tolower(label)) %&gt;%
   show_query() %&gt;%
@@ -667,7 +665,8 @@ chartevents_dict &lt;- tbl(con, &quot;d_items&quot;) %&gt;%
 ## 3 Routine Vital Signs mmHg     Numeric                NA              NA
 ## 4 Routine Vital Signs mmHg     Numeric                NA              NA
 ## 5 Routine Vital Signs °F       Numeric                NA              NA</code></pre>
-<pre class="r"><code>chartevents_tble &lt;- tbl(con, &quot;chartevents&quot;) %&gt;%
+<pre class="r"><code># Filter chartevents table
+chartevents_tble &lt;- tbl(con, &quot;chartevents&quot;) %&gt;%
   semi_join(icustays_tble, by = &quot;subject_id&quot;) %&gt;%
   filter(itemid %in% chart) %&gt;%
   select(subject_id, itemid, charttime, valuenum) %&gt;%
@@ -704,7 +703,7 @@ chartevents_dict &lt;- tbl(con, &quot;d_items&quot;) %&gt;%
 ## 10   16425665 223761 2125-06-05 12:00:00     98.9
 ## # … with more rows</code></pre>
 <p>Only keep the first chart events during ICU stay and pivot chart events to become variables/columns.</p>
-<pre class="r"><code># # TODO
+<pre class="r"><code># Find first measurement after check-in and restrict chart events
  chartevents_tble &lt;- chartevents_tble %&gt;%  
   left_join(chartime, by = &quot;subject_id&quot;) %&gt;% 
   filter(charttime &gt;= intime) %&gt;%
@@ -713,13 +712,12 @@ chartevents_dict &lt;- tbl(con, &quot;d_items&quot;) %&gt;%
   group_by(subject_id, itemid) %&gt;% 
   summarise_all(min) %&gt;%
   left_join(chartevents_tble, by = c(&quot;subject_id&quot;, &quot;itemid&quot;, &quot;charttime&quot;)) %&gt;%
+  # Create separate columns for each vital measurement and use measurement names
   inner_join(chartevents_dict, by = &quot;itemid&quot;) %&gt;%
   select(subject_id, label, valuenum) %&gt;%
   pivot_wider(names_from = label, values_from = valuenum) %&gt;%
-  #ungroup %&gt;%
   arrange(subject_id) %&gt;%
   show_query() %&gt;%
-  #summarise(n = n()) %&gt;%
   print(width = Inf)</code></pre>
 <pre><code>## &lt;SQL&gt;
 ## SELECT `subject_id`, MAX(IF(`label` = &#39;heart_rate&#39;, `valuenum`, NULL)) AS `heart_rate`, MAX(IF(`label` = &#39;respiratory_rate&#39;, `valuenum`, NULL)) AS `respiratory_rate`, MAX(IF(`label` = &#39;temperature_fahrenheit&#39;, `valuenum`, NULL)) AS `temperature_fahrenheit`, MAX(IF(`label` = &#39;non_invasive_blood_pressure_mean&#39;, `valuenum`, NULL)) AS `non_invasive_blood_pressure_mean`, MAX(IF(`label` = &#39;non_invasive_blood_pressure_systolic&#39;, `valuenum`, NULL)) AS `non_invasive_blood_pressure_systolic`
@@ -811,6 +809,8 @@ chartevents_dict &lt;- tbl(con, &quot;d_items&quot;) %&gt;%
 ##  9                               85                                  129
 ## 10                               53                                   87
 ## # … with more rows</code></pre>
+<pre class="r"><code># Remove temporary table need to determine first measurements
+rm(chartime)</code></pre>
 <ol start="8" style="list-style-type: decimal">
 <li>Put things together. This step is similar to Q7 of HW2. Using one chain of pipes <code>%&gt;%</code> to perform following data wrangling steps: (i) start with the <code>icustays_tble</code> for the first ICU stay of each unique patient, (ii) merge in admissions and patients tables, (iii) keep adults only (age at admission &gt;= 18), (iv) merge in the labevents and chartevents tables, (v) create an indicator for 30-day mortality, (vi) save the final tibble to an <code>icu_cohort.rds</code> R data file in the <code>mimiciv_shiny</code> folder.</li>
 </ol>
@@ -818,8 +818,7 @@ chartevents_dict &lt;- tbl(con, &quot;d_items&quot;) %&gt;%
 if (!dir.exists(&quot;mimiciv_shiny&quot;)) {
   dir.create(&quot;mimiciv_shiny&quot;)
 }</code></pre>
-<pre class="r"><code># # TODO
-# 
+<pre class="r"><code># Merge all tables together
 icu_cohort &lt;- admissions_tble %&gt;%
   inner_join(icustays_tble, by = c(&quot;subject_id&quot;, &quot;hadm_id&quot;)) %&gt;%
   inner_join(patients_tble) %&gt;%
@@ -841,9 +840,10 @@ icu_cohort &lt;- admissions_tble %&gt;%
     &quot;No&quot;,
     thirty_day_mort
   )) %&gt;%
-  select (-thirty_day_mort_check) %&gt;%  
+  select(-thirty_day_mort_check) %&gt;%  
   show_query() %&gt;%
   print(width = Inf) %&gt;%
+# Collect and create RDS file for shiny app
   collect() %&gt;%
   write_rds(&quot;./mimiciv_shiny/icu_cohort.rds&quot;) </code></pre>
 <pre><code>## Joining, by = &quot;subject_id&quot;
