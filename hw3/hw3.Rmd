@@ -112,6 +112,7 @@ labevents_dict <- tbl(con, "d_labitems") %>%
   filter(itemid %in% lab) %>%
   mutate(label = ifelse(label == "Calcium, Total", "Calcium", label)) %>%
   mutate(label = ifelse(label == "White Blood Cells", "WBC", label)) %>%
+  mutate(label = tolower(label)) %>%
   show_query() %>%
   print(width = Inf)
 labevents_tble <- tbl(con, "labevents") %>%
@@ -152,6 +153,7 @@ chart <- c(220045, 220181, 220179, 223761, 220210)
 chartevents_dict <- tbl(con, "d_items") %>%
   filter(itemid %in% chart) %>%
   mutate(label = str_replace(label," ", "_")) %>%
+  mutate(label = tolower(label)) %>%
   show_query() %>%
   print(width = Inf)
 chartevents_tble <- tbl(con, "chartevents") %>%
@@ -201,10 +203,12 @@ icu_cohort <- admissions_tble %>%
   left_join(labevents_tble) %>%
   left_join(chartevents_tble) %>%
 # Restrict age at admission > 18
-  filter(year(admittime) - (anchor_year - anchor_age) > 18) %>%
+  mutate(admit_age = year(admittime) - (anchor_year - anchor_age)) %>%
+  filter(admit_age > 18) %>%
+# Create 30 day mortality variable
   mutate(thirty_day_mort_check = DATE_DIFF(dod, admittime, DAY)) %>%
   mutate(
-     thirty_day_mort = ifelse(thirty_day_mort_check < 30, 
+     thirty_day_mort = ifelse(thirty_day_mort_check <= 30, 
      "Yes", 
      "No"
   )) %>%
@@ -217,6 +221,7 @@ icu_cohort <- admissions_tble %>%
   select (-thirty_day_mort_check) %>%  
   show_query() %>%
   print(width = Inf) %>%
+  collect() %>%
   write_rds("./mimiciv_shiny/icu_cohort.rds") 
 ```
 

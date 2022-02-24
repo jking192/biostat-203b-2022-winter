@@ -358,52 +358,52 @@ admissions_tble &lt;- tbl(con, &quot;admissions&quot;) %&gt;%
 ## # Database: BigQueryConnection
 ##    subject_id  hadm_id admittime           dischtime          
 ##         &lt;int&gt;    &lt;int&gt; &lt;dttm&gt;              &lt;dttm&gt;             
-##  1   10930322 29807749 2125-12-26 15:36:00 2125-12-30 12:15:00
-##  2   17038950 24783985 2118-12-23 21:21:00 2118-12-28 16:00:00
-##  3   12006501 26648356 2162-08-14 01:55:00 2162-08-22 13:26:00
-##  4   16013238 26884872 2117-07-01 22:19:00 2117-07-04 19:19:00
-##  5   16291864 21667672 2142-12-12 21:52:00 2142-12-31 13:10:00
-##  6   13972879 27280578 2143-12-22 22:44:00 2143-12-24 05:35:00
-##  7   18256282 28106624 2169-07-02 17:53:00 2169-07-07 17:18:00
-##  8   19261620 29209298 2189-03-12 17:19:00 2189-03-19 11:00:00
-##  9   12012181 26862482 2120-09-10 05:10:00 2120-09-16 19:25:00
-## 10   17190362 25197072 2130-10-09 23:00:00 2130-10-14 19:00:00
+##  1   13197526 28853425 2111-03-01 02:22:00 2111-03-03 17:30:00
+##  2   15509304 26869731 2189-08-09 05:07:00 2189-08-11 15:00:00
+##  3   11958726 24320913 2117-12-20 13:42:00 2118-01-28 16:30:00
+##  4   16613161 23377835 2156-02-08 19:57:00 2156-02-18 13:02:00
+##  5   17969957 29045054 2181-06-04 19:38:00 2181-06-12 19:05:00
+##  6   15784035 24096846 2137-04-17 18:41:00 2137-04-24 16:14:00
+##  7   14854458 28121109 2174-09-01 19:17:00 2174-09-03 22:30:00
+##  8   14360149 25834248 2176-11-25 17:13:00 2176-12-17 00:00:00
+##  9   15840371 22995174 2187-05-04 20:43:00 2187-05-12 00:00:00
+## 10   18443449 22133024 2157-05-25 14:00:00 2157-05-30 19:07:00
 ##    deathtime           admission_type admission_location    
 ##    &lt;dttm&gt;              &lt;chr&gt;          &lt;chr&gt;                 
-##  1 NA                  EW EMER.       EMERGENCY ROOM        
-##  2 NA                  EW EMER.       EMERGENCY ROOM        
-##  3 NA                  EW EMER.       EMERGENCY ROOM        
-##  4 2117-07-04 19:19:00 EW EMER.       TRANSFER FROM HOSPITAL
-##  5 NA                  EW EMER.       EMERGENCY ROOM        
-##  6 2143-12-24 05:35:00 EW EMER.       EMERGENCY ROOM        
-##  7 NA                  EW EMER.       EMERGENCY ROOM        
-##  8 NA                  EW EMER.       EMERGENCY ROOM        
-##  9 NA                  EW EMER.       TRANSFER FROM HOSPITAL
-## 10 NA                  EW EMER.       EMERGENCY ROOM        
-##    discharge_location       insurance language marital_status
-##    &lt;chr&gt;                    &lt;chr&gt;     &lt;chr&gt;    &lt;chr&gt;         
-##  1 HOME HEALTH CARE         Medicare  ENGLISH  WIDOWED       
-##  2 SKILLED NURSING FACILITY Medicare  ?        WIDOWED       
-##  3 REHAB                    Medicare  ENGLISH  WIDOWED       
-##  4 DIED                     Medicare  ENGLISH  WIDOWED       
-##  5 SKILLED NURSING FACILITY Medicare  ENGLISH  WIDOWED       
-##  6 DIED                     Medicare  ?        WIDOWED       
-##  7 SKILLED NURSING FACILITY Medicare  ENGLISH  WIDOWED       
-##  8 SKILLED NURSING FACILITY Medicare  ENGLISH  WIDOWED       
-##  9 SKILLED NURSING FACILITY Medicare  ENGLISH  WIDOWED       
-## 10 &lt;NA&gt;                     Medicare  ENGLISH  WIDOWED       
+##  1 NA                  URGENT         TRANSFER FROM HOSPITAL
+##  2 NA                  URGENT         TRANSFER FROM HOSPITAL
+##  3 NA                  URGENT         TRANSFER FROM HOSPITAL
+##  4 2156-02-18 13:02:00 URGENT         TRANSFER FROM HOSPITAL
+##  5 NA                  URGENT         TRANSFER FROM HOSPITAL
+##  6 NA                  URGENT         TRANSFER FROM HOSPITAL
+##  7 NA                  URGENT         TRANSFER FROM HOSPITAL
+##  8 2176-12-17 00:00:00 URGENT         TRANSFER FROM HOSPITAL
+##  9 2187-05-12 00:00:00 URGENT         TRANSFER FROM HOSPITAL
+## 10 NA                  URGENT         TRANSFER FROM HOSPITAL
+##    discharge_location           insurance language marital_status
+##    &lt;chr&gt;                        &lt;chr&gt;     &lt;chr&gt;    &lt;chr&gt;         
+##  1 HOME HEALTH CARE             Other     ENGLISH  &lt;NA&gt;          
+##  2 HOME                         Other     ENGLISH  &lt;NA&gt;          
+##  3 CHRONIC/LONG TERM ACUTE CARE Medicare  ENGLISH  &lt;NA&gt;          
+##  4 DIED                         Medicaid  ?        &lt;NA&gt;          
+##  5 HOME HEALTH CARE             Medicare  ?        &lt;NA&gt;          
+##  6 HOME HEALTH CARE             Medicare  ?        &lt;NA&gt;          
+##  7 AGAINST ADVICE               Other     ENGLISH  &lt;NA&gt;          
+##  8 DIED                         Medicare  ENGLISH  &lt;NA&gt;          
+##  9 DIED                         Other     ENGLISH  &lt;NA&gt;          
+## 10 HOME HEALTH CARE             Medicare  ENGLISH  &lt;NA&gt;          
 ##    ethnicity              edregtime           edouttime          
 ##    &lt;chr&gt;                  &lt;dttm&gt;              &lt;dttm&gt;             
-##  1 WHITE                  2125-12-26 13:45:00 2125-12-26 21:50:00
-##  2 WHITE                  2118-12-23 15:45:00 2118-12-24 00:04:00
-##  3 ASIAN                  2162-08-13 23:54:00 2162-08-14 03:34:00
-##  4 WHITE                  2117-07-01 20:02:00 2117-07-01 23:18:00
-##  5 WHITE                  2142-12-12 15:08:00 2142-12-12 23:00:00
-##  6 WHITE                  2143-12-22 17:48:00 2143-12-22 23:18:00
-##  7 BLACK/AFRICAN AMERICAN 2169-07-02 11:21:00 2169-07-02 18:50:00
-##  8 WHITE                  2189-03-12 12:04:00 2189-03-12 18:29:00
-##  9 WHITE                  2120-09-10 04:47:00 2120-09-10 07:46:00
-## 10 WHITE                  2130-10-09 19:27:00 2130-10-10 00:59:00
+##  1 WHITE                  NA                  NA                 
+##  2 UNKNOWN                2189-08-09 03:51:00 2189-08-09 06:38:00
+##  3 UNKNOWN                NA                  NA                 
+##  4 BLACK/AFRICAN AMERICAN NA                  NA                 
+##  5 UNABLE TO OBTAIN       NA                  NA                 
+##  6 UNKNOWN                NA                  NA                 
+##  7 UNKNOWN                NA                  NA                 
+##  8 BLACK/AFRICAN AMERICAN NA                  NA                 
+##  9 UNKNOWN                NA                  NA                 
+## 10 WHITE                  NA                  NA                 
 ##    hospital_expire_flag
 ##                   &lt;int&gt;
 ##  1                    0
@@ -411,10 +411,10 @@ admissions_tble &lt;- tbl(con, &quot;admissions&quot;) %&gt;%
 ##  3                    0
 ##  4                    1
 ##  5                    0
-##  6                    1
+##  6                    0
 ##  7                    0
-##  8                    0
-##  9                    0
+##  8                    1
+##  9                    1
 ## 10                    0
 ## # … with more rows</code></pre>
 <pre class="r"><code># admissions_tble %&gt;%
@@ -466,27 +466,29 @@ labevents_dict &lt;- tbl(con, &quot;d_labitems&quot;) %&gt;%
   filter(itemid %in% lab) %&gt;%
   mutate(label = ifelse(label == &quot;Calcium, Total&quot;, &quot;Calcium&quot;, label)) %&gt;%
   mutate(label = ifelse(label == &quot;White Blood Cells&quot;, &quot;WBC&quot;, label)) %&gt;%
+  mutate(label = tolower(label)) %&gt;%
   show_query() %&gt;%
   print(width = Inf)</code></pre>
 <pre><code>## &lt;SQL&gt;
-## SELECT `itemid`, IF(`label` = &#39;White Blood Cells&#39;, &#39;WBC&#39;, `label`) AS `label`, `fluid`, `category`, `loinc_code`
+## SELECT `itemid`, LOWER(`label`) AS `label`, `fluid`, `category`, `loinc_code`
+## FROM (SELECT `itemid`, IF(`label` = &#39;White Blood Cells&#39;, &#39;WBC&#39;, `label`) AS `label`, `fluid`, `category`, `loinc_code`
 ## FROM (SELECT `itemid`, IF(`label` = &#39;Calcium, Total&#39;, &#39;Calcium&#39;, `label`) AS `label`, `fluid`, `category`, `loinc_code`
 ## FROM `d_labitems`
-## WHERE (`itemid` IN (50912.0, 50971.0, 50983.0, 50902.0, 50882.0, 51221.0, 51301.0, 50931.0, 50960.0, 50893.0))) `q01`
+## WHERE (`itemid` IN (50912.0, 50971.0, 50983.0, 50902.0, 50882.0, 51221.0, 51301.0, 50931.0, 50960.0, 50893.0))) `q01`) `q02`
 ## # Source:   lazy query [?? x 5]
 ## # Database: BigQueryConnection
 ##    itemid label       fluid category   loinc_code
 ##     &lt;int&gt; &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;     
-##  1  50882 Bicarbonate Blood Chemistry  1963-8    
-##  2  50893 Calcium     Blood Chemistry  2000-8    
-##  3  50902 Chloride    Blood Chemistry  2075-0    
-##  4  50912 Creatinine  Blood Chemistry  2160-0    
-##  5  50931 Glucose     Blood Chemistry  6777-7    
-##  6  50960 Magnesium   Blood Chemistry  2601-3    
-##  7  50971 Potassium   Blood Chemistry  2823-3    
-##  8  50983 Sodium      Blood Chemistry  2951-2    
-##  9  51221 Hematocrit  Blood Hematology 4544-3    
-## 10  51301 WBC         Blood Hematology 804-5</code></pre>
+##  1  50882 bicarbonate Blood Chemistry  1963-8    
+##  2  50893 calcium     Blood Chemistry  2000-8    
+##  3  50902 chloride    Blood Chemistry  2075-0    
+##  4  50912 creatinine  Blood Chemistry  2160-0    
+##  5  50931 glucose     Blood Chemistry  6777-7    
+##  6  50960 magnesium   Blood Chemistry  2601-3    
+##  7  50971 potassium   Blood Chemistry  2823-3    
+##  8  50983 sodium      Blood Chemistry  2951-2    
+##  9  51221 hematocrit  Blood Hematology 4544-3    
+## 10  51301 wbc         Blood Hematology 804-5</code></pre>
 <pre class="r"><code>labevents_tble &lt;- tbl(con, &quot;labevents&quot;) %&gt;%
   semi_join(icustays_tble, by = &quot;subject_id&quot;) %&gt;%
   filter(itemid %in% lab) %&gt;%
@@ -512,16 +514,16 @@ labevents_dict &lt;- tbl(con, &quot;d_labitems&quot;) %&gt;%
 ## # Database: BigQueryConnection
 ##    subject_id itemid charttime           valuenum
 ##         &lt;int&gt;  &lt;int&gt; &lt;dttm&gt;                 &lt;dbl&gt;
-##  1   10004235  51221 2196-06-19 04:47:00     34.2
-##  2   10019003  50983 2153-04-04 05:33:00    146  
-##  3   10019003  50893 2153-09-26 11:45:00      9.3
-##  4   10019003  51221 2155-06-08 09:32:00     26.2
-##  5   10031358  50902 2156-09-14 07:40:00    100  
-##  6   10035168  50983 2146-11-24 09:45:00    139  
-##  7   10035168  50912 2146-12-31 05:59:00      0.4
-##  8   10035631  50971 2112-12-04 15:00:00      4.3
-##  9   10035631  50983 2115-05-15 15:50:00    137  
-## 10   10038933  50971 2148-09-10 09:44:00      3.8
+##  1   10004235  51301 2196-06-15 06:04:00     11  
+##  2   10004235  51301 2196-06-20 23:55:00     15.1
+##  3   10005348  50971 2130-10-28 21:18:00      3.5
+##  4   10019003  50912 2155-10-17 10:02:00      1.3
+##  5   10035168  50960 2144-12-31 00:30:00      1.5
+##  6   10035168  50893 2145-10-19 00:30:00      7.5
+##  7   10035631  50912 2113-08-28 07:07:00      0.8
+##  8   10035631  50893 2114-07-07 12:55:00      9.7
+##  9   10035631  50882 2115-11-14 00:04:00     21  
+## 10   10035631  51221 2116-01-05 10:20:00     39.5
 ## # … with more rows</code></pre>
 <p>Only keep the first lab measurements during ICU stay and pivot lab items to become variables/columns.</p>
 <pre class="r"><code># # TODO
@@ -543,7 +545,7 @@ chartime &lt;- select(icustays_tble, subject_id, intime, outtime)
   #summarise(n = n()) %&gt;%
   print(width = Inf)</code></pre>
 <pre><code>## &lt;SQL&gt;
-## SELECT `subject_id`, MAX(IF(`label` = &#39;WBC&#39;, `valuenum`, NULL)) AS `WBC`, MAX(IF(`label` = &#39;Sodium&#39;, `valuenum`, NULL)) AS `Sodium`, MAX(IF(`label` = &#39;Calcium&#39;, `valuenum`, NULL)) AS `Calcium`, MAX(IF(`label` = &#39;Glucose&#39;, `valuenum`, NULL)) AS `Glucose`, MAX(IF(`label` = &#39;Chloride&#39;, `valuenum`, NULL)) AS `Chloride`, MAX(IF(`label` = &#39;Magnesium&#39;, `valuenum`, NULL)) AS `Magnesium`, MAX(IF(`label` = &#39;Potassium&#39;, `valuenum`, NULL)) AS `Potassium`, MAX(IF(`label` = &#39;Creatinine&#39;, `valuenum`, NULL)) AS `Creatinine`, MAX(IF(`label` = &#39;Hematocrit&#39;, `valuenum`, NULL)) AS `Hematocrit`, MAX(IF(`label` = &#39;Bicarbonate&#39;, `valuenum`, NULL)) AS `Bicarbonate`
+## SELECT `subject_id`, MAX(IF(`label` = &#39;wbc&#39;, `valuenum`, NULL)) AS `wbc`, MAX(IF(`label` = &#39;sodium&#39;, `valuenum`, NULL)) AS `sodium`, MAX(IF(`label` = &#39;calcium&#39;, `valuenum`, NULL)) AS `calcium`, MAX(IF(`label` = &#39;glucose&#39;, `valuenum`, NULL)) AS `glucose`, MAX(IF(`label` = &#39;chloride&#39;, `valuenum`, NULL)) AS `chloride`, MAX(IF(`label` = &#39;magnesium&#39;, `valuenum`, NULL)) AS `magnesium`, MAX(IF(`label` = &#39;potassium&#39;, `valuenum`, NULL)) AS `potassium`, MAX(IF(`label` = &#39;creatinine&#39;, `valuenum`, NULL)) AS `creatinine`, MAX(IF(`label` = &#39;hematocrit&#39;, `valuenum`, NULL)) AS `hematocrit`, MAX(IF(`label` = &#39;bicarbonate&#39;, `valuenum`, NULL)) AS `bicarbonate`
 ## FROM (SELECT `subject_id`, `label`, `valuenum`
 ## FROM (SELECT `subject_id`, `LHS`.`itemid` AS `itemid`, `charttime`, `valuenum`, `label`, `fluid`, `category`, `loinc_code`
 ## FROM (SELECT `LHS`.`subject_id` AS `subject_id`, `LHS`.`itemid` AS `itemid`, `LHS`.`charttime` AS `charttime`, `valuenum`
@@ -595,19 +597,20 @@ chartime &lt;- select(icustays_tble, subject_id, intime, outtime)
 ## WHERE (`itemid` IN (50912.0, 50971.0, 50983.0, 50902.0, 50882.0, 51221.0, 51301.0, 50931.0, 50960.0, 50893.0))) `RHS`
 ## ON (`LHS`.`subject_id` = `RHS`.`subject_id` AND `LHS`.`itemid` = `RHS`.`itemid` AND `LHS`.`charttime` = `RHS`.`charttime`)
 ## ) `LHS`
-## INNER JOIN (SELECT `itemid`, IF(`label` = &#39;White Blood Cells&#39;, &#39;WBC&#39;, `label`) AS `label`, `fluid`, `category`, `loinc_code`
+## INNER JOIN (SELECT `itemid`, LOWER(`label`) AS `label`, `fluid`, `category`, `loinc_code`
+## FROM (SELECT `itemid`, IF(`label` = &#39;White Blood Cells&#39;, &#39;WBC&#39;, `label`) AS `label`, `fluid`, `category`, `loinc_code`
 ## FROM (SELECT `itemid`, IF(`label` = &#39;Calcium, Total&#39;, &#39;Calcium&#39;, `label`) AS `label`, `fluid`, `category`, `loinc_code`
 ## FROM `d_labitems`
-## WHERE (`itemid` IN (50912.0, 50971.0, 50983.0, 50902.0, 50882.0, 51221.0, 51301.0, 50931.0, 50960.0, 50893.0))) `q01`) `RHS`
+## WHERE (`itemid` IN (50912.0, 50971.0, 50983.0, 50902.0, 50882.0, 51221.0, 51301.0, 50931.0, 50960.0, 50893.0))) `q01`) `q02`) `RHS`
 ## ON (`LHS`.`itemid` = `RHS`.`itemid`)
-## ) `q02`) `q03`
+## ) `q03`) `q04`
 ## GROUP BY `subject_id`
 ## ORDER BY `subject_id`
 ## # Source:     lazy query [?? x 11]
 ## # Database:   BigQueryConnection
 ## # Groups:     subject_id
 ## # Ordered by: subject_id
-##    subject_id   WBC Sodium Calcium Glucose Chloride Magnesium Potassium
+##    subject_id   wbc sodium calcium glucose chloride magnesium potassium
 ##         &lt;int&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
 ##  1   10000032  NA      132     9.3     115      102       2.3       4.7
 ##  2   10001217  19      138     8.2     113      104       1.9       3.6
@@ -619,7 +622,7 @@ chartime &lt;- select(icustays_tble, subject_id, intime, outtime)
 ##  8   10002348   4.3    142     9.4     127      107       1.6       4.8
 ##  9   10002428  22.4    129     7.4      99       98       1.4       3.9
 ## 10   10002430  10.3    144     9.2     128      105       2.3       3.8
-##    Creatinine Hematocrit Bicarbonate
+##    creatinine hematocrit bicarbonate
 ##         &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt;
 ##  1        0.5       NA            21
 ##  2        0.4       33.6          23
@@ -640,21 +643,23 @@ chart &lt;- c(220045, 220181, 220179, 223761, 220210)
 chartevents_dict &lt;- tbl(con, &quot;d_items&quot;) %&gt;%
   filter(itemid %in% chart) %&gt;%
   mutate(label = str_replace(label,&quot; &quot;, &quot;_&quot;)) %&gt;%
+  mutate(label = tolower(label)) %&gt;%
   show_query() %&gt;%
   print(width = Inf)</code></pre>
 <pre><code>## &lt;SQL&gt;
-## SELECT `itemid`, REGEXP_REPLACE(`label`, &#39; &#39;, &#39;_&#39;) AS `label`, `abbreviation`, `linksto`, `category`, `unitname`, `param_type`, `lownormalvalue`, `highnormalvalue`
+## SELECT `itemid`, LOWER(`label`) AS `label`, `abbreviation`, `linksto`, `category`, `unitname`, `param_type`, `lownormalvalue`, `highnormalvalue`
+## FROM (SELECT `itemid`, REGEXP_REPLACE(`label`, &#39; &#39;, &#39;_&#39;) AS `label`, `abbreviation`, `linksto`, `category`, `unitname`, `param_type`, `lownormalvalue`, `highnormalvalue`
 ## FROM `d_items`
-## WHERE (`itemid` IN (220045.0, 220181.0, 220179.0, 223761.0, 220210.0))
+## WHERE (`itemid` IN (220045.0, 220181.0, 220179.0, 223761.0, 220210.0))) `q01`
 ## # Source:   lazy query [?? x 9]
 ## # Database: BigQueryConnection
 ##   itemid label                                abbreviation  linksto    
 ##    &lt;int&gt; &lt;chr&gt;                                &lt;chr&gt;         &lt;chr&gt;      
-## 1 220210 Respiratory_Rate                     RR            chartevents
-## 2 220045 Heart_Rate                           HR            chartevents
-## 3 220179 Non_Invasive_Blood_Pressure_systolic NBPs          chartevents
-## 4 220181 Non_Invasive_Blood_Pressure_mean     NBPm          chartevents
-## 5 223761 Temperature_Fahrenheit               Temperature F chartevents
+## 1 220210 respiratory_rate                     RR            chartevents
+## 2 220045 heart_rate                           HR            chartevents
+## 3 220179 non_invasive_blood_pressure_systolic NBPs          chartevents
+## 4 220181 non_invasive_blood_pressure_mean     NBPm          chartevents
+## 5 223761 temperature_fahrenheit               Temperature F chartevents
 ##   category            unitname param_type lownormalvalue highnormalvalue
 ##   &lt;chr&gt;               &lt;chr&gt;    &lt;chr&gt;               &lt;dbl&gt;           &lt;dbl&gt;
 ## 1 Respiratory         insp/min Numeric                NA              NA
@@ -687,16 +692,16 @@ chartevents_dict &lt;- tbl(con, &quot;d_items&quot;) %&gt;%
 ## # Database: BigQueryConnection
 ##    subject_id itemid charttime           valuenum
 ##         &lt;int&gt;  &lt;int&gt; &lt;dttm&gt;                 &lt;dbl&gt;
-##  1   10550641 223761 2129-04-19 11:00:00     96.3
-##  2   18275245 223761 2128-04-27 06:00:00     97.3
-##  3   11771169 223761 2129-04-30 04:00:00     98.6
-##  4   12340484 223761 2125-12-26 16:00:00    101. 
-##  5   14503479 223761 2187-02-01 01:00:00     99.7
-##  6   19830515 223761 2144-01-12 08:00:00     97.3
-##  7   10532095 223761 2186-04-13 18:00:00     98  
-##  8   12532250 223761 2129-10-07 13:00:00     97.4
-##  9   14741136 223761 2184-11-14 12:00:00     96.4
-## 10   13996984 223761 2188-12-28 04:00:00     98.7
+##  1   11168650 223761 2138-03-19 00:00:00     98.6
+##  2   12251785 223761 2176-01-01 12:00:00     99.2
+##  3   12655234 223761 2116-07-04 20:00:00     99.8
+##  4   13232362 223761 2127-09-15 21:00:00     98  
+##  5   19855045 223761 2180-06-28 04:00:00     98.4
+##  6   11677176 223761 2186-02-16 16:00:00     96.8
+##  7   12707756 223761 2166-12-18 04:00:00     98.1
+##  8   14189704 223761 2170-10-10 20:00:00     97.7
+##  9   15154165 223761 2112-08-13 10:00:00    102. 
+## 10   16425665 223761 2125-06-05 12:00:00     98.9
 ## # … with more rows</code></pre>
 <p>Only keep the first chart events during ICU stay and pivot chart events to become variables/columns.</p>
 <pre class="r"><code># # TODO
@@ -717,7 +722,7 @@ chartevents_dict &lt;- tbl(con, &quot;d_items&quot;) %&gt;%
   #summarise(n = n()) %&gt;%
   print(width = Inf)</code></pre>
 <pre><code>## &lt;SQL&gt;
-## SELECT `subject_id`, MAX(IF(`label` = &#39;Heart_Rate&#39;, `valuenum`, NULL)) AS `Heart_Rate`, MAX(IF(`label` = &#39;Respiratory_Rate&#39;, `valuenum`, NULL)) AS `Respiratory_Rate`, MAX(IF(`label` = &#39;Temperature_Fahrenheit&#39;, `valuenum`, NULL)) AS `Temperature_Fahrenheit`, MAX(IF(`label` = &#39;Non_Invasive_Blood_Pressure_mean&#39;, `valuenum`, NULL)) AS `Non_Invasive_Blood_Pressure_mean`, MAX(IF(`label` = &#39;Non_Invasive_Blood_Pressure_systolic&#39;, `valuenum`, NULL)) AS `Non_Invasive_Blood_Pressure_systolic`
+## SELECT `subject_id`, MAX(IF(`label` = &#39;heart_rate&#39;, `valuenum`, NULL)) AS `heart_rate`, MAX(IF(`label` = &#39;respiratory_rate&#39;, `valuenum`, NULL)) AS `respiratory_rate`, MAX(IF(`label` = &#39;temperature_fahrenheit&#39;, `valuenum`, NULL)) AS `temperature_fahrenheit`, MAX(IF(`label` = &#39;non_invasive_blood_pressure_mean&#39;, `valuenum`, NULL)) AS `non_invasive_blood_pressure_mean`, MAX(IF(`label` = &#39;non_invasive_blood_pressure_systolic&#39;, `valuenum`, NULL)) AS `non_invasive_blood_pressure_systolic`
 ## FROM (SELECT `subject_id`, `label`, `valuenum`
 ## FROM (SELECT `subject_id`, `LHS`.`itemid` AS `itemid`, `charttime`, `valuenum`, `label`, `abbreviation`, `linksto`, `category`, `unitname`, `param_type`, `lownormalvalue`, `highnormalvalue`
 ## FROM (SELECT `LHS`.`subject_id` AS `subject_id`, `LHS`.`itemid` AS `itemid`, `LHS`.`charttime` AS `charttime`, `valuenum`
@@ -769,18 +774,19 @@ chartevents_dict &lt;- tbl(con, &quot;d_items&quot;) %&gt;%
 ## WHERE (`itemid` IN (220045.0, 220181.0, 220179.0, 223761.0, 220210.0))) `RHS`
 ## ON (`LHS`.`subject_id` = `RHS`.`subject_id` AND `LHS`.`itemid` = `RHS`.`itemid` AND `LHS`.`charttime` = `RHS`.`charttime`)
 ## ) `LHS`
-## INNER JOIN (SELECT `itemid`, REGEXP_REPLACE(`label`, &#39; &#39;, &#39;_&#39;) AS `label`, `abbreviation`, `linksto`, `category`, `unitname`, `param_type`, `lownormalvalue`, `highnormalvalue`
+## INNER JOIN (SELECT `itemid`, LOWER(`label`) AS `label`, `abbreviation`, `linksto`, `category`, `unitname`, `param_type`, `lownormalvalue`, `highnormalvalue`
+## FROM (SELECT `itemid`, REGEXP_REPLACE(`label`, &#39; &#39;, &#39;_&#39;) AS `label`, `abbreviation`, `linksto`, `category`, `unitname`, `param_type`, `lownormalvalue`, `highnormalvalue`
 ## FROM `d_items`
-## WHERE (`itemid` IN (220045.0, 220181.0, 220179.0, 223761.0, 220210.0))) `RHS`
+## WHERE (`itemid` IN (220045.0, 220181.0, 220179.0, 223761.0, 220210.0))) `q01`) `RHS`
 ## ON (`LHS`.`itemid` = `RHS`.`itemid`)
-## ) `q01`) `q02`
+## ) `q02`) `q03`
 ## GROUP BY `subject_id`
 ## ORDER BY `subject_id`
 ## # Source:     lazy query [?? x 6]
 ## # Database:   BigQueryConnection
 ## # Groups:     subject_id
 ## # Ordered by: subject_id
-##    subject_id Heart_Rate Respiratory_Rate Temperature_Fahrenheit
+##    subject_id heart_rate respiratory_rate temperature_fahrenheit
 ##         &lt;int&gt;      &lt;dbl&gt;            &lt;dbl&gt;                  &lt;dbl&gt;
 ##  1   10000032         91               24                   98.7
 ##  2   10000980         77               23                   98  
@@ -792,7 +798,7 @@ chartevents_dict &lt;- tbl(con, &quot;d_items&quot;) %&gt;%
 ##  8   10002223        100               29                   98.6
 ##  9   10002348         72               14                   97.9
 ## 10   10002428        124               25                  103. 
-##    Non_Invasive_Blood_Pressure_mean Non_Invasive_Blood_Pressure_systolic
+##    non_invasive_blood_pressure_mean non_invasive_blood_pressure_systolic
 ##                               &lt;dbl&gt;                                &lt;dbl&gt;
 ##  1                               56                                   84
 ##  2                               92                                  150
@@ -820,10 +826,12 @@ icu_cohort &lt;- admissions_tble %&gt;%
   left_join(labevents_tble) %&gt;%
   left_join(chartevents_tble) %&gt;%
 # Restrict age at admission &gt; 18
-  filter(year(admittime) - (anchor_year - anchor_age) &gt; 18) %&gt;%
+  mutate(admit_age = year(admittime) - (anchor_year - anchor_age)) %&gt;%
+  filter(admit_age &gt; 18) %&gt;%
+# Create 30 day mortality variable
   mutate(thirty_day_mort_check = DATE_DIFF(dod, admittime, DAY)) %&gt;%
   mutate(
-     thirty_day_mort = ifelse(thirty_day_mort_check &lt; 30, 
+     thirty_day_mort = ifelse(thirty_day_mort_check &lt;= 30, 
      &quot;Yes&quot;, 
      &quot;No&quot;
   )) %&gt;%
@@ -836,16 +844,18 @@ icu_cohort &lt;- admissions_tble %&gt;%
   select (-thirty_day_mort_check) %&gt;%  
   show_query() %&gt;%
   print(width = Inf) %&gt;%
+  collect() %&gt;%
   write_rds(&quot;./mimiciv_shiny/icu_cohort.rds&quot;) </code></pre>
 <pre><code>## Joining, by = &quot;subject_id&quot;
 ## Joining, by = &quot;subject_id&quot;
 ## Joining, by = &quot;subject_id&quot;</code></pre>
 <pre><code>## &lt;SQL&gt;
-## SELECT `subject_id`, `hadm_id`, `admittime`, `dischtime`, `deathtime`, `admission_type`, `admission_location`, `discharge_location`, `insurance`, `language`, `marital_status`, `ethnicity`, `edregtime`, `edouttime`, `hospital_expire_flag`, `intime`, `stay_id`, `first_careunit`, `last_careunit`, `outtime`, `los`, `gender`, `anchor_age`, `anchor_year`, `anchor_year_group`, `dod`, `WBC`, `Sodium`, `Calcium`, `Glucose`, `Chloride`, `Magnesium`, `Potassium`, `Creatinine`, `Hematocrit`, `Bicarbonate`, `Heart_Rate`, `Respiratory_Rate`, `Temperature_Fahrenheit`, `Non_Invasive_Blood_Pressure_mean`, `Non_Invasive_Blood_Pressure_systolic`, IF(((`thirty_day_mort`) IS NULL), &#39;No&#39;, `thirty_day_mort`) AS `thirty_day_mort`
-## FROM (SELECT `subject_id`, `hadm_id`, `admittime`, `dischtime`, `deathtime`, `admission_type`, `admission_location`, `discharge_location`, `insurance`, `language`, `marital_status`, `ethnicity`, `edregtime`, `edouttime`, `hospital_expire_flag`, `intime`, `stay_id`, `first_careunit`, `last_careunit`, `outtime`, `los`, `gender`, `anchor_age`, `anchor_year`, `anchor_year_group`, `dod`, `WBC`, `Sodium`, `Calcium`, `Glucose`, `Chloride`, `Magnesium`, `Potassium`, `Creatinine`, `Hematocrit`, `Bicarbonate`, `Heart_Rate`, `Respiratory_Rate`, `Temperature_Fahrenheit`, `Non_Invasive_Blood_Pressure_mean`, `Non_Invasive_Blood_Pressure_systolic`, `thirty_day_mort_check`, IF(`thirty_day_mort_check` &lt; 30.0, &#39;Yes&#39;, &#39;No&#39;) AS `thirty_day_mort`
-## FROM (SELECT `subject_id`, `hadm_id`, `admittime`, `dischtime`, `deathtime`, `admission_type`, `admission_location`, `discharge_location`, `insurance`, `language`, `marital_status`, `ethnicity`, `edregtime`, `edouttime`, `hospital_expire_flag`, `intime`, `stay_id`, `first_careunit`, `last_careunit`, `outtime`, `los`, `gender`, `anchor_age`, `anchor_year`, `anchor_year_group`, `dod`, `WBC`, `Sodium`, `Calcium`, `Glucose`, `Chloride`, `Magnesium`, `Potassium`, `Creatinine`, `Hematocrit`, `Bicarbonate`, `Heart_Rate`, `Respiratory_Rate`, `Temperature_Fahrenheit`, `Non_Invasive_Blood_Pressure_mean`, `Non_Invasive_Blood_Pressure_systolic`, DATE_DIFF(`dod`, `admittime`, `DAY`) AS `thirty_day_mort_check`
-## FROM (SELECT `LHS`.`subject_id` AS `subject_id`, `hadm_id`, `admittime`, `dischtime`, `deathtime`, `admission_type`, `admission_location`, `discharge_location`, `insurance`, `language`, `marital_status`, `ethnicity`, `edregtime`, `edouttime`, `hospital_expire_flag`, `intime`, `stay_id`, `first_careunit`, `last_careunit`, `outtime`, `los`, `gender`, `anchor_age`, `anchor_year`, `anchor_year_group`, `dod`, `WBC`, `Sodium`, `Calcium`, `Glucose`, `Chloride`, `Magnesium`, `Potassium`, `Creatinine`, `Hematocrit`, `Bicarbonate`, `Heart_Rate`, `Respiratory_Rate`, `Temperature_Fahrenheit`, `Non_Invasive_Blood_Pressure_mean`, `Non_Invasive_Blood_Pressure_systolic`
-## FROM (SELECT `LHS`.`subject_id` AS `subject_id`, `hadm_id`, `admittime`, `dischtime`, `deathtime`, `admission_type`, `admission_location`, `discharge_location`, `insurance`, `language`, `marital_status`, `ethnicity`, `edregtime`, `edouttime`, `hospital_expire_flag`, `intime`, `stay_id`, `first_careunit`, `last_careunit`, `outtime`, `los`, `gender`, `anchor_age`, `anchor_year`, `anchor_year_group`, `dod`, `WBC`, `Sodium`, `Calcium`, `Glucose`, `Chloride`, `Magnesium`, `Potassium`, `Creatinine`, `Hematocrit`, `Bicarbonate`
+## SELECT `subject_id`, `hadm_id`, `admittime`, `dischtime`, `deathtime`, `admission_type`, `admission_location`, `discharge_location`, `insurance`, `language`, `marital_status`, `ethnicity`, `edregtime`, `edouttime`, `hospital_expire_flag`, `intime`, `stay_id`, `first_careunit`, `last_careunit`, `outtime`, `los`, `gender`, `anchor_age`, `anchor_year`, `anchor_year_group`, `dod`, `wbc`, `sodium`, `calcium`, `glucose`, `chloride`, `magnesium`, `potassium`, `creatinine`, `hematocrit`, `bicarbonate`, `heart_rate`, `respiratory_rate`, `temperature_fahrenheit`, `non_invasive_blood_pressure_mean`, `non_invasive_blood_pressure_systolic`, `admit_age`, IF(((`thirty_day_mort`) IS NULL), &#39;No&#39;, `thirty_day_mort`) AS `thirty_day_mort`
+## FROM (SELECT `subject_id`, `hadm_id`, `admittime`, `dischtime`, `deathtime`, `admission_type`, `admission_location`, `discharge_location`, `insurance`, `language`, `marital_status`, `ethnicity`, `edregtime`, `edouttime`, `hospital_expire_flag`, `intime`, `stay_id`, `first_careunit`, `last_careunit`, `outtime`, `los`, `gender`, `anchor_age`, `anchor_year`, `anchor_year_group`, `dod`, `wbc`, `sodium`, `calcium`, `glucose`, `chloride`, `magnesium`, `potassium`, `creatinine`, `hematocrit`, `bicarbonate`, `heart_rate`, `respiratory_rate`, `temperature_fahrenheit`, `non_invasive_blood_pressure_mean`, `non_invasive_blood_pressure_systolic`, `admit_age`, `thirty_day_mort_check`, IF(`thirty_day_mort_check` &lt;= 30.0, &#39;Yes&#39;, &#39;No&#39;) AS `thirty_day_mort`
+## FROM (SELECT `subject_id`, `hadm_id`, `admittime`, `dischtime`, `deathtime`, `admission_type`, `admission_location`, `discharge_location`, `insurance`, `language`, `marital_status`, `ethnicity`, `edregtime`, `edouttime`, `hospital_expire_flag`, `intime`, `stay_id`, `first_careunit`, `last_careunit`, `outtime`, `los`, `gender`, `anchor_age`, `anchor_year`, `anchor_year_group`, `dod`, `wbc`, `sodium`, `calcium`, `glucose`, `chloride`, `magnesium`, `potassium`, `creatinine`, `hematocrit`, `bicarbonate`, `heart_rate`, `respiratory_rate`, `temperature_fahrenheit`, `non_invasive_blood_pressure_mean`, `non_invasive_blood_pressure_systolic`, `admit_age`, DATE_DIFF(`dod`, `admittime`, `DAY`) AS `thirty_day_mort_check`
+## FROM (SELECT `subject_id`, `hadm_id`, `admittime`, `dischtime`, `deathtime`, `admission_type`, `admission_location`, `discharge_location`, `insurance`, `language`, `marital_status`, `ethnicity`, `edregtime`, `edouttime`, `hospital_expire_flag`, `intime`, `stay_id`, `first_careunit`, `last_careunit`, `outtime`, `los`, `gender`, `anchor_age`, `anchor_year`, `anchor_year_group`, `dod`, `wbc`, `sodium`, `calcium`, `glucose`, `chloride`, `magnesium`, `potassium`, `creatinine`, `hematocrit`, `bicarbonate`, `heart_rate`, `respiratory_rate`, `temperature_fahrenheit`, `non_invasive_blood_pressure_mean`, `non_invasive_blood_pressure_systolic`, EXTRACT(year FROM `admittime`) - (`anchor_year` - `anchor_age`) AS `admit_age`
+## FROM (SELECT `LHS`.`subject_id` AS `subject_id`, `hadm_id`, `admittime`, `dischtime`, `deathtime`, `admission_type`, `admission_location`, `discharge_location`, `insurance`, `language`, `marital_status`, `ethnicity`, `edregtime`, `edouttime`, `hospital_expire_flag`, `intime`, `stay_id`, `first_careunit`, `last_careunit`, `outtime`, `los`, `gender`, `anchor_age`, `anchor_year`, `anchor_year_group`, `dod`, `wbc`, `sodium`, `calcium`, `glucose`, `chloride`, `magnesium`, `potassium`, `creatinine`, `hematocrit`, `bicarbonate`, `heart_rate`, `respiratory_rate`, `temperature_fahrenheit`, `non_invasive_blood_pressure_mean`, `non_invasive_blood_pressure_systolic`
+## FROM (SELECT `LHS`.`subject_id` AS `subject_id`, `hadm_id`, `admittime`, `dischtime`, `deathtime`, `admission_type`, `admission_location`, `discharge_location`, `insurance`, `language`, `marital_status`, `ethnicity`, `edregtime`, `edouttime`, `hospital_expire_flag`, `intime`, `stay_id`, `first_careunit`, `last_careunit`, `outtime`, `los`, `gender`, `anchor_age`, `anchor_year`, `anchor_year_group`, `dod`, `wbc`, `sodium`, `calcium`, `glucose`, `chloride`, `magnesium`, `potassium`, `creatinine`, `hematocrit`, `bicarbonate`
 ## FROM (SELECT `LHS`.`subject_id` AS `subject_id`, `hadm_id`, `admittime`, `dischtime`, `deathtime`, `admission_type`, `admission_location`, `discharge_location`, `insurance`, `language`, `marital_status`, `ethnicity`, `edregtime`, `edouttime`, `hospital_expire_flag`, `intime`, `stay_id`, `first_careunit`, `last_careunit`, `outtime`, `los`, `gender`, `anchor_age`, `anchor_year`, `anchor_year_group`, `dod`
 ## FROM (SELECT `LHS`.`subject_id` AS `subject_id`, `LHS`.`hadm_id` AS `hadm_id`, `admittime`, `dischtime`, `deathtime`, `admission_type`, `admission_location`, `discharge_location`, `insurance`, `language`, `marital_status`, `ethnicity`, `edregtime`, `edouttime`, `hospital_expire_flag`, `intime`, `stay_id`, `first_careunit`, `last_careunit`, `outtime`, `los`
 ## FROM (SELECT * FROM `admissions` AS `LHS`
@@ -884,7 +894,7 @@ icu_cohort &lt;- admissions_tble %&gt;%
 ## )) `RHS`
 ## ON (`LHS`.`subject_id` = `RHS`.`subject_id`)
 ## ) `LHS`
-## LEFT JOIN (SELECT `subject_id`, MAX(IF(`label` = &#39;WBC&#39;, `valuenum`, NULL)) AS `WBC`, MAX(IF(`label` = &#39;Sodium&#39;, `valuenum`, NULL)) AS `Sodium`, MAX(IF(`label` = &#39;Calcium&#39;, `valuenum`, NULL)) AS `Calcium`, MAX(IF(`label` = &#39;Glucose&#39;, `valuenum`, NULL)) AS `Glucose`, MAX(IF(`label` = &#39;Chloride&#39;, `valuenum`, NULL)) AS `Chloride`, MAX(IF(`label` = &#39;Magnesium&#39;, `valuenum`, NULL)) AS `Magnesium`, MAX(IF(`label` = &#39;Potassium&#39;, `valuenum`, NULL)) AS `Potassium`, MAX(IF(`label` = &#39;Creatinine&#39;, `valuenum`, NULL)) AS `Creatinine`, MAX(IF(`label` = &#39;Hematocrit&#39;, `valuenum`, NULL)) AS `Hematocrit`, MAX(IF(`label` = &#39;Bicarbonate&#39;, `valuenum`, NULL)) AS `Bicarbonate`
+## LEFT JOIN (SELECT `subject_id`, MAX(IF(`label` = &#39;wbc&#39;, `valuenum`, NULL)) AS `wbc`, MAX(IF(`label` = &#39;sodium&#39;, `valuenum`, NULL)) AS `sodium`, MAX(IF(`label` = &#39;calcium&#39;, `valuenum`, NULL)) AS `calcium`, MAX(IF(`label` = &#39;glucose&#39;, `valuenum`, NULL)) AS `glucose`, MAX(IF(`label` = &#39;chloride&#39;, `valuenum`, NULL)) AS `chloride`, MAX(IF(`label` = &#39;magnesium&#39;, `valuenum`, NULL)) AS `magnesium`, MAX(IF(`label` = &#39;potassium&#39;, `valuenum`, NULL)) AS `potassium`, MAX(IF(`label` = &#39;creatinine&#39;, `valuenum`, NULL)) AS `creatinine`, MAX(IF(`label` = &#39;hematocrit&#39;, `valuenum`, NULL)) AS `hematocrit`, MAX(IF(`label` = &#39;bicarbonate&#39;, `valuenum`, NULL)) AS `bicarbonate`
 ## FROM (SELECT `subject_id`, `label`, `valuenum`
 ## FROM (SELECT `subject_id`, `LHS`.`itemid` AS `itemid`, `charttime`, `valuenum`, `label`, `fluid`, `category`, `loinc_code`
 ## FROM (SELECT `LHS`.`subject_id` AS `subject_id`, `LHS`.`itemid` AS `itemid`, `LHS`.`charttime` AS `charttime`, `valuenum`
@@ -936,16 +946,17 @@ icu_cohort &lt;- admissions_tble %&gt;%
 ## WHERE (`itemid` IN (50912.0, 50971.0, 50983.0, 50902.0, 50882.0, 51221.0, 51301.0, 50931.0, 50960.0, 50893.0))) `RHS`
 ## ON (`LHS`.`subject_id` = `RHS`.`subject_id` AND `LHS`.`itemid` = `RHS`.`itemid` AND `LHS`.`charttime` = `RHS`.`charttime`)
 ## ) `LHS`
-## INNER JOIN (SELECT `itemid`, IF(`label` = &#39;White Blood Cells&#39;, &#39;WBC&#39;, `label`) AS `label`, `fluid`, `category`, `loinc_code`
+## INNER JOIN (SELECT `itemid`, LOWER(`label`) AS `label`, `fluid`, `category`, `loinc_code`
+## FROM (SELECT `itemid`, IF(`label` = &#39;White Blood Cells&#39;, &#39;WBC&#39;, `label`) AS `label`, `fluid`, `category`, `loinc_code`
 ## FROM (SELECT `itemid`, IF(`label` = &#39;Calcium, Total&#39;, &#39;Calcium&#39;, `label`) AS `label`, `fluid`, `category`, `loinc_code`
 ## FROM `d_labitems`
-## WHERE (`itemid` IN (50912.0, 50971.0, 50983.0, 50902.0, 50882.0, 51221.0, 51301.0, 50931.0, 50960.0, 50893.0))) `q01`) `RHS`
+## WHERE (`itemid` IN (50912.0, 50971.0, 50983.0, 50902.0, 50882.0, 51221.0, 51301.0, 50931.0, 50960.0, 50893.0))) `q01`) `q02`) `RHS`
 ## ON (`LHS`.`itemid` = `RHS`.`itemid`)
-## ) `q02`) `q03`
+## ) `q03`) `q04`
 ## GROUP BY `subject_id`) `RHS`
 ## ON (`LHS`.`subject_id` = `RHS`.`subject_id`)
 ## ) `LHS`
-## LEFT JOIN (SELECT `subject_id`, MAX(IF(`label` = &#39;Heart_Rate&#39;, `valuenum`, NULL)) AS `Heart_Rate`, MAX(IF(`label` = &#39;Respiratory_Rate&#39;, `valuenum`, NULL)) AS `Respiratory_Rate`, MAX(IF(`label` = &#39;Temperature_Fahrenheit&#39;, `valuenum`, NULL)) AS `Temperature_Fahrenheit`, MAX(IF(`label` = &#39;Non_Invasive_Blood_Pressure_mean&#39;, `valuenum`, NULL)) AS `Non_Invasive_Blood_Pressure_mean`, MAX(IF(`label` = &#39;Non_Invasive_Blood_Pressure_systolic&#39;, `valuenum`, NULL)) AS `Non_Invasive_Blood_Pressure_systolic`
+## LEFT JOIN (SELECT `subject_id`, MAX(IF(`label` = &#39;heart_rate&#39;, `valuenum`, NULL)) AS `heart_rate`, MAX(IF(`label` = &#39;respiratory_rate&#39;, `valuenum`, NULL)) AS `respiratory_rate`, MAX(IF(`label` = &#39;temperature_fahrenheit&#39;, `valuenum`, NULL)) AS `temperature_fahrenheit`, MAX(IF(`label` = &#39;non_invasive_blood_pressure_mean&#39;, `valuenum`, NULL)) AS `non_invasive_blood_pressure_mean`, MAX(IF(`label` = &#39;non_invasive_blood_pressure_systolic&#39;, `valuenum`, NULL)) AS `non_invasive_blood_pressure_systolic`
 ## FROM (SELECT `subject_id`, `label`, `valuenum`
 ## FROM (SELECT `subject_id`, `LHS`.`itemid` AS `itemid`, `charttime`, `valuenum`, `label`, `abbreviation`, `linksto`, `category`, `unitname`, `param_type`, `lownormalvalue`, `highnormalvalue`
 ## FROM (SELECT `LHS`.`subject_id` AS `subject_id`, `LHS`.`itemid` AS `itemid`, `LHS`.`charttime` AS `charttime`, `valuenum`
@@ -997,16 +1008,17 @@ icu_cohort &lt;- admissions_tble %&gt;%
 ## WHERE (`itemid` IN (220045.0, 220181.0, 220179.0, 223761.0, 220210.0))) `RHS`
 ## ON (`LHS`.`subject_id` = `RHS`.`subject_id` AND `LHS`.`itemid` = `RHS`.`itemid` AND `LHS`.`charttime` = `RHS`.`charttime`)
 ## ) `LHS`
-## INNER JOIN (SELECT `itemid`, REGEXP_REPLACE(`label`, &#39; &#39;, &#39;_&#39;) AS `label`, `abbreviation`, `linksto`, `category`, `unitname`, `param_type`, `lownormalvalue`, `highnormalvalue`
+## INNER JOIN (SELECT `itemid`, LOWER(`label`) AS `label`, `abbreviation`, `linksto`, `category`, `unitname`, `param_type`, `lownormalvalue`, `highnormalvalue`
+## FROM (SELECT `itemid`, REGEXP_REPLACE(`label`, &#39; &#39;, &#39;_&#39;) AS `label`, `abbreviation`, `linksto`, `category`, `unitname`, `param_type`, `lownormalvalue`, `highnormalvalue`
 ## FROM `d_items`
-## WHERE (`itemid` IN (220045.0, 220181.0, 220179.0, 223761.0, 220210.0))) `RHS`
+## WHERE (`itemid` IN (220045.0, 220181.0, 220179.0, 223761.0, 220210.0))) `q01`) `RHS`
 ## ON (`LHS`.`itemid` = `RHS`.`itemid`)
-## ) `q01`) `q02`
+## ) `q02`) `q03`
 ## GROUP BY `subject_id`) `RHS`
 ## ON (`LHS`.`subject_id` = `RHS`.`subject_id`)
-## ) `q03`
-## WHERE (EXTRACT(year FROM `admittime`) - (`anchor_year` - `anchor_age`) &gt; 18.0)) `q04`) `q05`
-## # Source:   lazy query [?? x 42]
+## ) `q04`) `q05`
+## WHERE (`admit_age` &gt; 18.0)) `q06`) `q07`
+## # Source:   lazy query [?? x 43]
 ## # Database: BigQueryConnection
 ##    subject_id  hadm_id admittime           dischtime          
 ##         &lt;int&gt;    &lt;int&gt; &lt;dttm&gt;              &lt;dttm&gt;             
@@ -1080,7 +1092,7 @@ icu_cohort &lt;- admissions_tble %&gt;%
 ##  8 Neuro Stepdown 2135-09-23 12:56:46 1.78  F              48        2131
 ##  9 Neuro Stepdown 2175-11-21 16:06:17 1.63  F              24        2175
 ## 10 Neuro Stepdown 2140-07-19 13:01:05 7.80  F              49        2140
-##    anchor_year_group dod          WBC Sodium Calcium Glucose Chloride Magnesium
+##    anchor_year_group dod          wbc sodium calcium glucose chloride magnesium
 ##    &lt;chr&gt;             &lt;date&gt;     &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
 ##  1 2008 - 2010       NA           7.8    130     8.2     113       97       1.5
 ##  2 2017 - 2019       NA           3.5    141     8.1      99      108       1.8
@@ -1092,7 +1104,7 @@ icu_cohort &lt;- admissions_tble %&gt;%
 ##  8 2011 - 2013       NA          14.7    145     8.3     157      106       1.9
 ##  9 2014 - 2016       NA           7.1    139     9.2      85      105       2  
 ## 10 2017 - 2019       NA          20.1    137     9.6      98      101       1.8
-##    Potassium Creatinine Hematocrit Bicarbonate Heart_Rate Respiratory_Rate
+##    potassium creatinine hematocrit bicarbonate heart_rate respiratory_rate
 ##        &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt;      &lt;dbl&gt;            &lt;dbl&gt;
 ##  1       3.3        1         30.6          22         78               16
 ##  2       4          0.5       30.5          21         91                5
@@ -1104,7 +1116,7 @@ icu_cohort &lt;- admissions_tble %&gt;%
 ##  8       4          0.8       37.1          22         71               23
 ##  9       4.3        0.8       34.7          24         67               17
 ## 10       3.8        0.7       39.6          20         72               12
-##    Temperature_Fahrenheit Non_Invasive_Blood_Pressure_mean
+##    temperature_fahrenheit non_invasive_blood_pressure_mean
 ##                     &lt;dbl&gt;                            &lt;dbl&gt;
 ##  1                  102.                                86
 ##  2                   98.4                               72
@@ -1116,18 +1128,18 @@ icu_cohort &lt;- admissions_tble %&gt;%
 ##  8                   98.4                               99
 ##  9                   98.6                               85
 ## 10                   99.5                              117
-##    Non_Invasive_Blood_Pressure_systolic thirty_day_mort
-##                                   &lt;dbl&gt; &lt;chr&gt;          
-##  1                                   98 No             
-##  2                                  111 No             
-##  3                                  183 No             
-##  4                                  162 No             
-##  5                                  165 No             
-##  6                                  132 No             
-##  7                                  114 No             
-##  8                                  144 No             
-##  9                                  120 No             
-## 10                                  140 No             
+##    non_invasive_blood_pressure_systolic admit_age thirty_day_mort
+##                                   &lt;dbl&gt;     &lt;int&gt; &lt;chr&gt;          
+##  1                                   98        80 No             
+##  2                                  111        49 No             
+##  3                                  183        72 No             
+##  4                                  162        69 No             
+##  5                                  165        63 No             
+##  6                                  132        57 No             
+##  7                                  114        46 No             
+##  8                                  144        52 No             
+##  9                                  120        24 No             
+## 10                                  140        49 No             
 ## # … with more rows</code></pre>
 <p>Close database connection and clear workspace.</p>
 <pre class="r"><code>dbDisconnect(con)
