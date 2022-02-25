@@ -165,7 +165,7 @@ chartevents_tble <- tbl(con, "chartevents") %>%
 Only keep the first chart events during ICU stay and pivot chart events to become variables/columns.
 ```{r}
 # Find first measurement after check-in and restrict chart events
- chartevents_tble <- chartevents_tble %>%  
+chartevents_tble <- chartevents_tble %>%  
   left_join(chartime, by = "subject_id") %>% 
   filter(charttime >= intime) %>%
   filter(charttime <= outtime) %>%

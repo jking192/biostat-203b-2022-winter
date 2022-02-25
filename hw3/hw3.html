@@ -775,7 +775,7 @@ chartevents_tble &lt;- tbl(con, &quot;chartevents&quot;) %&gt;%
 ## # … with more rows</code></pre>
 <p>Only keep the first chart events during ICU stay and pivot chart events to become variables/columns.</p>
 <pre class="r"><code># Find first measurement after check-in and restrict chart events
- chartevents_tble &lt;- chartevents_tble %&gt;%  
+chartevents_tble &lt;- chartevents_tble %&gt;%  
   left_join(chartime, by = &quot;subject_id&quot;) %&gt;% 
   filter(charttime &gt;= intime) %&gt;%
   filter(charttime &lt;= outtime) %&gt;%
