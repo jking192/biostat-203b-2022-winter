@@ -1,11 +1,13 @@
 ---
 title: "Biostat 203B Homework 3"
 subtitle: Due Feb 25 @ 11:59PM
+author: Jonthan King
 output:
-  # ioslides_presentation: default
   html_document:
     toc: true
     toc_depth: 4
+    toc_float: true
+    theme: cerulean
 ---
 
 Display machine information:
@@ -91,12 +93,10 @@ admissions_tble <- tbl(con, "admissions") %>%
 
 5. Connect to the `patients` table and only keep the patients who have a match in `icustays_tble` (according to `subject_id`).
 ```{r}
-# # TODO
- patients_tble <- tbl(con, "patients") %>%
- semi_join(icustays_tble, by = "subject_id") %>%
- show_query() %>%
- print(width = Inf)
-
+patients_tble <- tbl(con, "patients") %>%
+  semi_join(icustays_tble, by = "subject_id") %>%
+  show_query() %>%
+  print(width = Inf)
 ```
 
 6. Connect to the `labevents` table and retrieve a subset that only contain subjects who appear in `icustays_tble` and the lab items listed in HW2. 
@@ -173,7 +173,7 @@ Only keep the first chart events during ICU stay and pivot chart events to becom
   group_by(subject_id, itemid) %>% 
   summarise_all(min) %>%
   left_join(chartevents_tble, by = c("subject_id", "itemid", "charttime")) %>%
-  # Create separate columns for each vital measurement and use measurement names
+# Create separate columns for each vital measurement and use measurement names
   inner_join(chartevents_dict, by = "itemid") %>%
   select(subject_id, label, valuenum) %>%
   pivot_wider(names_from = label, values_from = valuenum) %>%
@@ -205,7 +205,7 @@ icu_cohort <- admissions_tble %>%
   mutate(admit_age = year(admittime) - (anchor_year - anchor_age)) %>%
   filter(admit_age > 18) %>%
 # Create 30 day mortality variable
-  mutate(thirty_day_mort_check = DATE_DIFF(dod, admittime, DAY)) %>%
+  mutate(thirty_day_mort_check = date_diff(dod, admittime, DAY)) %>%
   mutate(
      thirty_day_mort = ifelse(thirty_day_mort_check <= 30, 
      "Yes", 

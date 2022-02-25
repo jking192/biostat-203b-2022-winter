@@ -114,7 +114,7 @@ server <- function(input, output) {
     }
   })
   # Generate summary table
-  output$demo_summary <-renderPrint({
+  output$demo_summary <- renderPrint({
     if (input$choice_demo != "Admission Age") {
       table(dem())
     } else {
@@ -158,7 +158,7 @@ server <- function(input, output) {
     }  
   })
   # Generate summary stats
-  output$lab_summary <-renderPrint({
+  output$lab_summary <- renderPrint({
     summary(lab())
   })
   # Read user's choice and match with correct variable
@@ -176,8 +176,7 @@ server <- function(input, output) {
   })
   # Make histogram and determine whether to log transform
   output$vital_plot <- renderPlot({
-    if(input$vital_transform)
-    {
+    if (input$vital_transform) {
       ggplot(data = icu_data) +
         geom_histogram(
           mapping = aes(x = log(vital())), 
@@ -185,8 +184,7 @@ server <- function(input, output) {
           bins = input$vital_bins
         ) +
         labs(x = "ln(Measurement Value)") 
-    } else
-    {
+    } else {
       ggplot(data = icu_data) +
         geom_histogram(
           mapping = aes(x = vital()), 
@@ -197,7 +195,7 @@ server <- function(input, output) {
     }
   })
   # Generate summary stats
-  output$vital_summary <-renderPrint({
+  output$vital_summary <- renderPrint({
     summary(vital())
   })
       
