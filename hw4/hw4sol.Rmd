@@ -63,13 +63,27 @@ for (i in 23:38) {
   q1 <- quantile(col_vec, 0.25, na.rm = TRUE)
   q3 <- quantile(col_vec, 0.75, na.rm = TRUE)
   col_vec[col_vec > q3 + 1.5 * iqr] <- NA
-  col_vec[col_vec < q1 - 1.5 *iqr] <- NA
+  col_vec[col_vec < q1 - 1.5 * iqr] <- NA
   icu_cohort[[i]] <- col_vec
 }
-summary(icu_cohort)
+# Remove variables not used in Question 2
+icu_cohort_final <- select(icu_cohort, -c(1:9, 12:18, 20:22))
+icu_cohort_final
 ```
 
 4. Impute missing values by `miceRanger` (request $m=3$ data sets). This step is computational intensive. Make sure to save the imputation results as a file. Hint: Setting `max.depth=10` in the `miceRanger` function may cut some computing time.
+
+## Solution
+```{r}
+mice <- miceRanger(
+  data = icu_cohort_final,
+  m = 3,
+  max.depth = 10,
+  returnModels = FALSE,
+  verbose = FALSE
+)
+saveRDS(mice, "./mice.rds")
+```
 
 5. Make imputation diagnostic plots and explain what they mean.
 
