@@ -74,7 +74,7 @@ icu_cohort_final
 4. Impute missing values by `miceRanger` (request $m=3$ data sets). This step is computational intensive. Make sure to save the imputation results as a file. Hint: Setting `max.depth=10` in the `miceRanger` function may cut some computing time.
 
 ## Solution
-```{r}
+```{r, eval = F}
 mice <- miceRanger(
   data = icu_cohort_final,
   m = 3,
@@ -82,13 +82,31 @@ mice <- miceRanger(
   returnModels = FALSE,
   verbose = FALSE
 )
-saveRDS(mice, "./mice.rds")
+saveRDS(mice, "mice.rds")
 ```
 
 5. Make imputation diagnostic plots and explain what they mean.
 
-6. Choose one of the imputed data sets to be used in Q2. This is **not** a good idea to use just one imputed data set or to average multiple imputed data sets. Explain in a couple of sentences what the correct Multiple Imputation strategy is.
+```{r}
+# Load the data
+mice_icu <- readRDS("mice.rds")
+# Diagnostic Plots
+plotDistributions(mice_icu, vars = 'allNumeric')
+plotVarConvergence(mice_icu, vars = 'allNumeric')
+plotModelError(mice_icu, vars = 'allNumeric')
+```
 
+- The first set of plots show original distributions (red) and inputed distributions (black). For most of the measurements, these distributions match fairly closely, but there are obvious deviations for heart rate, mean non-invasive blood pressure,  non-invasive systolic blood pressure, and respiratory rate, suggesting that the data was not missing completely ar random.
+
+- The second set of plots show if the imputed data has converged over the five iterations ran. Most of the measurements have converged, but magnesium, glucose, respiration rate, temperature in Fahrenheit, and heart rate all show obvious divergence. Perhaps more iterations need to be run.
+
+- The third set of plots show OOB accuracy/r-squared values. Since non of the plots reaches accuracy/r-squared above 0.6, it can be concluded that none of the variables were imputed with high accuracy. There is also an obvious deviation in accuracy for non-invasive systolic blood pressure among the three imputed datasets.
+
+6. Choose one of the imputed data sets to be used in Q2. This is **not** a good idea to use just one imputed data set or to average multiple imputed data sets. Explain in a couple of sentences what the correct Multiple Imputation strategy is.
+```{r}
+```
+
+I will just choose the first imputed data set for Q2, but this is not the right imputation strategy. The correct multiple imputation strategy is to pool multiple imputed data sets to combine within-imputation variance (the variance for each individual imputed data set) and between-imputation variance (shifts between imputed data sets). This is done by combining the parameter estimates into one set of estimates. Under the correct conditions, this set of estimates are unbiased and have the appropriate statistical properties.
 ## Q2. Predicting 30-day mortality
 
 Develop at least two analytic approaches for predicting the 30-day mortality of patients admitted to ICU using demographic information (gender, age, marital status, ethnicity), first lab measurements during ICU stay, and first vital measurements during ICU stay. For example, you can use (1) logistic regression (`glm()` function in base R or keras), (2) logistic regression with lasso penalty (glmnet or keras package), (3) random forest (randomForest package), or (4) neural network (keras package).
