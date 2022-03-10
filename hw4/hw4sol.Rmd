@@ -6,6 +6,9 @@ output:
   html_document:
     toc: true
     toc_depth: 4
+    toc_float: true
+    number_sections: true
+    theme: cerulean
 ---
 
 ```{r, include = FALSE}
@@ -23,7 +26,7 @@ suppressPackageStartupMessages(library(lubridate))
 suppressPackageStartupMessages(library(miceRanger))
 ```
 
-## Q1. Missing data
+# Q1. Missing data
 
 Through the Shiny app developed in HW3, we observe abundant missing values in the MIMIC-IV ICU cohort we created. In this question, we use multiple imputation to obtain a data set without missing values.
 
@@ -32,6 +35,7 @@ Through the Shiny app developed in HW3, we observe abundant missing values in th
     A more thorough book treatment of the practical imputation strategies is the book [*_Flexible Imputation of Missing Data_*](https://stefvanbuuren.name/fimd/) by Stef van Buuren. 
 
 1. Explain the jargon MCAR, MAR, and MNAR.
+
 ## Solution
 
 - MCAR stands for "missing completely at rondom." This means that the cause of missing data is unrelated to the data itself, so there are no systematic differences between observations with and without missing data. Therefore, no bias is introduced, but the statistical power will be lower.
@@ -42,6 +46,8 @@ Through the Shiny app developed in HW3, we observe abundant missing values in th
 
 2. Explain in a couple of sentences how the Multiple Imputation by Chained Equations (MICE) work.
 
+## Solution
+
 - MICE is a multiple imputation method that replaces missing data under assumptions about the missingness mechanism (MCAR, MAR, or MNAR). MICE fits a separate regression model for each variable with missing data based on the other variables to predict missing values. In order to fit the regression model, temporary placeholders are inputted for all variables with missing data. When MICE reaches a variable, all of its placeholders are set back to missing when the regression is conducted to generate predicted values. This process is repeated for all such variables a specified number of times (i.e., number of cycles).
 
 3. Perform a data quality check of the ICU stays data. Discard variables with substantial missingness, say >5000 `NA`s. Replace apparent data entry errors by `NA`s.
@@ -50,7 +56,7 @@ Through the Shiny app developed in HW3, we observe abundant missing values in th
 
 ```{r}
 # Load the Data
-icu_cohort <- readRDS("icu_cohort.rds")
+icu_cohort <- readRDS("../hw3/mimiciv_shiny/icu_cohort.rds")
 # Check for substantial missingness
 summary(icu_cohort)
 # Discard deathtime, edregtime, edouttime, and dod (>5000 NAs)
@@ -74,6 +80,7 @@ icu_cohort_final
 4. Impute missing values by `miceRanger` (request $m=3$ data sets). This step is computational intensive. Make sure to save the imputation results as a file. Hint: Setting `max.depth=10` in the `miceRanger` function may cut some computing time.
 
 ## Solution
+
 ```{r, eval = F}
 mice <- miceRanger(
   data = icu_cohort_final,
@@ -86,6 +93,8 @@ saveRDS(mice, "mice.rds")
 ```
 
 5. Make imputation diagnostic plots and explain what they mean.
+
+## Solution 
 
 ```{r}
 # Load the data
@@ -103,15 +112,47 @@ plotModelError(mice_icu, vars = 'allNumeric')
 - The third set of plots show OOB accuracy/r-squared values. Since non of the plots reaches accuracy/r-squared above 0.6, it can be concluded that none of the variables were imputed with high accuracy. There is also an obvious deviation in accuracy for non-invasive systolic blood pressure among the three imputed datasets.
 
 6. Choose one of the imputed data sets to be used in Q2. This is **not** a good idea to use just one imputed data set or to average multiple imputed data sets. Explain in a couple of sentences what the correct Multiple Imputation strategy is.
+
+## Solution
+
 ```{r}
+# Prep Data by creating dummy variables for categorical variables
+list <- completeData(mice_icu)
+final_data <- model.matrix(~ gender + admit_age + marital_status + ethnicity +
+                             wbc + sodium + calcium + glucose + chloride + 
+                             magnesium + potassium + creatinine + hematocrit +
+                             bicarbonate + heart_rate + respiratory_rate +
+                             temperature_fahrenheit + 
+                             non_invasive_blood_pressure_mean +
+                             non_invasive_blood_pressure_systolic + 
+                             thirty_day_mort, data = list[[1]])
 ```
 
 I will just choose the first imputed data set for Q2, but this is not the right imputation strategy. The correct multiple imputation strategy is to pool multiple imputed data sets to combine within-imputation variance (the variance for each individual imputed data set) and between-imputation variance (shifts between imputed data sets). This is done by combining the parameter estimates into one set of estimates. Under the correct conditions, this set of estimates are unbiased and have the appropriate statistical properties.
-## Q2. Predicting 30-day mortality
+
+# Q2. Predicting 30-day mortality
 
 Develop at least two analytic approaches for predicting the 30-day mortality of patients admitted to ICU using demographic information (gender, age, marital status, ethnicity), first lab measurements during ICU stay, and first vital measurements during ICU stay. For example, you can use (1) logistic regression (`glm()` function in base R or keras), (2) logistic regression with lasso penalty (glmnet or keras package), (3) random forest (randomForest package), or (4) neural network (keras package).
 
 1. Partition data into 80% training set and 20% test set. Stratify partitioning according the 30-day mortality status.
+
+## Solution
+
+I will use logistic regression and neural networks for this assignment.
+
+```{r}
+suppressPackageStartupMessages(library(caret))
+# Convert to data frame for partitioning
+final_frame <- as.data.frame(final_data)
+# Create partition
+set.seed(1234)
+train_index <- createDataPartition(
+                  final_frame$thirty_day_mortYes, 
+                  p = .8, 
+                  list = FALSE)
+train <- final_frame[train_index,]
+test <- final_frame[-train_index,]
+```
 
 2. Train the models using the training set.
 
