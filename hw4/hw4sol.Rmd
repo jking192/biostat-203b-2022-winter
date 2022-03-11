@@ -24,6 +24,7 @@ Load database libraries and the tidyverse frontend:
 suppressPackageStartupMessages(library(tidyverse))
 suppressPackageStartupMessages(library(lubridate))
 suppressPackageStartupMessages(library(miceRanger))
+suppressPackageStartupMessages(library(caret))
 ```
 
 # Q1. Missing data
@@ -141,7 +142,6 @@ Develop at least two analytic approaches for predicting the 30-day mortality of 
 I will use logistic regression and neural networks for this assignment.
 
 ```{r}
-suppressPackageStartupMessages(library(caret))
 # Convert to data frame for partitioning
 final_frame <- as.data.frame(final_data)
 # Create partition
@@ -149,12 +149,41 @@ set.seed(1234)
 train_index <- createDataPartition(
                   final_frame$thirty_day_mortYes, 
                   p = .8, 
-                  list = FALSE)
+                  list = FALSE
+                )
 train <- final_frame[train_index,]
 test <- final_frame[-train_index,]
 ```
 
 2. Train the models using the training set.
 
+## Solution
+
+```{r}
+# Creating logistic regression model
+regression <- glm(
+                thirty_day_mortYes ~ . -`(Intercept)`, 
+                data = train, 
+                family = binomial
+              )
+summary(regression)
+
+# Predict for test set
+predicted <- predict(regression, test, type = "response")
+# Set prediction threshold to 0.5
+final_predict <- ifelse(predicted > 0.5, "Yes", "No")
+# Create confusion matrix
+confusion_matrix <- table(test$thirty_day_mortYes, final_predict)
+confusion_matrix
+
+# Create neural network
+```
 3. Compare model prediction performance on the test set.
+```{r}
+# Accuracy for logistic regression
+accuracy <- sum(diag(confusion_matrix))/sum(confusion_matrix)
+accuracy
+
+# Accuracy for neural network
+```
 

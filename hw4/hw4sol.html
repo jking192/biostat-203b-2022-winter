@@ -275,7 +275,8 @@ div.tocify {
 <p>Load database libraries and the tidyverse frontend:</p>
 <pre class="r"><code>suppressPackageStartupMessages(library(tidyverse))
 suppressPackageStartupMessages(library(lubridate))
-suppressPackageStartupMessages(library(miceRanger))</code></pre>
+suppressPackageStartupMessages(library(miceRanger))
+suppressPackageStartupMessages(library(caret))</code></pre>
 <div id="q1.-missing-data" class="section level1" number="1">
 <h1><span class="header-section-number">1</span> Q1. Missing data</h1>
 <p>Through the Shiny app developed in HW3, we observe abundant missing values in the MIMIC-IV ICU cohort we created. In this question, we use multiple imputation to obtain a data set without missing values.</p>
@@ -607,21 +608,99 @@ final_data &lt;- model.matrix(~ gender + admit_age + marital_status + ethnicity 
 <div id="solution-6" class="section level2" number="2.1">
 <h2><span class="header-section-number">2.1</span> Solution</h2>
 <p>I will use logistic regression and neural networks for this assignment.</p>
-<pre class="r"><code>suppressPackageStartupMessages(library(caret))
-# Convert to data frame for partitioning
+<pre class="r"><code># Convert to data frame for partitioning
 final_frame &lt;- as.data.frame(final_data)
 # Create partition
 set.seed(1234)
 train_index &lt;- createDataPartition(
                   final_frame$thirty_day_mortYes, 
                   p = .8, 
-                  list = FALSE)
+                  list = FALSE
+                )
 train &lt;- final_frame[train_index,]
 test &lt;- final_frame[-train_index,]</code></pre>
 <ol start="2" style="list-style-type: decimal">
-<li><p>Train the models using the training set.</p></li>
-<li><p>Compare model prediction performance on the test set.</p></li>
+<li>Train the models using the training set.</li>
 </ol>
+</div>
+<div id="solution-7" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> Solution</h2>
+<pre class="r"><code># Creating logistic regression model
+regression &lt;- glm(
+                thirty_day_mortYes ~ . -`(Intercept)`, 
+                data = train, 
+                family = binomial
+              )
+summary(regression)</code></pre>
+<pre><code>## 
+## Call:
+## glm(formula = thirty_day_mortYes ~ . - `(Intercept)`, family = binomial, 
+##     data = train)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -2.1740  -0.4592  -0.3237  -0.2264   3.4815  
+## 
+## Coefficients:
+##                                        Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)                          11.7062832  2.2684937   5.160 2.46e-07 ***
+## genderM                              -0.1743633  0.0377774  -4.616 3.92e-06 ***
+## admit_age                             0.0267232  0.0013005  20.548  &lt; 2e-16 ***
+## marital_statusMARRIED                -0.0640671  0.0680402  -0.942  0.34639    
+## marital_statusSINGLE                 -0.0083101  0.0720816  -0.115  0.90822    
+## marital_statusWIDOWED                -0.0366481  0.0771146  -0.475  0.63461    
+## ethnicityASIAN                        0.3649133  0.4206662   0.867  0.38569    
+## `ethnicityBLACK/AFRICAN AMERICAN`    -0.1080543  0.4144764  -0.261  0.79432    
+## `ethnicityHISPANIC/LATINO`           -0.0996649  0.4251525  -0.234  0.81466    
+## ethnicityOTHER                        0.1665764  0.4181370   0.398  0.69035    
+## `ethnicityUNABLE TO OBTAIN`           0.9867015  0.4275944   2.308  0.02102 *  
+## ethnicityUNKNOWN                      1.0125397  0.4117738   2.459  0.01393 *  
+## ethnicityWHITE                        0.0693095  0.4102985   0.169  0.86586    
+## wbc                                   0.0251268  0.0035316   7.115 1.12e-12 ***
+## sodium                                0.0774450  0.0061558  12.581  &lt; 2e-16 ***
+## calcium                              -0.2522102  0.0285298  -8.840  &lt; 2e-16 ***
+## glucose                               0.0027224  0.0004585   5.938 2.89e-09 ***
+## chloride                             -0.0885615  0.0046803 -18.922  &lt; 2e-16 ***
+## magnesium                             0.1438652  0.0516829   2.784  0.00538 ** 
+## potassium                            -0.0147298  0.0313228  -0.470  0.63817    
+## creatinine                            0.8346205  0.0429455  19.434  &lt; 2e-16 ***
+## hematocrit                           -0.0023132  0.0029216  -0.792  0.42850    
+## bicarbonate                          -0.1128758  0.0057906 -19.493  &lt; 2e-16 ***
+## heart_rate                            0.0109504  0.0010099  10.843  &lt; 2e-16 ***
+## respiratory_rate                      0.0463767  0.0035007  13.248  &lt; 2e-16 ***
+## temperature_fahrenheit               -0.1565201  0.0217548  -7.195 6.26e-13 ***
+## non_invasive_blood_pressure_mean      0.0023280  0.0015875   1.466  0.14252    
+## non_invasive_blood_pressure_systolic -0.0084903  0.0011198  -7.582 3.40e-14 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 27893  on 42451  degrees of freedom
+## Residual deviance: 23667  on 42424  degrees of freedom
+## AIC: 23723
+## 
+## Number of Fisher Scoring iterations: 6</code></pre>
+<pre class="r"><code># Predict for test set
+predicted &lt;- predict(regression, test, type = &quot;response&quot;)
+# Set prediction threshold to 0.5
+final_predict &lt;- ifelse(predicted &gt; 0.5, &quot;Yes&quot;, &quot;No&quot;)
+# Create confusion matrix
+confusion_matrix &lt;- table(test$thirty_day_mortYes, final_predict)
+confusion_matrix</code></pre>
+<pre><code>##    final_predict
+##       No  Yes
+##   0 9418   72
+##   1 1026   97</code></pre>
+<pre class="r"><code># Create neural network</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li>Compare model prediction performance on the test set.</li>
+</ol>
+<pre class="r"><code># Accuracy for logistic regression
+accuracy &lt;- sum(diag(confusion_matrix))/sum(confusion_matrix)
+accuracy</code></pre>
+<pre><code>## [1] 0.896542</code></pre>
+<pre class="r"><code># Accuracy for neural network</code></pre>
 </div>
 </div>
 
