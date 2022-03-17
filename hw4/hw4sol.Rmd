@@ -1,0 +1,237 @@
+---
+title: "Biostat 203B Homework 4"
+subtitle: Due Mar 18 @ 11:59PM
+output:
+  # ioslides_presentation: default
+  html_document:
+    toc: true
+    toc_depth: 4
+    toc_float: true
+    number_sections: true
+    theme: cerulean
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, cache = TRUE)
+# Set root directory to simplify file importing and saving
+knitr::opts_knit$set(root.dir = '../hw4')
+```
+
+Display machine information:
+```{r}
+sessionInfo()
+```
+Load database libraries and the tidyverse frontend:
+```{r}
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(lubridate))
+suppressPackageStartupMessages(library(miceRanger))
+suppressPackageStartupMessages(library(caret))
+suppressPackageStartupMessages(library(keras))
+suppressPackageStartupMessages(library(tensorflow))
+```
+
+# Q1. Missing data
+
+Through the Shiny app developed in HW3, we observe abundant missing values in the MIMIC-IV ICU cohort we created. In this question, we use multiple imputation to obtain a data set without missing values.
+
+0. Read following tutorials on the R package miceRanger for imputation: <https://github.com/farrellday/miceRanger>, <https://cran.r-project.org/web/packages/miceRanger/vignettes/miceAlgorithm.html>.
+
+    A more thorough book treatment of the practical imputation strategies is the book [*_Flexible Imputation of Missing Data_*](https://stefvanbuuren.name/fimd/) by Stef van Buuren. 
+
+1. Explain the jargon MCAR, MAR, and MNAR.
+
+## Solution
+
+- MCAR stands for "missing completely at rondom." This means that the cause of missing data is unrelated to the data itself, so there are no systematic differences between observations with and without missing data. Therefore, no bias is introduced, but the statistical power will be lower.
+
+- MAR stands for "missing at random." This means that missing data is systematically different from the observed data, but this difference can be explained by other fully observed variables.
+
+- MNAR stands for "missing not at random." This means that missing data is systematically related to unobserved data that is not measured by the researcher.
+
+2. Explain in a couple of sentences how the Multiple Imputation by Chained Equations (MICE) work.
+
+## Solution
+
+- MICE is a multiple imputation method that replaces missing data under assumptions about the missingness mechanism (MCAR, MAR, or MNAR). MICE fits a separate regression model for each variable with missing data based on the other variables to predict missing values. In order to fit the regression model, temporary placeholders are imputed for all variables with missing data. When MICE reaches a variable, all of its placeholders are set back to missing when the regression is conducted to generate predicted values. This process is repeated for all imputed variables a specified number of times (i.e., number of cycles).
+
+3. Perform a data quality check of the ICU stays data. Discard variables with substantial missingness, say >5000 `NA`s. Replace apparent data entry errors by `NA`s.
+
+## Solution
+
+```{r}
+# Load the Data
+icu_cohort <- readRDS("../hw3/mimiciv_shiny/icu_cohort.rds")
+# Check for substantial missingness
+summary(icu_cohort)
+# Discard deathtime, edregtime, edouttime, and dod (>5000 NAs)
+icu_cohort <- select(icu_cohort, -c(deathtime, edregtime, edouttime, dod))
+summary(icu_cohort)
+# Remove outliers using 1.5 IQR rule
+for (i in 23:38) {
+  col_vec <- icu_cohort[[i]]
+  iqr <- IQR(col_vec, na.rm = TRUE)
+  q1 <- quantile(col_vec, 0.25, na.rm = TRUE)
+  q3 <- quantile(col_vec, 0.75, na.rm = TRUE)
+  col_vec[col_vec > q3 + 1.5 * iqr] <- NA
+  col_vec[col_vec < q1 - 1.5 * iqr] <- NA
+  icu_cohort[[i]] <- col_vec
+}
+# Remove variables not used in Question 2
+icu_cohort_final <- select(icu_cohort, -c(1:9, 12:18, 20:22))
+icu_cohort_final %>%
+  print(width = Inf)
+```
+
+4. Impute missing values by `miceRanger` (request $m=3$ data sets). This step is computational intensive. Make sure to save the imputation results as a file. Hint: Setting `max.depth=10` in the `miceRanger` function may cut some computing time.
+
+## Solution
+
+```{r, eval = F}
+mice <- miceRanger(
+  data = icu_cohort_final,
+  m = 3,
+  max.depth = 10,
+  returnModels = FALSE,
+  verbose = FALSE
+)
+saveRDS(mice, "mice.rds")
+```
+
+5. Make imputation diagnostic plots and explain what they mean.
+
+## Solution 
+
+```{r}
+# Load the data
+mice_icu <- readRDS("mice.rds")
+# Diagnostic Plots
+plotDistributions(mice_icu, vars = 'allNumeric')
+plotVarConvergence(mice_icu, vars = 'allNumeric')
+plotModelError(mice_icu, vars = 'allNumeric')
+```
+
+- The first set of plots show original distributions (red) and imputed distributions (black). For most of the measurements, these distributions match fairly closely, but there are obvious deviations for heart rate, mean non-invasive blood pressure, non-invasive systolic blood pressure, and respiratory rate, suggesting that the data was not missing completely at random.
+
+- The second set of plots show if the imputed data has converged over the five iterations ran. Most of the measurements have converged, but magnesium, glucose, respiration rate, temperature in Fahrenheit, and heart rate all show obvious divergence. Perhaps more iterations need to be run.
+
+- The third set of plots show OOB accuracy/r-squared values. Since non of the plots reaches accuracy/r-squared above 0.6, it can be concluded that none of the variables were imputed with high accuracy. There is also obvious deviations in accuracy for non-invasive systolic blood pressure between the three imputed data sets.
+
+6. Choose one of the imputed data sets to be used in Q2. This is **not** a good idea to use just one imputed data set or to average multiple imputed data sets. Explain in a couple of sentences what the correct Multiple Imputation strategy is.
+
+## Solution
+
+```{r}
+# Prep Data by creating dummy variables for categorical variables
+list <- completeData(mice_icu)
+final_data <- model.matrix(~ gender + admit_age + marital_status + ethnicity +
+                          wbc + sodium + calcium + glucose + chloride + 
+                          magnesium + potassium + creatinine + hematocrit +
+                          bicarbonate + heart_rate + respiratory_rate +
+                          temperature_fahrenheit + 
+                          non_invasive_blood_pressure_mean +
+                          non_invasive_blood_pressure_systolic + 
+                          thirty_day_mort, data = list[[1]])
+```
+
+I will just choose the first imputed data set for Q2, but this is not the right imputation strategy. The correct multiple imputation strategy is to pool multiple imputed data sets to combine within-imputation variance (the variance for each individual imputed data set) and between-imputation variance (shifts between imputed data sets). This is done by combining the parameter estimates into one set of estimates. Under the correct conditions, this set of estimates are unbiased and have the appropriate statistical properties.
+
+# Q2. Predicting 30-day mortality
+
+Develop at least two analytic approaches for predicting the 30-day mortality of patients admitted to ICU using demographic information (gender, age, marital status, ethnicity), first lab measurements during ICU stay, and first vital measurements during ICU stay. For example, you can use (1) logistic regression (`glm()` function in base R or keras), (2) logistic regression with lasso penalty (glmnet or keras package), (3) random forest (randomForest package), or (4) neural network (keras package).
+
+1. Partition data into 80% training set and 20% test set. Stratify partitioning according the 30-day mortality status.
+
+## Solution
+
+- I will use logistic regression and a neural network for this assignment.
+
+```{r}
+# Convert to data frame for partitioning
+final_frame <- as.data.frame(final_data)
+# Set the seed for reproducible results
+set.seed(1234)
+# Create partition
+train_index <- createDataPartition(
+  final_frame$thirty_day_mortYes, 
+  p = .8, 
+  list = FALSE
+)
+train <- final_frame[train_index, ]
+test <- final_frame[-train_index, ]
+```
+
+2. Train the models using the training set.
+
+## Solution
+
+```{r}
+# Creating logistic regression model
+regression <- glm(
+  thirty_day_mortYes ~. -`(Intercept)`, 
+  data = train, 
+  family = binomial
+)
+summary(regression)
+# Predict for test set
+predicted <- predict(regression, test, type = "response")
+# Set prediction threshold to 0.5
+final_predict <- ifelse(predicted > 0.5, "Yes", "No")
+# Create and print confusion matrix
+confusion_matrix <- table(test$thirty_day_mortYes, final_predict)
+confusion_matrix
+
+# Create neural network
+# Convert training and testing data sets to matrix
+neural_train <- as.matrix(train)
+neural_test <- as.matrix(test)
+# Split independent variables and dependent outcome (30 day mortality)
+x_train <- neural_train[, 2:28]
+x_test <- neural_test[, 2:28]
+y_train <- neural_train[, 29]
+y_test <- neural_test[, 29]
+# Create model
+library(keras)
+# install_keras(tensorflow = 2.6)
+model <- keras_model_sequential()
+model %>%
+  layer_dense(units = 128, activation = 'relu', input_shape = c(27)) %>%
+  layer_dropout(rate = 0.5) %>%
+  layer_dense(units = 64, activation = 'relu') %>%
+  layer_dropout(rate = 0.5) %>%
+  layer_dense(units = 1, activation = 'sigmoid')
+summary(model)
+# Compile the model
+model %>% 
+  compile(
+    loss = 'binary_crossentropy',
+    optimizer = optimizer_adagrad(),
+    metrics = 'accuracy'
+  )
+
+# Train the model
+visuals <- model %>% 
+  fit(
+    x_train, y_train, 
+    epochs = 15, batch_size = 32, 
+    #class_weight = list ("0" = 1, "1" = 6),
+    validation_split = 0.2
+  )
+plot(visuals)
+```
+
+3. Compare model prediction performance on the test set.
+
+## Solution
+
+```{r}
+# Accuracy for logistic regression
+accuracy <- sum(diag(confusion_matrix)) / sum(confusion_matrix)
+accuracy
+
+# Accuracy for neural network
+model %>% 
+  evaluate(x_test, y_test)
+```
+
+- Accuracy for both methods was between 0.89 and 0.90. I tried to assign class weights due to imbalanced data since only about 10% of patients died within 30 days of hospital admission, but this messed up my neural network.
