@@ -219,6 +219,7 @@ visuals <- model %>%
   )
 plot(visuals)
 ```
+
 3. Compare model prediction performance on the test set.
 
 ## Solution
