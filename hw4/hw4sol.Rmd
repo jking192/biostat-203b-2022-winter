@@ -134,7 +134,7 @@ final_data <- model.matrix(~ gender + admit_age + marital_status + ethnicity +
                           thirty_day_mort, data = list[[1]])
 ```
 
-I will just choose the first imputed data set for Q2, but this is not the right imputation strategy. The correct multiple imputation strategy is to pool multiple imputed data sets to combine within-imputation variance (the variance for each individual imputed data set) and between-imputation variance (shifts between imputed data sets). This is done by combining the parameter estimates into one set of estimates. Under the correct conditions, this set of estimates are unbiased and have the appropriate statistical properties.
+- I will just choose the first imputed data set for Q2, but this is not the right imputation strategy. The correct multiple imputation strategy is to pool multiple imputed data sets to combine within-imputation variance (the variance for each individual imputed data set) and between-imputation variance (shifts between imputed data sets). This is done by combining the parameter estimates into one set of estimates. Under the correct conditions, this set of estimates are unbiased and have the appropriate statistical properties.
 
 # Q2. Predicting 30-day mortality
 
